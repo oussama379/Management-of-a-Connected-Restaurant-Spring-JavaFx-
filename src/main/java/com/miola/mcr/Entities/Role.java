@@ -19,6 +19,7 @@ public class Role {
     private String Title;
     private String Description;
 
+
     @ManyToMany
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
@@ -27,6 +28,8 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     private Collection<Zone> zones=new ArrayList<>();
+
+
 
 
 }

@@ -13,6 +13,6 @@
       prefHeight="100.0" prefWidth="350.0" spacing="10" alignment="CENTER">
 
     <Label fx:id="weatherLabel"/>
-    <Button onAction="#loadWeatherForecast">Get weather</Button>
+    <Button onAction="#loadWeatherForecast">Get  NNN weather</Button>
 </VBox>
 

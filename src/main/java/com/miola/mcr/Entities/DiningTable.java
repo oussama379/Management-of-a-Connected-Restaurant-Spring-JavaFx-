@@ -4,10 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +18,9 @@ public class DiningTable {
     private Long id;
     private int number;
     private String state;
+
+    @OneToMany(mappedBy="diningTable")
+    private Collection<Sensor> sensors=new ArrayList<>();
 
     public void modifyState() {
         // TODO implement here

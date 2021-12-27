@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 @Component
 @FxmlView
@@ -42,8 +43,9 @@ public class Login {
 
     @FXML
     void handleButtonAction(MouseEvent event) {
-        if(userService.authenticate(getUsername(), getPassword())){
-            lblErrors.setText("Login Succefull.");
+        if(userService.authenticate(getUsername(), getPassword()) != null){
+            lblErrors.setText("Login Succefull. ");
+            System.out.print(userService.getUser());
         }else{
             lblErrors.setText("Login Failed.");
         }

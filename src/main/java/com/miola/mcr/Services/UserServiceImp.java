@@ -6,23 +6,36 @@ import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 @Service
 public class UserServiceImp implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+    private User currentUser;
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     @Override
-    public boolean authenticate(String username, String password) {
+    public User authenticate(String username, String password) {
         User user = userRepository.findByUsername(username);
         if(user == null){
-            return false;
+            return null;
         }else{
-            if(password.equals(user.getPassword())) return true;
-            else return false;
+            if(password.equals(user.getPassword())) {
+                currentUser = user;
+                return user;
+            }
+            else return null;
         }
+
     }
 
     @Override
@@ -57,6 +70,7 @@ public class UserServiceImp implements UserService{
     @Override
     public boolean editUser(User user) {
         try {
+            // TODO tkharbi9a
             User u = userRepository.findById(user.getId()).orElse(null);
             user.setId(u.getId());
             userRepository.save(user);
@@ -65,5 +79,10 @@ public class UserServiceImp implements UserService{
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public User getUser() {
+        return getCurrentUser();
     }
 }
