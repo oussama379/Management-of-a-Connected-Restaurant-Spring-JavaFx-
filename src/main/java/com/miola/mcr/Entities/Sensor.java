@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name="Sensors")
 public class Sensor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,5 @@ public class Sensor {
 
 
 
-
-    public void testAlerte() {
-        // TODO implement here
-    }
 
 }

@@ -22,4 +22,7 @@ public class Zone {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles=new ArrayList<>();
 
+    @OneToMany(mappedBy="zone")
+    private Collection<Sensor> sensors=new ArrayList<>();
+
 }

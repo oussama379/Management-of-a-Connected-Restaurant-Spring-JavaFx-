@@ -4,23 +4,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name="EnergyMonitors")
 public class EnergyMonitor extends Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean state;
 
-    public void changeState() {
-        // TODO implement here
-    }
 
 }

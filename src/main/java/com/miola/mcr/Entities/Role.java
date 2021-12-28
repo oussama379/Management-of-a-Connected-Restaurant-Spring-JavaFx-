@@ -29,6 +29,9 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Collection<Zone> zones=new ArrayList<>();
 
+    @OneToMany(mappedBy="role")
+    private Collection<User> users=new ArrayList<>();
+
 
 
 

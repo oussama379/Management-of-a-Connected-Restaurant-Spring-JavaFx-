@@ -12,6 +12,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name="Alertes")
 public class Alerte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

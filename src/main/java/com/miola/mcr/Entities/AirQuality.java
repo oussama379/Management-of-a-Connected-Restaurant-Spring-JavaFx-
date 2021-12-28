@@ -4,15 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name="AirQualities")
 public class AirQuality extends Device {
 
     @Id
@@ -23,8 +21,6 @@ public class AirQuality extends Device {
     private Boolean alarm;
 
 
-    public void triggerAlarm() {
-        // TODO implement here
-    }
+
 
 }

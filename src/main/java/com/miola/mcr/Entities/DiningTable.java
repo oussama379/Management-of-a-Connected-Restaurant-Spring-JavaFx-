@@ -12,6 +12,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name="DiningTables")
 public class DiningTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +23,6 @@ public class DiningTable {
     @OneToMany(mappedBy="diningTable")
     private Collection<Sensor> sensors=new ArrayList<>();
 
-    public void modifyState() {
-        // TODO implement here
-    }
+
 
 }
