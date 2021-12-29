@@ -10,13 +10,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @ToString
-@Table(name="AirConditioners")
+@DiscriminatorValue("AirConditioner")
+// works with DeviceRepositoy
 public class AirConditioner extends Device {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private Double temperature;
 
 

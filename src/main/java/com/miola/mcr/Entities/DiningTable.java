@@ -20,6 +20,7 @@ public class DiningTable {
     private int number;
     private String state;
 
+    // TODO EAGER VS LAZY
     @OneToMany(mappedBy="diningTable")
     private Collection<Sensor> sensors=new ArrayList<>();
 

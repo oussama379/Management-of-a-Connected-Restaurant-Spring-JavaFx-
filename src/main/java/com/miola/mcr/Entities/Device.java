@@ -10,9 +10,12 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
-@Entity
 @ToString
-@Table(name="Devices")
+@Entity
+// More fast because all date is in one table, and null is not prblm because we dont have too many fields
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="device_type",
+        discriminatorType = DiscriminatorType.STRING)
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,14 +10,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @ToString
-@Table(name="AirQualities")
+@DiscriminatorValue("AirQuality")
+// works with DeviceRepositoy
 public class AirQuality extends Device {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String type;
-
     private Boolean alarm;
 
 

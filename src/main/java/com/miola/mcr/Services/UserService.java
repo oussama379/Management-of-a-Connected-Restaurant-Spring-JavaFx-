@@ -9,9 +9,11 @@ public interface UserService {
     Role getUserRole(User user);
     User getUserById(Long Id);
     boolean saveUser(User user);
+     //boolean registerUser(User user);
     boolean deleteUserById(Long Id);
     boolean editUser(User user);
     User getUser ();
+    String encryptionMd5(String passwordToHash);
 
 
 

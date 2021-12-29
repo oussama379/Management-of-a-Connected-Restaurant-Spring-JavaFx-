@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Service
 public class UserServiceImp implements UserService{
 
@@ -29,7 +32,7 @@ public class UserServiceImp implements UserService{
         if(user == null){
             return null;
         }else{
-            if(password.equals(user.getPassword())) {
+            if(encryptionMd5(password).equals(user.getPassword())) {
                 currentUser = user;
                 return user;
             }
@@ -37,6 +40,8 @@ public class UserServiceImp implements UserService{
         }
 
     }
+
+
 
     @Override
     public Role getUserRole(User user) {
@@ -50,13 +55,22 @@ public class UserServiceImp implements UserService{
 
     @Override
     public boolean saveUser(User user) {
-        if (!userRepository.existsById(user.getId())){
+//        if (!userRepository.existsById(user.getId())){
+        try{
+            String password = user.getPassword();
+            user.setPassword(encryptionMd5(password));
             userRepository.save(user);
             return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        else
-        return false;
+       // }
+       // else
+      //  return false;
     }
+
+
 
     @Override
     public boolean deleteUserById(Long Id) {
@@ -70,11 +84,11 @@ public class UserServiceImp implements UserService{
     @Override
     public boolean editUser(User user) {
         try {
-            // TODO tkharbi9a
-            User u = userRepository.findById(user.getId()).orElse(null);
-            user.setId(u.getId());
-            userRepository.save(user);
-            return true;
+            if (userRepository.existsById(user.getId())) {
+                userRepository.save(user);
+                return true;
+            }else return false;
+
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -85,4 +99,32 @@ public class UserServiceImp implements UserService{
     public User getUser() {
         return getCurrentUser();
     }
+
+
+    public String encryptionMd5(String passwordToHash){
+        String generatedPassword = null;
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Add password bytes to digest
+            md.update(passwordToHash.getBytes());
+
+            // Get the hash's bytes
+            byte[] bytes = md.digest();
+
+            // This bytes[] has bytes in decimal format. Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            // Get complete hashed password in hex format
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+    }
+
 }
