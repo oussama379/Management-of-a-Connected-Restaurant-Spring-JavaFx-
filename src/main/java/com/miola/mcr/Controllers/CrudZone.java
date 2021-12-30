@@ -1,14 +1,17 @@
 package com.miola.mcr.Controllers;
 
+
 import com.miola.mcr.Entities.User;
-import com.miola.mcr.Services.UserService;
-import com.miola.mcr.Services.UserServiceImp;
+import com.miola.mcr.Entities.Zone;
+import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,8 +21,6 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import io.github.palexdev.materialfx.controls.MFXTableView;
-import javafx.fxml.FXML;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -28,13 +29,14 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudUser implements Initializable {
+public class CrudZone implements Initializable {
+
 
     private final ConfigurableApplicationContext applicationContext;
-    private final UserService userService;
+    private final ZoneService zoneService;
 
     @FXML
-    private MFXTableView<User> tableView;
+    private MFXTableView<Zone> tableView;
 
     @FXML
     private MFXButton btnDelete;
@@ -45,10 +47,11 @@ public class CrudUser implements Initializable {
     private Stage formWindow;
 
     @Autowired
-    public CrudUser(ConfigurableApplicationContext applicationContext, UserService userService) {
+    public CrudZone(ConfigurableApplicationContext applicationContext, ZoneService zoneService) {
         this.applicationContext = applicationContext;
-        this.userService = userService;
+        this.zoneService = zoneService;
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,56 +88,61 @@ public class CrudUser implements Initializable {
 
         /* load data */
         //ObservableList<User> data = FXCollections.observableArrayList(dummyData);
-        ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
+        ObservableList<Zone> zones = FXCollections.observableArrayList(zoneService.getAllZones());
 
         /* create columns */
-        MFXTableColumn<User> idColumn = new MFXTableColumn<User>("Id", Comparator.comparing(User::getId));
-        MFXTableColumn<User> nameColumn = new MFXTableColumn<User>("Name", Comparator.comparing(User::getName));
-        MFXTableColumn<User> usernameColumn = new MFXTableColumn<User>("Username", Comparator.comparing(User::getUsername));
-        MFXTableColumn<User> roleColumn = new MFXTableColumn<User>("Role", Comparator.comparing(User::getRoleName));
+        MFXTableColumn<Zone> idColumn = new MFXTableColumn<Zone>("Id", Comparator.comparing(Zone::getId));
+        MFXTableColumn<Zone> titleColumn = new MFXTableColumn<Zone>("Title", Comparator.comparing(Zone::getTitle));
+        //MFXTableColumn<Zone> devicesColumn = new MFXTableColumn<Zone>("Devices", Comparator.comparing(Zone::getSensors));
+        //MFXTableColumn<Zone> sensorsColumn = new MFXTableColumn<Zone>("Sensors", Comparator.comparing(Zone::getSensors));
+        //MFXTableColumn<Zone> rolesColumn = new MFXTableColumn<Zone>("Roles", Comparator.comparing(Zone::getRoles));
+
 
         /* link columns with proprieties */
-        idColumn.setRowCellFunction(user -> new MFXTableRowCell(String.valueOf(user.getId())));
-        nameColumn.setRowCellFunction(user -> new MFXTableRowCell(user.getName()));
-        usernameColumn.setRowCellFunction(user -> new MFXTableRowCell(user.getUsername()));
-        roleColumn.setRowCellFunction(user -> new MFXTableRowCell(user.getRoleName()));
+        //  TODO WTF IS zone
+        idColumn.setRowCellFunction(zone -> new MFXTableRowCell(String.valueOf(zone.getId())));
+        titleColumn.setRowCellFunction(zone -> new MFXTableRowCell(zone.getTitle()));
+        //devicesColumn.setRowCellFunction(zone -> new MFXTableRowCell(zone.getSensors()));
+        //sensorsColumn.setRowCellFunction(zone -> new MFXTableRowCell(zone.getSensors()));
+        //rolesColumn.setRowCellFunction(zone -> new MFXTableRowCell(zone.getRoles()));
+
 
         /* fill table */
         //tableView.setItems(data);
-        tableView.setItems(users);
+        tableView.setItems(zones);
         tableView.getTableColumns().addAll(idColumn);
-        tableView.getTableColumns().addAll(nameColumn);
-        tableView.getTableColumns().addAll(usernameColumn);
-        tableView.getTableColumns().addAll(roleColumn);
+        tableView.getTableColumns().addAll(titleColumn);
+        //tableView.getTableColumns().addAll(devicesColumn);
+        //tableView.getTableColumns().addAll(sensorsColumn);
+        //tableView.getTableColumns().addAll(rolesColumn);
     }
 
     @FXML
     public void delete(ActionEvent event) {
         // TODO after deleting a user the view need to be reloaded
-        List<User> selectedUsers = tableView.getSelectionModel().getSelectedItems(); // gives a List<User> of selected users from tableView
+        List<Zone> selectedUsers = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedUsers.isEmpty()) {
-            for (User user : selectedUsers){
-                    userService.deleteUserById(user.getId());
+            for (Zone zone : selectedUsers){
+                zoneService.deleteZoneById(zone.getId());
             }
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<User> selectedUsers = tableView.getSelectionModel().getSelectedItems();
+        List<Zone> selectedUsers = tableView.getSelectionModel().getSelectedItems();
         if (!selectedUsers.isEmpty()) {
             /* take first user in selected users */
-            User userToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
+            Zone zoneToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
 
             /* show form */
             FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
             Parent root = fxWeaver.loadView(CrudUserForm.class);
             Scene scene = new Scene(root);
-            //System.out.print(userToBeEdit.getRoleName());
-            fxWeaver.getBean(CrudUserForm.class).fillData(userToBeEdit.getName(), userToBeEdit.getUsername(), userToBeEdit.getId(), userToBeEdit.getRoleName()); // send data to the form scene
+            fxWeaver.getBean(CrudZoneForm.class).fillData(zoneToBeEdit.getTitle(), zoneToBeEdit.getId()); // send data to the form scene
             formWindow.close();
             formWindow.setScene(scene);
-            formWindow.setTitle("Edit user");
+            formWindow.setTitle("Edit Zone");
             formWindow.show();
         }
     }

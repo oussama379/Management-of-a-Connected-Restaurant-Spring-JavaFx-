@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Collection;
 
-@Data
-@NoArgsConstructor
+//@Data
+//@NoArgsConstructor
 @Entity
-@ToString
+//@ToString
 @DiscriminatorValue("AirConditioner")
 // works with DeviceRepositoy
 public class AirConditioner extends Device {
@@ -20,5 +21,21 @@ public class AirConditioner extends Device {
 //    private Long id;
     private Double temperature;
 
+    public AirConditioner(Long id, String name, Boolean power, Collection<Sensor> sensors, Double temperature) {
+        super(id, name, power, sensors);
+        this.temperature = temperature;
+    }
 
+
+    public AirConditioner() {
+
+    }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
 }

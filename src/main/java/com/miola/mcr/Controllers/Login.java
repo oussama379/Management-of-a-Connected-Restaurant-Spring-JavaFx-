@@ -22,9 +22,8 @@ import org.springframework.stereotype.Component;
 @FxmlView
 public class Login {
 
-    @Autowired
-    private ConfigurableApplicationContext applicationContext;
-
+    private final ConfigurableApplicationContext applicationContext;
+    private final UserService userService;
     @FXML
     private Button btnFB;
 
@@ -46,16 +45,19 @@ public class Login {
     @FXML
     private TextField txtUsername;
 
+
+
     @Autowired
-    private UserService userService;
+    public Login(ConfigurableApplicationContext applicationContext, UserService userService) {
+        this.applicationContext = applicationContext;
+        this.userService = userService;
+    }
 
     @FXML
     void handleButtonAction(MouseEvent event) {
         if(userService.authenticate(getUsername(), getPassword()) != null){
             lblErrors.setText("Login Succefull.");
-
             FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-
             Pane root = fxWeaver.loadView(MainScene.class);
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -2,21 +2,24 @@ package com.miola.mcr.Services;
 
 
 import com.miola.mcr.Dao.UserRepository;
-import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UserServiceImp implements UserService{
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private User currentUser;
+
+    @Autowired
+    public UserServiceImp(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User getCurrentUser() {
         return currentUser;
@@ -44,8 +47,8 @@ public class UserServiceImp implements UserService{
 
 
     @Override
-    public Role getUserRole(User user) {
-        return getUserById(user.getId()).getRole();
+    public String getUserRole(User user) {
+        return getUserById(user.getId()).getRole().getTitle();
     }
 
     @Override
@@ -82,9 +85,19 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
+    public boolean deleteUserByUsername(String username) {
+        if (userRepository.existsByUsername(username)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean editUser(User user) {
         try {
             if (userRepository.existsById(user.getId())) {
+                String password = user.getPassword();
+                user.setPassword(encryptionMd5(password));
                 userRepository.save(user);
                 return true;
             }else return false;
@@ -98,6 +111,11 @@ public class UserServiceImp implements UserService{
     @Override
     public User getUser() {
         return getCurrentUser();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 

@@ -6,10 +6,10 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.*;
-@Data
-@NoArgsConstructor
+//@Data
+//@NoArgsConstructor
 @Entity
-@ToString
+//@ToString
 @Table(name="Permissions")
 public class Permission {
     @Id
@@ -21,6 +21,48 @@ public class Permission {
     private String description;
 
     @ManyToMany(mappedBy = "permissions")
-    private Collection<Role> roles=new ArrayList<>();
+    private Set<Role> roles=new HashSet<>();
 
+    public Permission(Long id, String title, String description, Set<Role> roles) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.roles = roles;
+    }
+
+    public Permission() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

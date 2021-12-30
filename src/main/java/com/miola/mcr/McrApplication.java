@@ -1,19 +1,37 @@
 package com.miola.mcr;
 
-import com.miola.mcr.Dao.UserRepository;
-import com.miola.mcr.Entities.User;
+import com.miola.mcr.Dao.RoleRepository;
+import com.miola.mcr.Dao.ZoneRepository;
+import com.miola.mcr.Entities.Role;
+import com.miola.mcr.Entities.Sensor;
+import com.miola.mcr.Entities.Zone;
+import com.miola.mcr.Services.RoleService;
 import com.miola.mcr.Services.UserService;
+import com.miola.mcr.Services.ZoneService;
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
 
 @SpringBootApplication
 public class McrApplication implements CommandLineRunner {
 
+    private final UserService userService;
+    private final ZoneService zoneService;
+    private final RoleService roleService;
+    private final RoleRepository roleRepository;
+    private final ZoneRepository zoneRepository;
+
     @Autowired
-    private UserService userService;
+    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository) {
+        this.userService = userService;
+        this.zoneService = zoneService;
+        this.roleService = roleService;
+        this.roleRepository = roleRepository;
+        this.zoneRepository = zoneRepository;
+    }
 
     public static void main(String[] args) {
 
@@ -23,12 +41,33 @@ public class McrApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User u = new User("ilyas","ilyas3","1234");
-        userService.saveUser(u);
-        User u2 = new User("oussama","oussama","1234");
-        userService.saveUser(u2);
-        User u1 = new User("ilyasxxx","ilyas3","1234");
-        userService.saveUser(u1);
+   /*     User u2 = new User(2L,"oussamaX","oussama","1234");
+        userService.editUser(u2);*/
+//        User u = new User("ilyas","ilyas3","1234");
+//        userService.saveUser(u);
+//        User u2 = new User("oussama","oussama","1234");
+//        userService.saveUser(u2);
+
+        /*for (int i=0 ; i < 30 ; i++){
+            User u = new User("oussama","oussama"+i, "1234" );
+            userService.saveUser(u);
+        }*/
+
+
+        //Zone Z = new Zone();
+        //Role r = roleRepository.findById(1L).orElse(null);
+        List<Zone> zones = zoneRepository.getAllZones();
+        for(Zone Z : zones) {
+            System.out.println(Z.toString());
+            for(Role R : Z.getRoles())
+                System.out.println(R.toString());
+            for(Sensor S : Z.getSensors())
+                System.out.println(S.toString());
+        }
+
+
+
+
 
     }
 }

@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Collection;
 
-@Data
-@NoArgsConstructor
+//@Data
+//@NoArgsConstructor
 @Entity
-@ToString
+//@ToString
 @DiscriminatorValue("AirQuality")
 // works with DeviceRepositoy
 public class AirQuality extends Device {
@@ -20,7 +21,30 @@ public class AirQuality extends Device {
     private String type;
     private Boolean alarm;
 
+    public AirQuality(Long id, String name, Boolean power, Collection<Sensor> sensors, Boolean state, String type, Boolean alarm) {
+        super(id, name, power, sensors);
+        this.type = type;
+        this.alarm = alarm;
+    }
 
 
+    public AirQuality() {
 
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(Boolean alarm) {
+        this.alarm = alarm;
+    }
 }

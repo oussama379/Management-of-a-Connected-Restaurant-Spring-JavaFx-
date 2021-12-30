@@ -16,14 +16,18 @@ import org.springframework.stereotype.Component;
 @FxmlView
 public class MainScene {
 
-    @Autowired
-    private ConfigurableApplicationContext applicationContext;
+    private final ConfigurableApplicationContext applicationContext;
 
     @FXML
     private MFXButton btUsersCrud;
 
     @FXML
     private BorderPane rootPane;
+
+    @Autowired
+    public MainScene(ConfigurableApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @FXML
     void loadScene(ActionEvent event) {

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @FxmlView
-public class ControllerTest {
+public class ControllerTestToBeDeletedAtTheEnd {
 //    @Autowired
 //    private UserRepository userRepository;
 //

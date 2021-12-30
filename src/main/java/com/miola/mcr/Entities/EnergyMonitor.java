@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Collection;
 
-@Data
-@NoArgsConstructor
+//@Data
+//@NoArgsConstructor
 @Entity
-@ToString
+//@ToString
 @DiscriminatorValue("EnergyMonitor")
 // works with DeviceRepositoy
 public class EnergyMonitor extends Device {
@@ -19,4 +20,20 @@ public class EnergyMonitor extends Device {
     private Boolean state;
 
 
+    public EnergyMonitor(Long id, String name, Boolean power, Collection<Sensor> sensors, Boolean state) {
+        super(id, name, power, sensors);
+        this.state = state;
+    }
+
+    public EnergyMonitor() {
+
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
+    }
 }
