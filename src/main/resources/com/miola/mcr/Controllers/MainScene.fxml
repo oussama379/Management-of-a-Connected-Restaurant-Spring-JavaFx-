@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" minHeight="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../../../style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.MainScene">
+   <left>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+         <top>
+            <VBox prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+               <children>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Home">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton fx:id="btUsersCrud" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Users CRUD">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Customers Dashboard">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Temperature Dashboard">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Energy Dashboard">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Devices Control">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Custumer Area">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+            </VBox>
+         </top>
+         <bottom>
+            <VBox alignment="BOTTOM_LEFT" minHeight="150.0" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <MFXButton depthLevel="LEVEL0" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Profil">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton depthLevel="LEVEL0" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Sign Out">
+                     <font>
+                        <Font name="Open Sans SemiBold" size="16.0" />
+                     </font>
+                  </MFXButton>
+               </children>
+            </VBox>
+         </bottom>
+      </BorderPane>
+   </left>
+</BorderPane>

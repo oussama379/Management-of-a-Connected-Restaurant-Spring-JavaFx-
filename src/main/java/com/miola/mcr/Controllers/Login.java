@@ -3,19 +3,27 @@ package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Services.UserService;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 
 @Component
 @FxmlView
 public class Login {
+
+    @Autowired
+    private ConfigurableApplicationContext applicationContext;
 
     @FXML
     private Button btnFB;
@@ -44,8 +52,15 @@ public class Login {
     @FXML
     void handleButtonAction(MouseEvent event) {
         if(userService.authenticate(getUsername(), getPassword()) != null){
-            lblErrors.setText("Login Succefull. ");
-            System.out.print(userService.getUser());
+            lblErrors.setText("Login Succefull.");
+
+            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+
+            Pane root = fxWeaver.loadView(MainScene.class);
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
         }else{
             lblErrors.setText("Login Failed.");
         }
