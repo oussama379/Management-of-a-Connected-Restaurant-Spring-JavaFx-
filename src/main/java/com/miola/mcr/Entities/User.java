@@ -1,5 +1,6 @@
 package com.miola.mcr.Entities;
 
+import io.github.palexdev.materialfx.filter.IFilterable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,14 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Table(name="Users")
-public class User {
+public class User implements IFilterable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String nom;
-    private String prenom;
+    private String name;
     @Column(name="username", unique=true)
     private String username;
     private String password;
@@ -26,20 +25,20 @@ public class User {
     @ManyToOne
     private Role role;
 
-
-
-    public User(Long id, String nom, String prenom, String username, String password) {
-        // TODO
+    public User(Long id, String name, String username, String password) {
         this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
+        this.name = name;
         this.username = username;
         this.password = password;
     }
-    public User(String nom, String prenom, String username, String password) {
-        this.nom = nom;
-        this.prenom = prenom;
+    public User(String name, String username, String password) {
+        this.name = name;
         this.username = username;
         this.password = password;
+    }
+
+    @Override
+    public String toFilterString() {
+        return getId() + " " + this.getName() + " " + getUsername() + " " + getPassword();
     }
 }

@@ -23,11 +23,11 @@ public class McrApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User u = new User("ilyas","hennane","ilyas3","1234");
+        User u = new User("ilyas","ilyas3","1234");
         userService.saveUser(u);
-        User u2 = new User("oussama","hennane","oussama","1234");
+        User u2 = new User("oussama","oussama","1234");
         userService.saveUser(u2);
-        User u1 = new User("ilyasxxx","hennane","ilyas3","1234");
+        User u1 = new User("ilyasxxx","ilyas3","1234");
         userService.saveUser(u1);
 
     }
