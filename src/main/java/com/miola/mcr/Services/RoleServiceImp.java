@@ -6,6 +6,7 @@ import com.miola.mcr.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class RoleServiceImp implements RoleService{
@@ -18,8 +19,8 @@ public class RoleServiceImp implements RoleService{
 
     @Override
     public List<String> getAllRolesNames() {
-        List<String> roleNames = null;
-        roleNames.add("fake role");
+        List<String> roleNames = new ArrayList<>();
+        //roleNames.add("fake role");
         for (Role role : roleRepository.findAll()) {
             roleNames.add(role.getTitle());
         }
@@ -29,5 +30,16 @@ public class RoleServiceImp implements RoleService{
     @Override
     public Role findRoleByTitle(String title) {
         return roleRepository.findByTitle(title);
+    }
+
+    @Override
+    public boolean saveRole(Role role) {
+        try{
+            roleRepository.save(role);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

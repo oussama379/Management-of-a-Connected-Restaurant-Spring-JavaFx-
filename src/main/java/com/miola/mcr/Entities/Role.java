@@ -22,6 +22,7 @@ public class Role {
     private String description;
 
 
+
     @ManyToMany
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
@@ -42,6 +43,11 @@ public class Role {
         this.permissions = permissions;
         this.zones = zones;
         this.users = users;
+    }
+
+    public Role(Long id, Set<Zone> zones) {
+        this.id = id;
+        this.zones = zones;
     }
 
     public Role() {

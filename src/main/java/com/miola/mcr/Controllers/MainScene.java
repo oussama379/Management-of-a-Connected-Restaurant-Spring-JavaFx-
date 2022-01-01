@@ -22,6 +22,9 @@ public class MainScene {
     private MFXButton btUsersCrud;
 
     @FXML
+    private MFXButton btZonesCrud;
+
+    @FXML
     private BorderPane rootPane;
 
     @Autowired
@@ -35,11 +38,16 @@ public class MainScene {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
 
         if (event.getSource().equals(btUsersCrud)) {
-            Pane newLoadedPane =  fxWeaver.loadView(CrudUser.class);
+            Pane newLoadedPane = fxWeaver.loadView(CrudUser.class);
             rootPane.setCenter(newLoadedPane);
-        }else{
+        } else if (event.getSource().equals(btZonesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudZone.class);
+            rootPane.setCenter(newLoadedPane);
+        } else {
             rootPane.setCenter(null);
         }
+
     }
 
 }

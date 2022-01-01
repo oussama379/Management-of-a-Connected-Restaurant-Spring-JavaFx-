@@ -14,4 +14,8 @@ public interface ZoneService {
     List<Device> getZoneDevices(Zone zone);
     List<Sensor> getZoneSensors(Zone zone);
     List<Role> getZoneRoles(Zone zone);
+
+    List<String> getZoneDevicesNames(Zone zone);
+    List<String> getZoneSensorsNames(Zone zone);
+    List<String> getZoneRolesNames(Zone zone);
 }

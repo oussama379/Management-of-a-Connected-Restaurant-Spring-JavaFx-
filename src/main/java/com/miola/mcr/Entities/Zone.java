@@ -22,12 +22,12 @@ public class Zone {
     private String title;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    //, cascade = CascadeType.PERSIST
     @JoinTable(name = "zone_role", joinColumns = @JoinColumn(name = "zone_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     @OneToMany(mappedBy="zone", fetch = FetchType.EAGER)
-    //, fetch = FetchType.EAGER, cascade = CascadeType.ALL
     private Set<Sensor> sensors;
 
     public Zone(Long id, String title, Set<Role> roles, Set<Sensor> sensors) {
@@ -35,6 +35,11 @@ public class Zone {
         this.title = title;
         this.roles = roles;
         this.sensors = sensors;
+    }
+
+    public Zone(Long id, String title) {
+        this.id = id;
+        this.title = title;
     }
 
     public Zone() {
