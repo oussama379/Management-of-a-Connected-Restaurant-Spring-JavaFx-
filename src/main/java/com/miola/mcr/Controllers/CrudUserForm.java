@@ -61,7 +61,7 @@ public class CrudUserForm implements Initializable {
 //        ObservableList<String> roles = FXCollections.observableArrayList(roleService.getAllRolesNames());
 
         // Temporary
-        cbRole.getItems().addAll("admin", "waiter");
+        cbRole.getItems().addAll(roleService.getAllRolesNames());
     }
 
     @FXML
@@ -88,6 +88,7 @@ public class CrudUserForm implements Initializable {
             User userToAdd = new User(getName(), getUsername(), getPassword(),roleService.findRoleByTitle(getRole()));
             //userToAdd.setRole(roleService.findRoleByTitle(getRole()));
            try {
+               System.out.print(roleService.findRoleByTitle(getRole()).toString());
                userService.saveUser(userToAdd);
                // TODO show Confirmation Msg
            }catch (Exception e){
@@ -97,7 +98,7 @@ public class CrudUserForm implements Initializable {
 
     }
 
-    // TODO Add Role to this function ILYAS
+
     public void fillData(String name, String username, Long idUser, String roleName){
         //System.out.print(roleName);
         this.idUser = idUser;

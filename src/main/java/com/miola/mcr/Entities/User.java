@@ -22,7 +22,7 @@ public class User implements IFilterable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
 
-    public User(Long id, String name, String username, String password, Role roleByTitle) {
+    public User(Long id, String name, String username, String password, Role role) {
         this.id = id;
         this.name = name;
         this.username = username;

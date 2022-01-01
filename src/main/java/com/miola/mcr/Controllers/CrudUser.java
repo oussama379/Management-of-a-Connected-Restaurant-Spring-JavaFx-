@@ -91,6 +91,7 @@ public class CrudUser implements Initializable {
         MFXTableColumn<User> idColumn = new MFXTableColumn<User>("Id", Comparator.comparing(User::getId));
         MFXTableColumn<User> nameColumn = new MFXTableColumn<User>("Name", Comparator.comparing(User::getName));
         MFXTableColumn<User> usernameColumn = new MFXTableColumn<User>("Username", Comparator.comparing(User::getUsername));
+        // TODO filter role
         MFXTableColumn<User> roleColumn = new MFXTableColumn<User>("Role", Comparator.comparing(User::getRoleName));
 
         /* link columns with proprieties */
