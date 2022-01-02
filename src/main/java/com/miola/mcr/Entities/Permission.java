@@ -20,8 +20,11 @@ public class Permission {
 
     private String description;
 
-    @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles=new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "permission_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public Permission(Long id, String title, String description, Set<Role> roles) {
         this.id = id;

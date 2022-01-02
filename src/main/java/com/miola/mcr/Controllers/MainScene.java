@@ -83,7 +83,11 @@ public class MainScene {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudRole.class);
             rootPane.setCenter(newLoadedPane);
-        } else {
+        } else if (event.getSource().equals(btPermissionsCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudPermission.class);
+            rootPane.setCenter(newLoadedPane);
+        }else {
             rootPane.setCenter(null);
         }
 

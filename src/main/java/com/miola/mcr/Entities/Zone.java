@@ -22,7 +22,6 @@ public class Zone {
     private String title;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    //, cascade = CascadeType.PERSIST
     @JoinTable(name = "zone_role", joinColumns = @JoinColumn(name = "zone_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
