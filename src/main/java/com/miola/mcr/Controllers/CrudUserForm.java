@@ -71,25 +71,25 @@ public class CrudUserForm implements Initializable {
 
     @FXML
     void save(ActionEvent event) {
-        /*
-        *  Audio
-        * */
-        // TODO after saving or editing a user the view need to be reloaded
+        User userToEditOrAdd = new User();
+        userToEditOrAdd.setName(getName());
+        userToEditOrAdd.setUsername(getUsername());
+        userToEditOrAdd.setPassword(getPassword());
+        userToEditOrAdd.setRole(roleService.findRoleByTitle(getRole()));
+
         if (isAnEdit){
-            User userToEdit = new User(this.idUser, getName(), getUsername(), getPassword(), roleService.findRoleByTitle(getRole()));
+            userToEditOrAdd.setId(this.idUser);
             try {
-                userService.editUser(userToEdit);
+                System.out.print(roleService.findRoleByTitle(getRole()).toString());
+                userService.editUser(userToEditOrAdd);
                 // TODO show Confirmation Msg
             }catch (Exception e){
                 // TODO show Error Msg
             }
         }else{
-            //System.out.print(getRole());
-            User userToAdd = new User(getName(), getUsername(), getPassword(),roleService.findRoleByTitle(getRole()));
-            //userToAdd.setRole(roleService.findRoleByTitle(getRole()));
            try {
                System.out.print(roleService.findRoleByTitle(getRole()).toString());
-               userService.saveUser(userToAdd);
+               userService.saveUser(userToEditOrAdd);
                // TODO show Confirmation Msg
            }catch (Exception e){
                // TODO show Error Msg
@@ -106,6 +106,7 @@ public class CrudUserForm implements Initializable {
         tfUsername.setText(username);
         // TODO setSelectedValue not displaying the role -> find other method
         cbRole.setSelectedValue(roleName);
+        cbRole.setPromptText(roleName);
         isAnEdit = true;
     }
 
@@ -123,7 +124,7 @@ public class CrudUserForm implements Initializable {
     }
 
     public String getRole() {
-        return cbRole.getSelectedValue().toString();
+        return cbRole.getSelectedValue();
     }
 }
 
