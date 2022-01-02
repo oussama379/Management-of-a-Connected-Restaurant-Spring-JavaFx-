@@ -73,19 +73,28 @@ public class McrApplication implements CommandLineRunner {
             System.out.println(roleName);*/
 
 
-//        List<Zone> zones = zoneRepository.getAllZones();
-//        for(Zone Z : zones) {
-//            System.out.println("Zone 1");
-//            for( String Sensor : zoneService.getZoneSensorsNames(Z))
-//                System.out.println(Sensor.toString());
-////            for( String Device : zoneService.getZoneDevicesNames(Z))
-////                System.out.println(Device.toString());
-//            for( String Role : zoneService.getZoneRolesNames(Z))
-//                System.out.println(Role.toString());
-//
-//        }
+ /*       List<Zone> zones = zoneRepository.getAllZones();
+        for(Zone Z : zones) {
+            System.out.println("Zone 1");
+            for( String Sensor : zoneService.getZoneSensorsNames(Z))
+                System.out.println(Sensor);
+            for( String Device : zoneService.getZoneDevicesNames(Z))
+                System.out.println(Device);
+            for( String Role : zoneService.getZoneRolesNames(Z))
+                System.out.println(Role);
 
+        }*/
 
+/*        Zone zone1 = zoneRepository.getById(1L);
+        Zone zone2 = zoneRepository.getById(2L);
+        for(Sensor S : zone1.getSensors()) {
+            System.out.println(S.toString());
+            System.out.println(S.getDevice().getName());
+        }
+        for(Sensor S : zone2.getSensors()) {
+            System.out.println(S.toString());
+            System.out.println(S.getDevice().getName());
+        }*/
 
 
 

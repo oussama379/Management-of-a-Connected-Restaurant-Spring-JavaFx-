@@ -17,4 +17,5 @@ public interface SensorService {
     boolean saveSensor(Sensor sensor);
     boolean editSensor(Sensor sensor);
 
+
 }

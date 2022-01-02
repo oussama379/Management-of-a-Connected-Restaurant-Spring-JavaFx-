@@ -9,4 +9,9 @@ public interface DiningTableService {
     List<String> getAllTablesNumbers();
     public void modifyState();
     DiningTable getDiningTableByNumber(int number);
+    List<DiningTable> getAllDiningTables();
+    List<String> getDiningTableSensorsNames(DiningTable diningTable);
+    boolean deleteDiningTableById(Long Id);
+    boolean saveDiningTable (DiningTable diningTable);
+    boolean editDiningTable(DiningTable diningTable);
 }

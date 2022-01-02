@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 
 @Entity
@@ -18,11 +19,10 @@ public class DiningTable {
     private int number;
     private String state;
 
-    // TODO EAGER VS LAZY
-    @OneToMany(mappedBy="diningTable")
-    private Collection<Sensor> sensors=new ArrayList<>();
+    @OneToMany(mappedBy="diningTable", fetch = FetchType.EAGER)
+    private Set<Sensor> sensors;
 
-    public DiningTable(Long id, int number, String state, Collection<Sensor> sensors) {
+    public DiningTable(Long id, int number, String state, Set<Sensor> sensors) {
         this.id = id;
         this.number = number;
         this.state = state;
@@ -30,7 +30,6 @@ public class DiningTable {
     }
 
     public DiningTable() {
-
     }
 
     public Long getId() {
@@ -57,11 +56,11 @@ public class DiningTable {
         this.state = state;
     }
 
-    public Collection<Sensor> getSensors() {
+    public Set<Sensor> getSensors() {
         return sensors;
     }
 
-    public void setSensors(Collection<Sensor> sensors) {
+    public void setSensors(Set<Sensor> sensors) {
         this.sensors = sensors;
     }
 }
