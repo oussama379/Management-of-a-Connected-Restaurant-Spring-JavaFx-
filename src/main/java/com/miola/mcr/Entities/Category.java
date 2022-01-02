@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 //@Data
 //@NoArgsConstructor
@@ -22,13 +23,13 @@ public class Category {
 
     private String description;
 
-    @OneToMany(mappedBy="category")
-    private Collection<Sensor> sensors=new ArrayList<>();
+    @OneToMany(mappedBy="category", fetch = FetchType.EAGER)
+    private Set<Sensor> sensors;
 
-    @OneToMany(mappedBy="category")
-    private Collection<Alerte> alerts=new ArrayList<>();
+    @OneToMany(mappedBy="category", fetch = FetchType.EAGER)
+    private Set<Alerte> alerts;
 
-    public Category(Long id, String title, String description, Collection<Sensor> sensors, Collection<Alerte> alerts) {
+    public Category(Long id, String title, String description, Set<Sensor> sensors, Set<Alerte> alerts) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -64,19 +65,19 @@ public class Category {
         this.description = description;
     }
 
-    public Collection<Sensor> getSensors() {
+    public Set<Sensor> getSensors() {
         return sensors;
     }
 
-    public void setSensors(Collection<Sensor> sensors) {
+    public void setSensors(Set<Sensor> sensors) {
         this.sensors = sensors;
     }
 
-    public Collection<Alerte> getAlerts() {
+    public Set<Alerte> getAlerts() {
         return alerts;
     }
 
-    public void setAlerts(Collection<Alerte> alerts) {
+    public void setAlerts(Set<Alerte> alerts) {
         this.alerts = alerts;
     }
 }

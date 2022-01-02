@@ -28,6 +28,13 @@ public class MainScene {
     private MFXButton btSensorsCrud;
 
     @FXML
+    private MFXButton btDinningTablesCrud;
+
+    @FXML
+    private MFXButton btCategoriesCrud;
+
+
+    @FXML
     private BorderPane rootPane;
 
     @Autowired
@@ -47,11 +54,19 @@ public class MainScene {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudZone.class);
             rootPane.setCenter(newLoadedPane);
-        }  else if (event.getSource().equals(btSensorsCrud)) {
+        } else if (event.getSource().equals(btSensorsCrud)) {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudSensor.class);
             rootPane.setCenter(newLoadedPane);
-        }else {
+        } else if (event.getSource().equals(btDinningTablesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudDinningTable.class);
+            rootPane.setCenter(newLoadedPane);
+        } else if (event.getSource().equals(btCategoriesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudCategory.class);
+            rootPane.setCenter(newLoadedPane);
+        } else {
             rootPane.setCenter(null);
         }
 
