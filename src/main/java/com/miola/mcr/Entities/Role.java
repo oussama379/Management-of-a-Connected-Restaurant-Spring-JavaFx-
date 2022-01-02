@@ -23,16 +23,16 @@ public class Role {
 
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permission> permissions;
 
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<Zone> zones;
 
-    @OneToMany(mappedBy="role")
+    @OneToMany(mappedBy="role", fetch = FetchType.EAGER)
     private Set<User> users;
 
 

@@ -33,6 +33,19 @@ public class MainScene {
     @FXML
     private MFXButton btCategoriesCrud;
 
+    @FXML
+    private MFXButton btRolesCrud;
+
+    @FXML
+    private MFXButton btAlertsCrud;
+
+    @FXML
+    private MFXButton btPermissionsCrud;
+
+    @FXML
+    private MFXButton btDevicesCrud;
+
+
 
     @FXML
     private BorderPane rootPane;
@@ -65,6 +78,10 @@ public class MainScene {
         } else if (event.getSource().equals(btCategoriesCrud)) {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudCategory.class);
+            rootPane.setCenter(newLoadedPane);
+        } else if (event.getSource().equals(btRolesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudRole.class);
             rootPane.setCenter(newLoadedPane);
         } else {
             rootPane.setCenter(null);
