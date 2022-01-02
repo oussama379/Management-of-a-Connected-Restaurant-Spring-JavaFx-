@@ -97,8 +97,8 @@ public class CrudZone implements Initializable {
         devicesColumn.setRowCellFunction(zone -> {
             MFXTableRowCell cell = new MFXTableRowCell("");
             cbDevice = new MFXComboBox<>();
-            //cbDevice.getItems().addAll(zoneService.getZoneDevicesNames(zone));
-            //cbDevice.setPromptText(cbDevice.getItems().get(0));
+            cbDevice.getItems().addAll(zoneService.getZoneDevicesNames(zone));
+            cbDevice.setPromptText("See Devices");
             cell.setLeadingGraphic(cbDevice);
             return cell;
         });

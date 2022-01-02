@@ -22,8 +22,10 @@ public class Sensor {
     private Zone zone;
     @ManyToOne
     private DiningTable diningTable;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Device device;
+
     @ManyToOne
     private Category category;
 

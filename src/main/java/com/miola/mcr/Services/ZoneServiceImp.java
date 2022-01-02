@@ -81,15 +81,12 @@ public class ZoneServiceImp implements ZoneService{
 
     @Override
     public List<String> getZoneDevicesNames(Zone zone) {
-        /*List<String> DevicesNames = new ArrayList<>();
-        for(Zone Z : zones) {
-            System.out.println(Z.toString());
-            for(Role R : Z.getRoles())
-                System.out.println(R.toString());
-            for(Sensor S : Z.getSensors())
-                System.out.println(S.toString());*/
-            return null;
-
+        List<String> DevicesNames = new ArrayList<>();
+            for(Sensor S : zone.getSensors()) {
+                if(S.getDevice() != null)
+                    DevicesNames.add(S.getDevice().getName());
+            }
+            return DevicesNames;
     }
 
 
