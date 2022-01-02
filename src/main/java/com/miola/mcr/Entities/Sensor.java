@@ -71,6 +71,10 @@ public class Sensor {
         return zone;
     }
 
+    public String getZoneName() {
+        return zone.getTitle();
+    }
+
     public void setZone(Zone zone) {
         this.zone = zone;
     }
@@ -79,12 +83,27 @@ public class Sensor {
         return diningTable;
     }
 
+    public String getDiningTableName() {
+        if (this.diningTable != null)
+            return String.valueOf(diningTable.getNumber());
+        else
+            // TODO TO BE FIXED
+            return null;
+    }
+
     public void setDiningTable(DiningTable diningTable) {
         this.diningTable = diningTable;
     }
 
     public Device getDevice() {
         return device;
+    }
+
+    public String getDeviceName() {
+        if (this.device != null)
+            return device.getName();
+        else
+            return " ";
     }
 
     public void setDevice(Device device) {
@@ -97,6 +116,10 @@ public class Sensor {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getCategoryName() {
+        return category.getTitle();
     }
 
     @Override

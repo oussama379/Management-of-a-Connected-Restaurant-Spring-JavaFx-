@@ -105,5 +105,21 @@ public class ZoneServiceImp implements ZoneService{
             rolesNames.add(r.getTitle());
         return rolesNames;
     }
+
+    @Override
+    public List<String> getAllZonesNames() {
+            List<String> zonesNames = new ArrayList<>();
+            zonesNames.add("fake device");
+            for (Zone zone : zoneRepository.findAll()) {
+                zonesNames.add(zone.getTitle());
+            }
+            return zonesNames;
+        }
+
+    @Override
+    public Zone getZoneByName(String name) {
+        return zoneRepository.findByTitle(name);
+    }
 }
+
 

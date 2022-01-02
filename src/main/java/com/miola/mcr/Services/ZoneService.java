@@ -18,4 +18,8 @@ public interface ZoneService {
     List<String> getZoneDevicesNames(Zone zone);
     List<String> getZoneSensorsNames(Zone zone);
     List<String> getZoneRolesNames(Zone zone);
+
+    List<String> getAllZonesNames();
+    Zone getZoneByName(String name);
+
 }

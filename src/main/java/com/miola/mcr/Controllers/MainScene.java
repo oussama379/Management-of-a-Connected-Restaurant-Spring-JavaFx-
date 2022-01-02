@@ -25,6 +25,9 @@ public class MainScene {
     private MFXButton btZonesCrud;
 
     @FXML
+    private MFXButton btSensorsCrud;
+
+    @FXML
     private BorderPane rootPane;
 
     @Autowired
@@ -44,7 +47,11 @@ public class MainScene {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudZone.class);
             rootPane.setCenter(newLoadedPane);
-        } else {
+        }  else if (event.getSource().equals(btSensorsCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudSensor.class);
+            rootPane.setCenter(newLoadedPane);
+        }else {
             rootPane.setCenter(null);
         }
 

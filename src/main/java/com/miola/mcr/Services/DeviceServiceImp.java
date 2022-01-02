@@ -3,7 +3,6 @@ package com.miola.mcr.Services;
 
 import com.miola.mcr.Dao.DeviceRepository;
 import com.miola.mcr.Entities.Device;
-import com.miola.mcr.Entities.Sensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +12,11 @@ import java.util.List;
 @Service
 public class DeviceServiceImp implements DeviceService{
 
-    private final DeviceRepository deviceRepository;
+
+    private final DeviceRepository<Device> deviceRepository;
 
     @Autowired
-    public DeviceServiceImp(DeviceRepository deviceRepository) {
+    public DeviceServiceImp(DeviceRepository<Device> deviceRepository) {
         this.deviceRepository = deviceRepository;
     }
 
@@ -34,5 +34,10 @@ public class DeviceServiceImp implements DeviceService{
     @Override
     public void changePower() {
 
+    }
+
+    @Override
+    public Device getDeviceByName(String name) {
+        return deviceRepository.findByName(name);
     }
 }

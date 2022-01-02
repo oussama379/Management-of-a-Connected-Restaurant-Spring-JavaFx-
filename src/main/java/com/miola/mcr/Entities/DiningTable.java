@@ -8,10 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-//@Data
-//@NoArgsConstructor
+
 @Entity
-//@ToString
 @Table(name="DiningTables")
 public class DiningTable {
     @Id
