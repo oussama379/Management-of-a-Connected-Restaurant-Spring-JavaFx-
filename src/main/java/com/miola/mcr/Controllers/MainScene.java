@@ -37,7 +37,7 @@ public class MainScene {
     private MFXButton btRolesCrud;
 
     @FXML
-    private MFXButton btAlertsCrud;
+    private MFXButton btAlertesCrud;
 
     @FXML
     private MFXButton btPermissionsCrud;
@@ -87,10 +87,13 @@ public class MainScene {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudPermission.class);
             rootPane.setCenter(newLoadedPane);
+        }else if (event.getSource().equals(btAlertesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudAlerte.class);
+            rootPane.setCenter(newLoadedPane);
         }else {
             rootPane.setCenter(null);
         }
-
     }
 
 }
