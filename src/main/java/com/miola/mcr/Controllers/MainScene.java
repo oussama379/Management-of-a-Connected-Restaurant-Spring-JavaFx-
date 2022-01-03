@@ -91,6 +91,10 @@ public class MainScene {
             Pane newLoadedPane;
             newLoadedPane = fxWeaver.loadView(CrudAlerte.class);
             rootPane.setCenter(newLoadedPane);
+        }else if (event.getSource().equals(btDevicesCrud)) {
+            Pane newLoadedPane;
+            newLoadedPane = fxWeaver.loadView(CrudDevice.class);
+            rootPane.setCenter(newLoadedPane);
         }else {
             rootPane.setCenter(null);
         }

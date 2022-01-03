@@ -21,9 +21,10 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    // TODO ENUM ON OFF
     private Boolean power;
 
-    @OneToMany(mappedBy="device")
+    @OneToMany(mappedBy="device", fetch = FetchType.EAGER)
     private Collection<Sensor> sensors=new ArrayList<>();
 
     public Device(Long id, String name, Boolean power, Collection<Sensor> sensors) {
