@@ -87,8 +87,7 @@ public class Sensor {
         if (this.diningTable != null)
             return String.valueOf(diningTable.getNumber());
         else
-            // TODO TO BE FIXED
-            return null;
+            return "";
     }
 
     public void setDiningTable(DiningTable diningTable) {
@@ -103,7 +102,7 @@ public class Sensor {
         if (this.device != null)
             return device.getName();
         else
-            return " ";
+            return "";
     }
 
     public void setDevice(Device device) {
@@ -119,7 +118,11 @@ public class Sensor {
     }
 
     public String getCategoryName() {
-        return category.getTitle();
+        try {
+            return category.getTitle();
+        } catch (NullPointerException e) {
+            return "";
+        }
     }
 
     @Override

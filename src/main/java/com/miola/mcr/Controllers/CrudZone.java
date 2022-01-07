@@ -1,6 +1,7 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Entities.User;
 import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.RoleService;
 import com.miola.mcr.Services.UserService;
@@ -8,8 +9,12 @@ import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +22,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +39,12 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 
 @Component
 @FxmlView
-public class CrudZone implements Initializable {
+public class CrudZone extends Crud implements Initializable {
 
-
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final ZoneService zoneService;
     //to be deleted
     private final RoleService roleService;
@@ -59,10 +68,12 @@ public class CrudZone implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudZone(ConfigurableApplicationContext applicationContext, ZoneService zoneService, UserService userService, RoleService roleService) {
-        this.applicationContext = applicationContext;
+    public CrudZone(ZoneService zoneService, UserService userService, FxWeaver fxWeaver, RoleService roleService) {
+        this.fxWeaver = fxWeaver;
         this.zoneService = zoneService;
         this.roleService = roleService;
     }
@@ -70,11 +81,16 @@ public class CrudZone implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudZoneForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
 
 
@@ -131,44 +147,34 @@ public class CrudZone implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<Zone> selectedZones = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedZones.isEmpty()) {
             for (Zone zone : selectedZones){
                 zoneService.deleteZoneById(zone.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Zone> selectedZones = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedZones.isEmpty()) {
-            /* take first user in selected users */
-            Zone zoneToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudZoneForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudZoneForm.class).fillData(zoneToBeEdit.getTitle(), zoneToBeEdit.getId(), zoneToBeEdit.getRoles()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Zone");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudZoneForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Zone");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Zone> zones = FXCollections.observableArrayList(zoneService.getAllZones());
+        tableView.setItems(zones);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

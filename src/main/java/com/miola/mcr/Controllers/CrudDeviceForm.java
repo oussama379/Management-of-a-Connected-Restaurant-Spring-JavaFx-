@@ -56,37 +56,44 @@ public class CrudDeviceForm implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cbDeviceType.getItems().addAll("Air Conditioner", "Air Quality", "Energy Monitor");
+        // Set Validation
+        this.setFieldsValidators();
     }
 
     @FXML
     void cancel(ActionEvent event) {
-
+        this.closeWindow();
     }
 
     @FXML
     void save(ActionEvent event) {
-        Device deviceToEditOrSave = null;
-        if(getDeviceType().equals("Air Conditioner")) deviceToEditOrSave = new AirConditioner();
-        if(getDeviceType().equals("Air Quality"))  deviceToEditOrSave = new AirQuality();
-        if(getDeviceType().equals("Energy Monitor")) deviceToEditOrSave = new EnergyMonitor();
-        deviceToEditOrSave.setName(getName());
+        boolean fieldsValidation = tfName.isValid() && cbDeviceType.isValid();
+        if (fieldsValidation){
+            Device deviceToEditOrSave = null;
+            if(getDeviceType().equals("Air Conditioner")) deviceToEditOrSave = new AirConditioner();
+            if(getDeviceType().equals("Air Quality"))  deviceToEditOrSave = new AirQuality();
+            if(getDeviceType().equals("Energy Monitor")) deviceToEditOrSave = new EnergyMonitor();
+            deviceToEditOrSave.setName(getName());
 
-        if (isAnEdit){
-            try {
-                //TODO TALK ABOUT EDIT DEVICE
-                //System.out.println(this.idDevice);
+            if (isAnEdit){
                 deviceToEditOrSave.setId(this.idDevice);
-                deviceService.editDevice(deviceToEditOrSave);
-            }catch (Exception e){
-                // TODO show Error Msg
+                if (deviceService.editDevice(deviceToEditOrSave)){
+                    fxWeaver.getBean(CrudDevice.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudDevice.class).showAlter(0);
+                }
+            }else{
+                System.out.println(deviceToEditOrSave);
+                if (deviceService.saveDevice(deviceToEditOrSave)){
+                    fxWeaver.getBean(CrudDevice.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudDevice.class).showAlter(0);
+                }
             }
         }else{
-            try {
-                deviceService.saveDevice(deviceToEditOrSave);
-                // TODO show Confirmation Msg
-            }catch (Exception e){
-                // TODO show Error Msg
-            }
+            fxWeaver.getBean(CrudDevice.class).showAlter(4);
         }
 
     }
@@ -95,11 +102,39 @@ public class CrudDeviceForm implements Initializable {
         //System.out.println(idDevice);
         this.idDevice = idDevice;
         tfName.setText(name);
-        if(deviceType.equals("AirConditioner")) {cbDeviceType.setSelectedValue("Air Conditioner"); cbDeviceType.setPromptText("Air Conditioner");}
-        if(deviceType.equals("AirQuality"))  {cbDeviceType.setSelectedValue("Air Quality"); cbDeviceType.setPromptText("Air Quality");}
-        if(deviceType.equals("EnergyMonitor")) {cbDeviceType.setSelectedValue("Energy Monitor"); cbDeviceType.setPromptText("Energy Monitor");}
+        if(deviceType.equals("AirConditioner")) {cbDeviceType.getSelectionModel().selectItem("Air Conditioner"); }
+        if(deviceType.equals("AirQuality"))  {cbDeviceType.getSelectionModel().selectItem("Air Quality"); }
+        if(deviceType.equals("EnergyMonitor")) {cbDeviceType.getSelectionModel().selectItem("Energy Monitor"); }
         cbDeviceType.setDisable(true);
         isAnEdit = true;
+    }
+
+    public void closeWindow(){
+        this.clearFields();
+this.isAnEdit = false;
+        Stage formWindow = (Stage) (tfName.getScene().getWindow());
+        formWindow.fireEvent(new WindowEvent(formWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
+    }
+
+    public void setFieldsValidators(){
+        // Name TextField : Required
+        tfName.setValidated(true);
+        tfName.getValidator().add(
+                BindingUtils.toProperty(tfName.textProperty().isNotEmpty()),
+                "Required"
+        );
+
+        // Type ComboBox : Required
+        cbDeviceType.setValidated(true);
+        cbDeviceType.getValidator().add(
+                BindingUtils.toProperty(cbDeviceType.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
+                "A value must be selected"
+        );
+    }
+
+    public void clearFields(){
+        tfName.clear();
+        cbDeviceType.getSelectionModel().clearSelection();
     }
 
 
@@ -109,8 +144,6 @@ public class CrudDeviceForm implements Initializable {
     public String getDeviceType() {
         return cbDeviceType.getSelectedValue();
     }
-
-
 
 }
 

@@ -37,7 +37,7 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudUser implements Initializable {
+public class CrudUser extends Crud implements Initializable {
 
     private final UserService userService;
     private final FxWeaver fxWeaver;
@@ -63,26 +63,18 @@ public class CrudUser implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println(url);
+        System.out.println(resourceBundle);
         populateTable();
 
-        Parent root = fxWeaver.loadView(CrudUserForm.class);
-        Scene scene = new Scene(root);
         formWindow = new Stage();
-        formWindow.initModality(Modality.APPLICATION_MODAL); // makes stage act as a modal
-        formWindow.setResizable(false); // prevents resize and removes minimize and maximize buttons
-        formWindow.initStyle(StageStyle.UNDECORATED);
-        formWindow.setScene(scene);
-        formWindow.setOnCloseRequest(ev -> {
-            this.updateTable();
-        });
-
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudUserForm.class)));
         dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
-        dialog.setIsDraggable(true);
-        dialog.setPrefSize(200, 100);
-        dialog.setVisible(false);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
         /* load data */
         //ObservableList<User> data = FXCollections.observableArrayList(dummyData);
         ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
@@ -109,57 +101,6 @@ public class CrudUser implements Initializable {
         tableView.getTableColumns().addAll(roleColumn);
     }
 
-    public  void updateTable(){
-        /* load data */
-        ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
-        tableView.setItems(users);
-    }
-
-    /*
-    * int alertType :
-    *       0 -> Save Failure
-    *       1 -> Save Success
-    *       2 -> Delete Confirmation TODO Delete Confirmation
-    *       3 -> Delete Success
-    *       4 -> Validation Warning
-    * */
-    public void showAlter(int alertType){
-        if (centerPane == null) {
-            centerPane = (AnchorPane) ((BorderPane) tableView.getScene().getRoot()).getCenter();
-
-            AnchorPane.setRightAnchor(dialog, 20.0);
-            AnchorPane.setBottomAnchor(dialog, 20.0);
-            centerPane.getChildren().add(dialog);
-            dialog.setOverlayClose(true);
-        }
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
-        delay.setOnFinished( event -> dialog.close() );
-
-        switch (alertType){
-            case 0:
-                MFXDialogFactory.convertToSpecific(DialogType.ERROR, dialog);
-                dialog.setTitle("Save failed");
-                break;
-            case 1:
-                MFXDialogFactory.convertToSpecific(DialogType.INFO, dialog);
-                dialog.setTitle("Saved successfully");
-                break;
-            case 2:
-                break;
-            case 3:
-                MFXDialogFactory.convertToSpecific(DialogType.INFO, dialog);
-                dialog.setTitle("Deleted successfully");
-                break;
-            case 4:
-                MFXDialogFactory.convertToSpecific(DialogType.WARNING, dialog);
-                dialog.setTitle("Fields validation failed");
-                break;
-            default:
-        }
-        dialog.show();
-        delay.play();
-    }
-
     @FXML
     public void delete(ActionEvent event) {
         List<User> selectedUsers = tableView.getSelectionModel().getSelectedItems(); // gives a List<User> of selected users from tableView
@@ -174,33 +115,21 @@ public class CrudUser implements Initializable {
 
     @FXML
     public void edit(ActionEvent event) {
-        List<User> selectedUsers = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedUsers.isEmpty()) {
-            /* take first user in selected users */
-            User userToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            fxWeaver.getBean(CrudUserForm.class).fillData(userToBeEdit.getName(), userToBeEdit.getUsername(), userToBeEdit.getId(), userToBeEdit.getRoleName()); // send data to the form scene
-            formWindow.close();
-            // Specifies the owner Window (parent) for new window
-//            Stage primaryStage = (Stage) btnDelete.getScene().getWindow();
-//            formWindow.initOwner(primaryStage);
-            formWindow.setTitle("Edit user");
-//            formWindow.show();
-            formWindow.showAndWait(); // blocks execution until the stage is closed
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        formWindow.close();
-        // Specifies the owner Window (parent) for new window
-//        Stage primaryStage = (Stage) btnDelete.getScene().getWindow();
-//        formWindow.initOwner(primaryStage);
-        formWindow.setTitle("Add new user");
-//        formWindow.show();
-        formWindow.showAndWait(); // blocks execution until the stage is closed
+        super.add(formWindow);
     }
 
+    public  void updateTable(){
+        /* load data */
+        ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
+        tableView.setItems(users);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
+    }
 }

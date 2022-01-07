@@ -1,6 +1,7 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Entities.Permission;
 import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.RoleService;
@@ -9,8 +10,11 @@ import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -32,10 +37,10 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudRole implements Initializable {
+public class CrudRole extends Crud implements Initializable {
 
 
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final RoleService roleService;
 
 
@@ -58,21 +63,28 @@ public class CrudRole implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudRole(ConfigurableApplicationContext applicationContext, RoleService roleService) {
-        this.applicationContext = applicationContext;
+    public CrudRole(FxWeaver fxWeaver, RoleService roleService) {
+        this.fxWeaver = fxWeaver;
         this.roleService = roleService;
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudRoleForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
 
 
@@ -132,44 +144,34 @@ public class CrudRole implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<Role> selectedRoles = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedRoles.isEmpty()) {
             for (Role role : selectedRoles){
                 roleService.deleteRoleById(role.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Role> selectedRoles = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedRoles.isEmpty()) {
-            /* take first user in selected users */
-            Role roleToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudRoleForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudRoleForm.class).fillData(roleToBeEdit.getTitle(), roleToBeEdit.getId(), roleToBeEdit.getDescription()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Role");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudRoleForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Role");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Role> items = FXCollections.observableArrayList(roleService.getAllRoles());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

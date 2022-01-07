@@ -1,12 +1,16 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.Sensor;
 import com.miola.mcr.Services.SensorService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -28,10 +33,10 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudSensor implements Initializable {
+public class CrudSensor extends Crud implements Initializable {
 
 
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final SensorService sensorService;
 
     @FXML
@@ -44,10 +49,12 @@ public class CrudSensor implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudSensor(ConfigurableApplicationContext applicationContext, SensorService sensorService) {
-        this.applicationContext = applicationContext;
+    public CrudSensor(FxWeaver fxWeaver, SensorService sensorService) {
+        this.fxWeaver = fxWeaver;
         this.sensorService = sensorService;
 
     }
@@ -55,11 +62,16 @@ public class CrudSensor implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudSensorForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
         /* load data */
         //ObservableList<User> data = FXCollections.observableArrayList(dummyData);
@@ -105,40 +117,29 @@ public class CrudSensor implements Initializable {
             for (Sensor sensor : selectedZones){
                 sensorService.deleteSensorById(sensor.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Sensor> selectedSensors = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedSensors.isEmpty()) {
-            /* take first user in selected users */
-            Sensor sensorToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-            /* show form */
-            // TODO OUSSAMA FxWeaver
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudSensorForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudSensorForm.class).fillData(sensorToBeEdit.getName(), sensorToBeEdit.getId(), sensorToBeEdit.getTopic(),
-                    sensorToBeEdit.getCategoryName(), sensorToBeEdit.getDeviceName(), sensorToBeEdit.getDiningTableName()
-                    , sensorToBeEdit.getZoneName()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Sensor");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudSensorForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Sensor");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Sensor> items = FXCollections.observableArrayList(sensorService.getAllSensors());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

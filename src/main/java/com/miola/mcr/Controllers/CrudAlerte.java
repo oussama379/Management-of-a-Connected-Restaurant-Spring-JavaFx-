@@ -2,12 +2,16 @@ package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Entities.Alerte;
 import com.miola.mcr.Entities.User;
+import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.AlerteService;
 import com.miola.mcr.Services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -29,9 +34,9 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudAlerte implements Initializable {
+public class CrudAlerte extends Crud implements Initializable {
 
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final AlerteService alerteService;
 
     @FXML
@@ -44,20 +49,27 @@ public class CrudAlerte implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudAlerte(ConfigurableApplicationContext applicationContext, AlerteService alerteService) {
-        this.applicationContext = applicationContext;
+    public CrudAlerte(FxWeaver fxWeaver, AlerteService alerteService) {
+        this.fxWeaver = fxWeaver;
         this.alerteService = alerteService;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudAlerteForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
         ObservableList<Alerte> alertes = FXCollections.observableArrayList(alerteService.getAllAlertes());
 
         /* create columns */
@@ -91,46 +103,35 @@ public class CrudAlerte implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<Alerte> selectedAlertes = tableView.getSelectionModel().getSelectedItems(); // gives a List<User> of selected users from tableView
         if (!selectedAlertes.isEmpty()) {
             for (Alerte alerte : selectedAlertes){
                     alerteService.deleteAlerteById(alerte.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Alerte> selectedAlertes = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedAlertes.isEmpty()) {
-            /* take first user in selected users */
-            Alerte alerteToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudAlerteForm.class);
-            Scene scene = new Scene(root);
-            //System.out.print(userToBeEdit.getRoleName());
-            fxWeaver.getBean(CrudAlerteForm.class).fillData(alerteToBeEdit.getType(), alerteToBeEdit.getId(), alerteToBeEdit.getSeverity(),
-                    String.valueOf(alerteToBeEdit.getValue()), alerteToBeEdit.getOperator(), alerteToBeEdit.getCategoryName()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Alert");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudAlerteForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Alert");
-        formWindow.show();
+        super.add(formWindow);
     }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Alerte> items = FXCollections.observableArrayList(alerteService.getAllAlertes());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
+    }
+
 
 }

@@ -21,9 +21,7 @@
         </rowConstraints>
          <children>
             <MFXLabel text="Table Number" />
-             <MFXLabel text="State" GridPane.rowIndex="1" />
             <MFXTextField fx:id="tfNumber" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" />
-            <MFXTextField fx:id="tfState" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <MFXButton fx:id="btnCancel" layoutX="213.0" layoutY="447.0" onAction="#cancel" prefHeight="50.0" prefWidth="150.0" text="Cancel" />

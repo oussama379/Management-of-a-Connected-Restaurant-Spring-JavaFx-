@@ -1,6 +1,7 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Entities.DiningTable;
 import com.miola.mcr.Entities.Permission;
 import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.PermissionService;
@@ -10,8 +11,11 @@ import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -33,10 +38,10 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudPermission implements Initializable {
+public class CrudPermission extends Crud implements Initializable {
 
 
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final PermissionService permissionService;
 
     @FXML
@@ -52,21 +57,28 @@ public class CrudPermission implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudPermission(ConfigurableApplicationContext applicationContext, PermissionService permissionService) {
-        this.applicationContext = applicationContext;
+    public CrudPermission(FxWeaver fxWeaver , PermissionService permissionService) {
+        this.fxWeaver = fxWeaver;
         this.permissionService = permissionService;
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudPermissionForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
 
 
@@ -106,45 +118,34 @@ public class CrudPermission implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<Permission> selectedPermissions = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedPermissions.isEmpty()) {
             for (Permission permission : selectedPermissions){
                 permissionService.deletePermissionById(permission.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Permission> selectedPermissions = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedPermissions.isEmpty()) {
-            /* take first user in selected users */
-            Permission permissionToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudPermissionForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudPermissionForm.class).fillData(permissionToBeEdit.getTitle(),
-                    permissionToBeEdit.getId(), permissionToBeEdit.getDescription(), permissionToBeEdit.getRoles()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Permission");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudPermissionForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Permission");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Permission> items = FXCollections.observableArrayList(permissionService.getAllPermissions());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

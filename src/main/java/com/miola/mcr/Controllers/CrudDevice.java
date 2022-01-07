@@ -9,8 +9,11 @@ import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -32,10 +36,10 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudDevice implements Initializable {
+public class CrudDevice extends Crud implements Initializable {
 
 
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final DeviceService deviceService;
 
     @FXML
@@ -51,21 +55,28 @@ public class CrudDevice implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudDevice(ConfigurableApplicationContext applicationContext, ZoneService zoneService, UserService userService, DeviceService deviceService, RoleService roleService) {
-        this.applicationContext = applicationContext;
+    public CrudDevice(FxWeaver fxWeaver, ZoneService zoneService, UserService userService, DeviceService deviceService, RoleService roleService) {
+        this.fxWeaver = fxWeaver;
         this.deviceService = deviceService;
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudDeviceForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
 
 
@@ -116,44 +127,34 @@ public class CrudDevice implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<Device> selectedDevices = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedDevices.isEmpty()) {
             for (Device device : selectedDevices){
                 deviceService.deleteDeviceById(device.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<Device> selectedDevices = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedDevices.isEmpty()) {
-             //take first user in selected users
-            Device deviceToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-             // show form
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudDeviceForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudDeviceForm.class).fillData(deviceToBeEdit.getName(), deviceToBeEdit.getId(), deviceToBeEdit.getClass().getSimpleName()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Device");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudDeviceForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Device");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<Device> items = FXCollections.observableArrayList(deviceService.getAllDevices());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

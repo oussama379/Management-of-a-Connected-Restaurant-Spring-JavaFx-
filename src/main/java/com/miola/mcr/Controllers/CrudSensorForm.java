@@ -1,19 +1,19 @@
 package com.miola.mcr.Controllers;
 
-import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.Sensor;
-import com.miola.mcr.Entities.User;
-import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.utils.BindingUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
@@ -23,13 +23,12 @@ import java.util.*;
 @FxmlView
 public class CrudSensorForm implements Initializable {
 
-
+    private final FxWeaver fxWeaver;
     private final SensorService sensorService;
     private final DeviceService deviceService;
     private final CategoryService categoryService;
     private final ZoneService zoneService;
     private final DiningTableService diningTableService;
-
 
     @FXML
     private MFXButton btnCancel;
@@ -58,7 +57,8 @@ public class CrudSensorForm implements Initializable {
 
 
     @Autowired
-    public CrudSensorForm(SensorService sensorService, DeviceService deviceService, CategoryService categoryService, ZoneService zoneService, DiningTableService diningTableService) {
+    public CrudSensorForm(FxWeaver fxWeaver, SensorService sensorService, DeviceService deviceService, CategoryService categoryService, ZoneService zoneService, DiningTableService diningTableService) {
+        this.fxWeaver = fxWeaver;
         this.sensorService = sensorService;
         this.deviceService = deviceService;
         this.categoryService = categoryService;
@@ -77,11 +77,13 @@ public class CrudSensorForm implements Initializable {
         cbCategory.setPromptText("See Categories");
         cbDTable.setPromptText("See Dinning Tables");
         cbZone.setPromptText("See Zones");
+        // Set Validation
+        this.setFieldsValidators();
     }
 
     @FXML
     void cancel(ActionEvent event) {
-
+        this.closeWindow();
     }
 
     @FXML
@@ -94,47 +96,90 @@ public class CrudSensorForm implements Initializable {
         if(getDevice() != null) sensorToEditOrAdd.setDevice(deviceService.getDeviceByName(getDevice()));
         if(getZone() != null) sensorToEditOrAdd.setZone(zoneService.getZoneByName(getZone()));
 
-        if (isAnEdit){
-            sensorToEditOrAdd.setId(this.idSensor);
-            try {
-                sensorService.editSensor(sensorToEditOrAdd);
-                // TODO show Confirmation Msg
-            }catch (Exception e){
-                // TODO show Error Msg
+        boolean fieldsValidation = tfName.isValid() && tfTopic.isValid() && cbCategory.isValid() && cbZone.isValid();
+        if (fieldsValidation){
+            if (isAnEdit){
+                sensorToEditOrAdd.setId(this.idSensor);
+                if (sensorService.editSensor(sensorToEditOrAdd)){
+                    fxWeaver.getBean(CrudSensor.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudSensor.class).showAlter(0);
+                }
+            }else{
+                if (sensorService.saveSensor(sensorToEditOrAdd)){
+                    fxWeaver.getBean(CrudSensor.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudSensor.class).showAlter(0);
+                }
             }
         }else{
-            try {
-                sensorService.saveSensor(sensorToEditOrAdd);
-                // TODO show Confirmation Msg
-            }catch (Exception e){
-                // TODO show Error Msg
-            }
+            fxWeaver.getBean(CrudSensor.class).showAlter(4);
         }
-
     }
-
 
     public void fillData(String Name, Long IdSensor, String Topic, String Category, String Device, String DiningTableName, String Zone){
         this.idSensor = IdSensor;
         tfName.setText(Name);
         tfTopic.setText(Topic);
 
-        cbDevice.setSelectedValue(Device);
-        cbDevice.setPromptText(Device);
+        cbDevice.getSelectionModel().selectItem(Device);
 
-        cbCategory.setSelectedValue(Category);
-        cbCategory.setPromptText(Category);
+        cbCategory.getSelectionModel().selectItem(Category);
 
-        cbDTable.setSelectedValue(DiningTableName);
-        cbDTable.setPromptText(DiningTableName);
+        cbDTable.getSelectionModel().selectItem(DiningTableName);
 
-        cbZone.setSelectedValue(Zone);
-        cbZone.setPromptText(Zone);
+        cbZone.getSelectionModel().selectItem(Zone);
 
         isAnEdit = true;
     }
 
-    // TODO : ADD NONE VALUE TO COMBOBOX
+    public void closeWindow(){
+        this.clearFields();
+this.isAnEdit = false;
+        Stage formWindow = (Stage) (tfName.getScene().getWindow());
+        formWindow.fireEvent(new WindowEvent(formWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
+    }
+
+    public void setFieldsValidators(){
+        // Name TextField : Required
+        tfName.setValidated(true);
+        tfName.getValidator().add(
+                BindingUtils.toProperty(tfName.textProperty().isNotEmpty()),
+                "Required"
+        );
+
+        // Topic TextField : Required
+        tfTopic.setValidated(true);
+        tfTopic.getValidator().add(
+                BindingUtils.toProperty(tfTopic.textProperty().isNotEmpty()),
+                "Required"
+        );
+
+        // Role ComboBox : Required
+        cbCategory.setValidated(true);
+        cbCategory.getValidator().add(
+                BindingUtils.toProperty(cbCategory.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
+                "A value must be selected"
+        );
+
+        // Role ComboBox : Required
+        cbZone.setValidated(true);
+        cbZone.getValidator().add(
+                BindingUtils.toProperty(cbZone.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
+                "A value must be selected"
+        );
+    }
+
+    public void clearFields(){
+        tfName.clear();
+        tfTopic.clear();
+        cbDevice.getSelectionModel().clearSelection();
+        cbCategory.getSelectionModel().clearSelection();
+        cbDTable.getSelectionModel().clearSelection();
+        cbZone.getSelectionModel().clearSelection();
+    }
 
     public String getName() {
         return tfName.getText();
@@ -154,9 +199,5 @@ public class CrudSensorForm implements Initializable {
     public String getZone() {
         return cbZone.getSelectedValue();
     }
-
-
-
-
 
 }

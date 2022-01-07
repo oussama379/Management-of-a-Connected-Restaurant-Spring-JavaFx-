@@ -115,13 +115,13 @@ public class CrudUserForm implements Initializable {
         this.idUser = idUser;
         tfName.setText(name);
         tfUsername.setText(username);
-        cbRole.setSelectedValue(roleName);
-        cbRole.setPromptText(roleName);
+        cbRole.getSelectionModel().selectItem(roleName);
         isAnEdit = true;
     }
 
     public void closeWindow(){
         this.clearFields();
+this.isAnEdit = false;
         Stage formWindow = (Stage) (tfName.getScene().getWindow());
         formWindow.fireEvent(new WindowEvent(formWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
@@ -150,11 +150,11 @@ public class CrudUserForm implements Initializable {
 
         // Confirm Password PasswordField : match to Password,
         pfConfirmPassword.setValidated(true);
-        pfConfirmPasswordValidator = BindingUtils.toProperty(pfConfirmPassword.passwordProperty().isEqualTo(this.getPassword()));
+        pfConfirmPasswordValidator = BindingUtils.toProperty(pfConfirmPassword.passwordProperty().isEqualTo(""));
             // Link PasswordField value to ConfirmPasswordField Validation
         pfPassword.textProperty().addListener((observable, oldValue, newValue) -> {
             pfConfirmPassword.getValidator().remove(pfConfirmPasswordValidator);
-            pfConfirmPasswordValidator = BindingUtils.toProperty(pfConfirmPassword.passwordProperty().isEqualTo(this.getPassword()));
+            pfConfirmPasswordValidator = BindingUtils.toProperty(pfConfirmPassword.passwordProperty().isEqualTo(newValue));
             pfConfirmPassword.getValidator().add(pfConfirmPasswordValidator, "Passwords do not macth");
         });
 
@@ -186,10 +186,9 @@ public class CrudUserForm implements Initializable {
     public void clearFields(){
         tfName.clear();
         tfUsername.clear();
-        pfPassword.passwordProperty().setValue("");
-        pfConfirmPassword.passwordProperty().setValue("");
+        pfPassword.passwordProperty().set("");
+        pfConfirmPassword.passwordProperty().set("");
         cbRole.getSelectionModel().clearSelection();
-        cbRole.setPromptText(null);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Entities.Device;
 import com.miola.mcr.Entities.DiningTable;
 import com.miola.mcr.Entities.Zone;
 import com.miola.mcr.Services.DiningTableService;
@@ -10,8 +11,11 @@ import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.base.AbstractMFXDialog;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.controls.enums.DialogType;
+import io.github.palexdev.materialfx.controls.factories.MFXDialogFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -33,10 +38,9 @@ import java.util.ResourceBundle;
 
 @Component
 @FxmlView
-public class CrudDinningTable implements Initializable {
+public class CrudDinningTable extends Crud implements Initializable {
 
-
-    private final ConfigurableApplicationContext applicationContext;
+    private final FxWeaver fxWeaver;
     private final DiningTableService diningTableService;
 
     @FXML
@@ -53,21 +57,28 @@ public class CrudDinningTable implements Initializable {
     private MFXButton btnEdit;
 
     private Stage formWindow;
+    private Pane centerPane = null;
+    private AbstractMFXDialog dialog;
 
     @Autowired
-    public CrudDinningTable(ConfigurableApplicationContext applicationContext, ZoneService zoneService, UserService userService, RoleService roleService, DiningTableService diningTableService) {
-        this.applicationContext = applicationContext;
+    public CrudDinningTable(FxWeaver fxWeaver, ZoneService zoneService, UserService userService, RoleService roleService, DiningTableService diningTableService) {
+        this.fxWeaver = fxWeaver;
         this.diningTableService = diningTableService;
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        formWindow = new Stage();
         populateTable();
+
+        formWindow = new Stage();
+        formWindow.setScene(new Scene(fxWeaver.loadView(CrudDinningTableForm.class)));
+        dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
+
+        super.initialize(formWindow, dialog);
     }
 
-    private void populateTable() {
+    public void populateTable() {
 
         /* load data */
         //ObservableList<User> data = FXCollections.observableArrayList(dummyData);
@@ -82,7 +93,6 @@ public class CrudDinningTable implements Initializable {
 
 
         /* link columns with proprieties */
-        //  TODO WTF IS zone
         idColumn.setRowCellFunction(diningTable -> new MFXTableRowCell(String.valueOf(diningTable.getId())));
         numberColumn.setRowCellFunction(diningTable -> new MFXTableRowCell(String.valueOf(diningTable.getNumber())));
         stateColumn.setRowCellFunction(diningTable -> new MFXTableRowCell(String.valueOf(diningTable.getState())));
@@ -106,45 +116,34 @@ public class CrudDinningTable implements Initializable {
 
     @FXML
     public void delete(ActionEvent event) {
-        // TODO after deleting a user the view need to be reloaded
         List<DiningTable> selectedDiningTables = tableView.getSelectionModel().getSelectedItems(); // gives a List<Zone> of selected zones from tableView
         if (!selectedDiningTables.isEmpty()) {
             for (DiningTable diningTable : selectedDiningTables){
                 diningTableService.deleteDiningTableById(diningTable.getId());
             }
+            this.showAlter(3);
+            this.updateTable();
         }
     }
 
     @FXML
     public void edit(ActionEvent event) {
-        List<DiningTable> selectedDiningTables = tableView.getSelectionModel().getSelectedItems();
-        if (!selectedDiningTables.isEmpty()) {
-            /* take first user in selected users */
-            DiningTable diningTableToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-
-            /* show form */
-            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-            Parent root = fxWeaver.loadView(CrudDinningTableForm.class);
-            Scene scene = new Scene(root);
-            fxWeaver.getBean(CrudDinningTableForm.class).fillData(diningTableToBeEdit.getNumber(), diningTableToBeEdit.getId(),
-                    diningTableToBeEdit.getState()); // send data to the form scene
-            formWindow.close();
-            formWindow.setScene(scene);
-            formWindow.setTitle("Edit Dinning Table");
-            formWindow.show();
-        }
+        edit(this.getClass() ,tableView, formWindow);
     }
 
     @FXML
     public void add(ActionEvent event) {
-        /* show form */
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CrudDinningTableForm.class);
-        Scene scene = new Scene(root);
-        formWindow.close();
-        formWindow.setScene(scene);
-        formWindow.setTitle("Add new Dinning Table");
-        formWindow.show();
+        super.add(formWindow);
+    }
+
+    public  void updateTable(){
+        /* load data */
+        ObservableList<DiningTable> items = FXCollections.observableArrayList(diningTableService.getAllDiningTables());
+        tableView.setItems(items);
+    }
+
+    public void showAlter(int alertType){
+        super.showAlter(alertType ,centerPane, tableView, dialog);
     }
 
 }

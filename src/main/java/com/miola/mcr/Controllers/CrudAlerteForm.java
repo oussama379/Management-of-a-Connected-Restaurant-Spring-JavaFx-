@@ -1,15 +1,18 @@
 package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Entities.Alerte;
-import com.miola.mcr.Entities.User;
 import com.miola.mcr.Services.AlerteService;
 import com.miola.mcr.Services.CategoryService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.utils.BindingUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,7 @@ import java.util.ResourceBundle;
 @FxmlView
 public class CrudAlerteForm implements Initializable {
 
+    private final FxWeaver fxWeaver;
     private final AlerteService alerteService;
     private final CategoryService categoryService;
 
@@ -40,7 +44,7 @@ public class CrudAlerteForm implements Initializable {
     private MFXTextField tfType;
 
     @FXML
-    private MFXTextField tfSeverity;
+    private MFXTextField tfSeverity; // TODO Oussama : Severity is a ComboBox with 3 values
 
     @FXML
     private MFXTextField tfValue;
@@ -50,7 +54,8 @@ public class CrudAlerteForm implements Initializable {
     private Long idAlerte;
 
     @Autowired
-    public CrudAlerteForm(AlerteService alerteService, CategoryService categoryService) {
+    public CrudAlerteForm(FxWeaver fxWeaver, AlerteService alerteService, CategoryService categoryService) {
+        this.fxWeaver = fxWeaver;
         this.alerteService = alerteService;
         this.categoryService = categoryService;
     }
@@ -63,38 +68,46 @@ public class CrudAlerteForm implements Initializable {
                 "Greater than", "Less than or equal to",
                 "Greater than or equal to",
                 "Equal to", "Unequal to");
+
+        // Set Validation
+        this.setFieldsValidators();
     }
 
     @FXML
     void cancel(ActionEvent event) {
-
+        this.closeWindow();
     }
 
     @FXML
     void save(ActionEvent event) {
-        Alerte alerteToEditOrAdd = new Alerte();
-        alerteToEditOrAdd.setType(getType());
-        alerteToEditOrAdd.setSeverity(getSeverity());
-        // TODO ILYAS : THE VALUE MUST BE A DOUBLE(OR INT)
-        alerteToEditOrAdd.setValue(Double.valueOf(getValue()));
-        alerteToEditOrAdd.setOperator(getOperator());
-        alerteToEditOrAdd.setCategory(categoryService.getCategoryByName(getCategory()));
-
-        if (isAnEdit){
-            alerteToEditOrAdd.setId(this.idAlerte);
-            try {
-                alerteService.editAlerte(alerteToEditOrAdd);
-                // TODO show Confirmation Msg
-            }catch (Exception e){
-                // TODO show Error Msg
+        boolean fieldsValidation = tfType.isValid() && cbCategory.isValid();
+        if (fieldsValidation){
+            Alerte alerteToEditOrAdd = new Alerte();
+            alerteToEditOrAdd.setType(getType());
+            alerteToEditOrAdd.setSeverity(getSeverity());
+            // TODO ILYAS : THE VALUE MUST BE A DOUBLE(OR INT)
+            alerteToEditOrAdd.setValue(Double.valueOf(getValue()));
+            alerteToEditOrAdd.setOperator(getOperator());
+            alerteToEditOrAdd.setCategory(categoryService.getCategoryByName(getCategory()));
+            
+            if (isAnEdit){
+                alerteToEditOrAdd.setId(this.idAlerte);
+                if (alerteService.editAlerte(alerteToEditOrAdd)){
+                    fxWeaver.getBean(CrudAlerte.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudAlerte.class).showAlter(0);
+                }
+            }else{
+                if (alerteService.saveAlerte(alerteToEditOrAdd)){
+                    fxWeaver.getBean(CrudAlerte.class).showAlter(1);
+                    this.closeWindow();
+                }else{
+                    fxWeaver.getBean(CrudAlerte.class).showAlter(0);
+                }
             }
         }else{
-           try {
-               alerteService.saveAlerte(alerteToEditOrAdd);
-               // TODO show Confirmation Msg
-           }catch (Exception e){
-               // TODO show Error Msg
-           }
+            fxWeaver.getBean(CrudAlerte.class).showAlter(4);
         }
 
     }
@@ -113,8 +126,31 @@ public class CrudAlerteForm implements Initializable {
         isAnEdit = true;
     }
 
+    public void closeWindow(){
+        this.clearFields();
+this.isAnEdit = false;
+        Stage formWindow = (Stage) (tfType.getScene().getWindow());
+        formWindow.fireEvent(new WindowEvent(formWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
+    }
 
-    public String getType() {
+    public void setFieldsValidators() {
+        // Name TextField : Required
+        tfType.setValidated(true);
+        tfType.getValidator().add(
+                BindingUtils.toProperty(tfType.textProperty().isNotEmpty()),
+                "Required"
+        );
+
+        // Cat ComboBox : Required
+        cbCategory.setValidated(true);
+        cbCategory.getValidator().add(
+                BindingUtils.toProperty(cbCategory.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
+                "A value must be selected"
+        );
+    }
+
+
+        public String getType() {
         return tfType.getText();
     }
 
@@ -132,6 +168,14 @@ public class CrudAlerteForm implements Initializable {
 
     public String getOperator() {
         return cbOperator.getSelectedValue();
+    }
+
+    public void clearFields(){
+        tfType.clear();
+        tfSeverity.clear();
+        tfValue.clear();
+        cbOperator.getSelectionModel().clearSelection();
+        cbCategory.getSelectionModel().clearSelection();
     }
 }
 
