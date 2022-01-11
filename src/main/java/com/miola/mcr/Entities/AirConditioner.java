@@ -21,7 +21,7 @@ public class AirConditioner extends Device {
 //    private Long id;
     private Double temperature;
 
-    public AirConditioner(Long id, String name, Boolean power, Collection<Sensor> sensors, Double temperature) {
+    public AirConditioner(Long id, String name, DevicePower power, Collection<Sensor> sensors, Double temperature) {
         super(id, name, power, sensors);
         this.temperature = temperature;
     }
@@ -37,5 +37,12 @@ public class AirConditioner extends Device {
 
     public void setTemperature(Double temperature) {
         this.temperature = temperature;
+    }
+
+    @Override
+    public String toString() {
+        return "AirConditioner{" +
+                "temperature=" + temperature +
+                '}';
     }
 }

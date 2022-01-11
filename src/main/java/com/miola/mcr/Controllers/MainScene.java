@@ -1,11 +1,15 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.JavaFxApplication;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +49,16 @@ public class MainScene {
     @FXML
     private MFXButton btDevicesCrud;
 
+    @FXML
+    private MFXButton btSignOut;
+
 
 
     @FXML
     private BorderPane rootPane;
+
+
+    private Stage stage;
 
     @Autowired
     public MainScene(ConfigurableApplicationContext applicationContext) {

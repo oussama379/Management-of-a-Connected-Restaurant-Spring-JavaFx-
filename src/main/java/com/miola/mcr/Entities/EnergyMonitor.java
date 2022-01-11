@@ -20,7 +20,7 @@ public class EnergyMonitor extends Device {
     private Boolean state;
 
 
-    public EnergyMonitor(Long id, String name, Boolean power, Collection<Sensor> sensors, Boolean state) {
+    public EnergyMonitor(Long id, String name, DevicePower power, Collection<Sensor> sensors, Boolean state) {
         super(id, name, power, sensors);
         this.state = state;
     }
@@ -35,5 +35,12 @@ public class EnergyMonitor extends Device {
 
     public void setState(Boolean state) {
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return  "EnergyMonitor{" +
+                "state=" + state +
+                '}';
     }
 }

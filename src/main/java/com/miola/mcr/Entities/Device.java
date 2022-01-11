@@ -21,13 +21,13 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    // TODO ENUM ON OFF
-    private Boolean power;
+    @Enumerated(EnumType.STRING)
+    private DevicePower power;
 
     @OneToMany(mappedBy="device", fetch = FetchType.EAGER)
     private Collection<Sensor> sensors=new ArrayList<>();
 
-    public Device(Long id, String name, Boolean power, Collection<Sensor> sensors) {
+    public Device(Long id, String name, DevicePower power, Collection<Sensor> sensors) {
         this.id = id;
         this.name = name;
         this.power = power;
@@ -54,11 +54,11 @@ public class Device {
         this.name = name;
     }
 
-    public Boolean getPower() {
+    public DevicePower getPower() {
         return power;
     }
 
-    public void setPower(Boolean power) {
+    public void setPower(DevicePower power) {
         this.power = power;
     }
 
@@ -68,5 +68,14 @@ public class Device {
 
     public void setSensors(Collection<Sensor> sensors) {
         this.sensors = sensors;
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", power=" + power +
+                '}';
     }
 }

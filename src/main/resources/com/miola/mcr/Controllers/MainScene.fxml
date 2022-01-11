@@ -67,7 +67,7 @@
                         <Font name="Open Sans SemiBold" size="16.0" />
                      </font>
                   </MFXButton>
-                  <MFXButton depthLevel="LEVEL0" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Sign Out">
+                  <MFXButton fx:id="btSignOut" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Sign Out">
                      <font>
                         <Font name="Open Sans SemiBold" size="16.0" />
                      </font>

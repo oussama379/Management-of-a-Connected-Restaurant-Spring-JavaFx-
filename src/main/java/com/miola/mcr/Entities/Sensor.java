@@ -1,10 +1,18 @@
 package com.miola.mcr.Entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 //@Data
 //@NoArgsConstructor
@@ -17,7 +25,7 @@ public class Sensor {
     private Long id;
     private String name;
     private String topic;
-    //private JsonObject data;
+    private String sensorDataJSON;
     @ManyToOne
     private Zone zone;
     @ManyToOne
@@ -133,4 +141,16 @@ public class Sensor {
                 ", topic='" + topic + '\'' +
                 '}';
     }
+
+/*
+    @Autowired
+    private ObjectMapper objectMapper;
+    public void serializeCustomerAttributes() throws JsonProcessingException {
+        this.sensorDataJSON = objectMapper.writeValueAsString(sensorData);
+    }
+    public void deserializeCustomerAttributes() throws IOException {
+        this.sensorData = objectMapper.readValue(sensorDataJSON, HashMap.class);
+    }
+*/
+
 }
