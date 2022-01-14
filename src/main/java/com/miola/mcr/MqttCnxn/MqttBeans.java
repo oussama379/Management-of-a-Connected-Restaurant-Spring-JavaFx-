@@ -69,7 +69,7 @@ public class MqttBeans {
     @Bean
     public MessageProducerSupport inbound2() {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn2",
-                mqttClientFactory(), "myTopic2");
+                mqttClientFactory(), "DbAirConditionner");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(2);
@@ -111,7 +111,7 @@ public class MqttBeans {
     public IntegrationFlow mqttInFlow2() {
         return IntegrationFlows.from(inbound2())
                 .transform(p -> p)
-                .handle("myService2","handleHere2")
+                .handle("DBAirConditionnerService","handleHere2")
                 .get();
     }
 

@@ -5,9 +5,6 @@ import io.github.palexdev.materialfx.filter.IFilterable;
 import javax.persistence.*;
 
 @Entity
-//@Data
-//@NoArgsConstructor
-//@ToString
 @Table(name="Users")
 public class User implements IFilterable {
 

@@ -10,10 +10,8 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.*;
-//@Data
-//@NoArgsConstructor
+
 @Entity
-//@ToString
 @Table(name="Zones")
 public class Zone {
     @Id

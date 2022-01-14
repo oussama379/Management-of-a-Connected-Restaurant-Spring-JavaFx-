@@ -23,44 +23,72 @@ public class DBEnergyService {
     //{"date":"2022-01-08 12:16:20","energyConsumption":6.735382944183295,"idSensor":3}
     private final SensorRepository sensorRepository;
     private final SensorService sensorService;
-    private LinkedHashMap<Object,String> sensorsData= new LinkedHashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode jsonNode;
     private final double costForKwH = 1.17;
     private static double consumptionToday;
+    public static double consumptionCostYesterday;
     private Map<String, Double> consumptionDevices = new HashMap<>();
     private static Map<Long, Double> consumptionSensors = new LinkedHashMap<>();
     private static List<Map.Entry<String, Double> > deviceConsumptionList = new ArrayList<>();
 
 
     @Autowired
-    public DBEnergyService(SensorRepository sensorRepository, SensorService sensorService) {
+    public DBEnergyService(SensorRepository sensorRepository, SensorService sensorService) throws ParseException, JsonProcessingException {
         this.sensorRepository = sensorRepository;
         this.sensorService = sensorService;
+        getCostYesterday();
+
     }
 
 
-    // TODO the id of the device in the iot-simulator must match the id in the DB
+
     @ServiceActivator(inputChannel="mqttInputChannel")
     public void handleHere(@Payload Object payload) throws IOException {
         System.out.println("payload :  "+payload);
         jsonNode = objectMapper.readTree((String) payload);
 
-
-
         consumptionToday = consumptionToday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
 
+        updateSensorDate(jsonNode);
+        sortDevicesByConsumption();
 
-        sensorsData.put(Long.parseLong(jsonNode.get("idSensor").asText()), (String)payload);
-        String sensorOldData = sensorRepository.selectSensorDataJSON(Long.parseLong(jsonNode.get("idSensor").asText()));
-
-        ArrayNode arrayNode = (ArrayNode) objectMapper.readTree(sensorOldData);
-        arrayNode.add(jsonNode);
-
-        String sensorNewData = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
-        sensorRepository.UpdateSensor(Long.parseLong(jsonNode.get("idSensor").asText()), sensorNewData);
+        System.out.println(consumptionSensors);
+        System.out.println(consumptionDevices);
+        System.out.println(deviceConsumptionList);
 
 
+    }
+
+    public void getCostYesterday() throws JsonProcessingException, ParseException {
+        double consumptionYesterday = 0;
+        ArrayNode superArray = objectMapper.createArrayNode();
+        for (Sensor S: sensorRepository.findSensorByTopic("EnergyDB")) {
+            String sensorData = sensorRepository.selectSensorDataJSON(S.getId());
+            ArrayNode arrayNode = (ArrayNode) objectMapper.readTree(sensorData);
+            superArray.addAll(arrayNode);
+        }
+
+        Calendar c1 = Calendar.getInstance(); // today
+        c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
+
+        for (JsonNode jsonNode : superArray){
+            //System.out.println(jsonNode);
+            Calendar c2 = Calendar.getInstance();
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jsonNode.get("date").asText());
+            c2.setTime(date);
+
+            if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                    && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
+                consumptionYesterday = consumptionYesterday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
+
+            }
+        }
+
+        consumptionCostYesterday =  consumptionYesterday*costForKwH;
+    }
+
+    public void sortDevicesByConsumption() throws JsonProcessingException {
         // BEGIN : sort devices by the consumption of each one : device -> Energy Sensor
         for (Sensor S: sensorRepository.findSensorByTopic("EnergyDB")) {
             double C = 0;
@@ -89,45 +117,15 @@ public class DBEnergyService {
             }
         });
         // End : sort devices by the consumption of each one
-
-        System.out.println(consumptionSensors);
-        System.out.println(consumptionDevices);
-        System.out.println(deviceConsumptionList);
-
-
     }
 
-    public double getCostYesterday() throws JsonProcessingException, ParseException {
-        double consumptionYesterday = 0;
-        ArrayNode superArray = objectMapper.createArrayNode();
-        for (Sensor S: sensorRepository.findSensorByTopic("EnergyDB")) {
-            String sensorData = sensorRepository.selectSensorDataJSON(S.getId());
-            ArrayNode arrayNode = (ArrayNode) objectMapper.readTree(sensorData);
-            superArray.addAll(arrayNode);
-        }
-
-        Calendar c1 = Calendar.getInstance(); // today
-        c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
-
-        for (JsonNode jsonNode : superArray){
-            System.out.println(jsonNode);
-            Calendar c2 = Calendar.getInstance();
-            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jsonNode.get("date").asText());
-            c2.setTime(date);
-
-            if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
-                    && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
-                consumptionYesterday = consumptionYesterday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
-
-            }
-        }
-        // TODO stati var
-        return consumptionYesterday*costForKwH;
+    public void updateSensorDate(JsonNode jsonNode) throws JsonProcessingException {
+        String sensorOldData = sensorRepository.selectSensorDataJSON(Long.parseLong(jsonNode.get("idSensor").asText()));
+        ArrayNode arrayNode = (ArrayNode) objectMapper.readTree(sensorOldData);
+        arrayNode.add(jsonNode);
+        String sensorNewData = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
+        sensorRepository.UpdateSensor(Long.parseLong(jsonNode.get("idSensor").asText()), sensorNewData);
     }
-
-
-
-
 
 
 

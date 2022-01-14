@@ -1,20 +1,15 @@
 package com.miola.mcr;
 
-import com.miola.mcr.Dao.RoleRepository;
-import com.miola.mcr.Dao.ZoneRepository;
-import com.miola.mcr.Entities.Role;
+import com.miola.mcr.Dao.*;
+import com.miola.mcr.Entities.DevicePower;
 import com.miola.mcr.Entities.Sensor;
-import com.miola.mcr.Entities.Zone;
-import com.miola.mcr.Services.RoleService;
-import com.miola.mcr.Services.UserService;
-import com.miola.mcr.Services.ZoneService;
+import com.miola.mcr.Services.*;
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
-
+//@Configuration
 @SpringBootApplication
 public class McrApplication implements CommandLineRunner {
 
@@ -23,20 +18,33 @@ public class McrApplication implements CommandLineRunner {
     private final RoleService roleService;
     private final RoleRepository roleRepository;
     private final ZoneRepository zoneRepository;
+    private final DeviceService deviceService;
+    private final EnergyMonitorRepository energyMonitorRepository;
+    private final DeviceRepository deviceRepository;
+    private final SensorRepository sensorRepository;
+    private final DBEnergyService dbEnergyService;
 
     @Autowired
-    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository) {
+    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository, DeviceService deviceService, EnergyMonitorRepository energyMonitorRepository, DeviceRepository deviceRepository, SensorRepository sensorRepository, DBEnergyService dbEnergyService) {
         this.userService = userService;
         this.zoneService = zoneService;
         this.roleService = roleService;
         this.roleRepository = roleRepository;
         this.zoneRepository = zoneRepository;
+        this.deviceService = deviceService;
+        this.energyMonitorRepository = energyMonitorRepository;
+        this.deviceRepository = deviceRepository;
+        this.sensorRepository = sensorRepository;
+        this.dbEnergyService = dbEnergyService;
     }
 
     public static void main(String[] args) {
 
         //SpringApplication.run(McrApplication.class, args);
         Application.launch(JavaFxApplication.class, args);
+
+
+
     }
 
     @Override
@@ -96,8 +104,51 @@ public class McrApplication implements CommandLineRunner {
             System.out.println(S.getDevice().getName());
         }*/
 
+        /*List<Device> Ds = deviceService.getAllDevices();
 
+        for (Device D : Ds){
+            System.out.println(D.getClass().getSimpleName());
+            System.out.println(D.getClass());
+        }*/
 
+       /* List<Device> Ds = deviceRepository.findByPower(DevicePower.ON);
+        for (Device D : Ds)
+            System.out.println(D.getName());
+
+*/
+            /*long count = sensorRepository.count("EnergyDB");
+        System.out.println(count);*/
+
+        /*double cost = dbEnergyService.getCostYesterday();
+        System.out.println(cost);*/
+
+        /*for (Sensor S : sensorRepository.findSensorByTopic("EnergyDB"))
+            System.out.println(S.getId());*/
+
+ /*       System.out.println(deviceRepository.findById(1L));
+        deviceService.changePower(DevicePower.OFF, 1L);
+        System.out.println(deviceRepository.findById(1L));*/
 
     }
+
+   /* @Bean
+    @ServiceActivator(inputChannel = "mqttInputChannel")
+    public MessageHandler handler() {
+        return new MessageHandler() {
+
+            @Override
+            public void handleMessage(Message<?> message) throws MessagingException {
+                String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
+                if(topic.equals("myTopic2")) {
+                    System.out.println("This is the topic2");
+                }
+                System.out.println(message.getPayload());
+
+            }
+
+        };
+    }*/
+
+
+
 }
