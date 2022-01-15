@@ -19,18 +19,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
-public class DBAirConditionnerService {
+public class DBAirService {
     // {"date":"2022-01-14 09:20:33","humidity":60.155631968437994,"idSensor":8,"temperature":33.466944974342724}
     private final SensorRepository sensorRepository;
     private final SensorService sensorService;
     private ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode jsonNode;
-    private static Map<String, ArrayList> ZoneData = new LinkedHashMap<>();
-    private ZoneService zoneService;
-    private DeviceService deviceService;
+    private static Map<String, ArrayList> ZoneData_Temp_Humi = new LinkedHashMap<>();
+    private static Map<String, ArrayList> ZoneData_co2_voc = new LinkedHashMap<>();
 
     @Autowired
-    public DBAirConditionnerService(SensorRepository sensorRepository, SensorService sensorService) throws ParseException, JsonProcessingException {
+    public DBAirService(SensorRepository sensorRepository, SensorService sensorService) throws ParseException, JsonProcessingException {
         this.sensorRepository = sensorRepository;
         this.sensorService = sensorService;
     }
@@ -41,14 +40,22 @@ public class DBAirConditionnerService {
         System.out.println("payload 2 : "+payload);
 
         jsonNode = objectMapper.readTree((String) payload);
-        updateSensorDate(jsonNode);
+        //updateSensorDate(jsonNode);
 
         Sensor S = sensorService.getSensorById(Long.parseLong(jsonNode.get("idSensor").asText())).orElse(null);
-        ZoneData.put(S.getZone().getTitle(),
-                new ArrayList<>(Arrays.asList(jsonNode.get("temperature").asText(), jsonNode.get("humidity").asText())));
 
 
-        System.out.println(ZoneData);
+
+        if(jsonNode.get("typeAir").asText().equals("AirQuality"))
+            ZoneData_co2_voc.put(S.getZone().getTitle(),
+                    new ArrayList<>(Arrays.asList(jsonNode.get("co2").asText(), jsonNode.get("voc").asText())));
+        if(jsonNode.get("typeAir").asText().equals("AirCondionner"))
+            ZoneData_Temp_Humi.put(S.getZone().getTitle(),
+                    new ArrayList<>(Arrays.asList(jsonNode.get("temperature").asText(), jsonNode.get("humidity").asText())));
+
+
+        System.out.println(ZoneData_co2_voc);
+        System.out.println(ZoneData_Temp_Humi);
     }
 
     public void updateSensorDate(JsonNode jsonNode) throws JsonProcessingException {

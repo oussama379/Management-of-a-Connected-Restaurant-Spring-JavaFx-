@@ -26,10 +26,6 @@ public interface SensorRepository extends JpaRepository<Sensor, Long> {
     long count(@Param("sensorTopic") String sensorTopic);
 
     List<Sensor> findSensorByTopic(String topic);
-
-
-
-
 }
 
 

@@ -25,6 +25,7 @@ public class Sensor {
     private Long id;
     private String name;
     private String topic;
+    //TODO default value []
     private String sensorDataJSON;
     @ManyToOne
     private Zone zone;
