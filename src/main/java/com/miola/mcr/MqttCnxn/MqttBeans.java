@@ -46,6 +46,11 @@ public class MqttBeans {
     }
 
         @Bean
+        public MessageChannel mqttInputChannel3() {
+        return new DirectChannel();
+    }
+
+        @Bean
         public MessageProducerSupport inbound() {
             // ClientId : uniquely identifies our client.
             MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
@@ -74,6 +79,17 @@ public class MqttBeans {
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(2);
         adapter.setOutputChannel(mqttInputChannel2());
+        return adapter;
+    }
+
+    @Bean
+    public MessageProducerSupport inbound3() {
+        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn3",
+                mqttClientFactory(), "DbCustomer");
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(2);
+        adapter.setOutputChannel(mqttInputChannel3());
         return adapter;
     }
 
@@ -115,6 +131,13 @@ public class MqttBeans {
                 .get();
     }
 
+    @Bean
+    public IntegrationFlow mqttInFlow3() {
+        return IntegrationFlows.from(inbound2())
+                .transform(p -> p)
+                .handle("CustomerAreaService","handleHere3")
+                .get();
+    }
 
         @Bean
         public MessageChannel mqttOutboundChannel() {

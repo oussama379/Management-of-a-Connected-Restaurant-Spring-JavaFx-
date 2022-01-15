@@ -29,7 +29,7 @@ public class Sensor {
     private String sensorDataJSON;
     @ManyToOne
     private Zone zone;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private DiningTable diningTable;
 
     @ManyToOne(fetch = FetchType.EAGER)

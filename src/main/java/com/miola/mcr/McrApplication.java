@@ -1,8 +1,6 @@
 package com.miola.mcr;
 
 import com.miola.mcr.Dao.*;
-import com.miola.mcr.Entities.DevicePower;
-import com.miola.mcr.Entities.Sensor;
 import com.miola.mcr.Services.*;
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,10 @@ public class McrApplication implements CommandLineRunner {
     private final DeviceRepository deviceRepository;
     private final SensorRepository sensorRepository;
     private final DBEnergyService dbEnergyService;
+    private final DiningTableRepository diningTableRepository;
 
     @Autowired
-    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository, DeviceService deviceService, EnergyMonitorRepository energyMonitorRepository, DeviceRepository deviceRepository, SensorRepository sensorRepository, DBEnergyService dbEnergyService) {
+    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository, DeviceService deviceService, EnergyMonitorRepository energyMonitorRepository, DeviceRepository deviceRepository, SensorRepository sensorRepository, DBEnergyService dbEnergyService, DiningTableRepository diningTableRepository) {
         this.userService = userService;
         this.zoneService = zoneService;
         this.roleService = roleService;
@@ -36,6 +35,7 @@ public class McrApplication implements CommandLineRunner {
         this.deviceRepository = deviceRepository;
         this.sensorRepository = sensorRepository;
         this.dbEnergyService = dbEnergyService;
+        this.diningTableRepository = diningTableRepository;
     }
 
     public static void main(String[] args) {
@@ -128,6 +128,11 @@ public class McrApplication implements CommandLineRunner {
  /*       System.out.println(deviceRepository.findById(1L));
         deviceService.changePower(DevicePower.OFF, 1L);
         System.out.println(deviceRepository.findById(1L));*/
+
+
+        /*System.out.println(diningTableRepository.findById(1L));
+        diningTableRepository.UpdateTableState(1L, "Empty");
+        System.out.println(diningTableRepository.findById(1L).toString());*/
 
     }
 
