@@ -23,7 +23,6 @@ public class Device {
     private String name;
     @Enumerated(EnumType.STRING)
     private DevicePower power;
-
     @OneToMany(mappedBy="device", fetch = FetchType.EAGER)
     private Collection<Sensor> sensors=new ArrayList<>();
 

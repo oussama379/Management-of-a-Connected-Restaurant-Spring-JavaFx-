@@ -66,5 +66,9 @@ public class DBAirService {
         sensorRepository.UpdateSensor(Long.parseLong(jsonNode.get("idSensor").asText()), sensorNewData);
     }
 
+    // To be used to passe the sensor to the testealertes method
+    public Sensor getSensorFromJson(JsonNode jsonNode){
+        return sensorService.getSensorById(Long.parseLong(jsonNode.get("idSensor").asText())).orElse(null);
+    }
 
 }

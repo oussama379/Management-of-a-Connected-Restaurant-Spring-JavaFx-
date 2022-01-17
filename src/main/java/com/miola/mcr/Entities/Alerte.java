@@ -7,6 +7,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -20,33 +22,42 @@ public class Alerte {
     private String severity;
     private Double value;
     private String operator;
-    @Basic
-    private java.sql.Timestamp time;
+    private String fromTime = "00:00:00";
+    private String toTime = "00:00:00";
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-
-    public Alerte(Long id, String type, String severity, Double value, String operator, java.sql.Timestamp time, Category category) {
+    public Alerte(Long id, String type, String severity, Double value, String operator, String fromTime, String toTime, Category category) {
         this.id = id;
         this.type = type;
         this.severity = severity;
         this.value = value;
         this.operator = operator;
-        this.time = time;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
         this.category = category;
+    }
+
+    public String getFromTime() {
+        return fromTime;
+    }
+
+    public void setFromTime(String fromTime) {
+        this.fromTime = fromTime;
+    }
+
+    public String getToTime() {
+        return toTime;
+    }
+
+    public void setToTime(String toTime) {
+        this.toTime = toTime;
     }
 
     public Alerte() {
 
     }
 
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
-    }
 
     public Long getId() {
         return id;
@@ -97,5 +108,19 @@ public class Alerte {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Alerte{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", severity='" + severity + '\'' +
+                ", value=" + value +
+                ", operator='" + operator + '\'' +
+                ", fromTime='" + fromTime + '\'' +
+                ", toTime='" + toTime + '\'' +
+                ", category=" + category +
+                '}';
     }
 }

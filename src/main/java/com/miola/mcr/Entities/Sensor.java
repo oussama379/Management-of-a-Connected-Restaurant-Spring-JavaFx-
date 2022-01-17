@@ -25,8 +25,7 @@ public class Sensor {
     private Long id;
     private String name;
     private String topic;
-    //TODO default value []
-    private String sensorDataJSON;
+    private String sensorDataJSON = "[]";
     @ManyToOne
     private Zone zone;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,7 +34,7 @@ public class Sensor {
     @ManyToOne(fetch = FetchType.EAGER)
     private Device device;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
     public Sensor(Long id, String name, String topic, Zone zone, DiningTable diningTable, Device device, Category category) {

@@ -79,7 +79,8 @@ public class CrudAlerte extends Crud implements Initializable {
         MFXTableColumn<Alerte> valueColumn = new MFXTableColumn<>("Value", Comparator.comparing(Alerte::getValue));
         // TODO MUTIPLE VALUES
         MFXTableColumn<Alerte> operatorColumn = new MFXTableColumn<>("Operator", Comparator.comparing(Alerte::getOperator));
-        //MFXTableColumn<Alerte> timeColumn = new MFXTableColumn<>("Time", Comparator.comparing(Alerte::getTime));
+        MFXTableColumn<Alerte> fromTimeColumn = new MFXTableColumn<>("From Time", Comparator.comparing(Alerte::getFromTime));
+        MFXTableColumn<Alerte> toTimeColumn = new MFXTableColumn<>("To Time", Comparator.comparing(Alerte::getToTime));
         MFXTableColumn<Alerte> categoryColumn = new MFXTableColumn<>("Category", Comparator.comparing(Alerte::getCategoryName));
 
         /* link columns with proprieties */
@@ -87,6 +88,8 @@ public class CrudAlerte extends Crud implements Initializable {
         typeColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getType()));
         severityColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getSeverity()));
         valueColumn.setRowCellFunction(alerte -> new MFXTableRowCell(String.valueOf(alerte.getValue())));
+        fromTimeColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getFromTime()));
+        toTimeColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getToTime()));
         operatorColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getOperator()));
         categoryColumn.setRowCellFunction(alerte -> new MFXTableRowCell(alerte.getCategoryName()));
 
@@ -97,6 +100,8 @@ public class CrudAlerte extends Crud implements Initializable {
         tableView.getTableColumns().addAll(typeColumn);
         tableView.getTableColumns().addAll(severityColumn);
         tableView.getTableColumns().addAll(valueColumn);
+        tableView.getTableColumns().addAll(fromTimeColumn);
+        tableView.getTableColumns().addAll(toTimeColumn);
         tableView.getTableColumns().addAll(operatorColumn);
         tableView.getTableColumns().addAll(categoryColumn);
     }

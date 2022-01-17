@@ -37,6 +37,8 @@ public class DBEnergyService {
     public DBEnergyService(SensorRepository sensorRepository, SensorService sensorService) throws ParseException, JsonProcessingException {
         this.sensorRepository = sensorRepository;
         this.sensorService = sensorService;
+
+        // TODO handle exceptions
         getCostYesterday();
 
     }
@@ -48,6 +50,7 @@ public class DBEnergyService {
         System.out.println("payload :  "+payload);
         jsonNode = objectMapper.readTree((String) payload);
 
+        // TODO initialise consumptionToday from Data base
         consumptionToday = consumptionToday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
 
         updateSensorDate(jsonNode);
@@ -72,6 +75,8 @@ public class DBEnergyService {
         Calendar c1 = Calendar.getInstance(); // today
         c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
 
+        Calendar c3 = Calendar.getInstance();// today
+
         for (JsonNode jsonNode : superArray){
             //System.out.println(jsonNode);
             Calendar c2 = Calendar.getInstance();
@@ -83,6 +88,14 @@ public class DBEnergyService {
                 consumptionYesterday = consumptionYesterday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
 
             }
+
+            if (c3.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                    && c3.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
+                // TODO To be checked
+                consumptionToday = consumptionToday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
+
+            }
+
         }
 
         consumptionCostYesterday =  consumptionYesterday*costForKwH;
@@ -125,6 +138,11 @@ public class DBEnergyService {
         arrayNode.add(jsonNode);
         String sensorNewData = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
         sensorRepository.UpdateSensor(Long.parseLong(jsonNode.get("idSensor").asText()), sensorNewData);
+    }
+
+    // To be used to passe the sensor to the testealertes method
+    public Sensor getSensorFromJson(JsonNode jsonNode){
+        return sensorService.getSensorById(Long.parseLong(jsonNode.get("idSensor").asText())).orElse(null);
     }
 
 
