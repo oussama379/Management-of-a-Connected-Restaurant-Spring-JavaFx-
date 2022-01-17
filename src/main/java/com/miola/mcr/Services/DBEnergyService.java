@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.miola.mcr.Controllers.DBEnergy;
 import com.miola.mcr.Dao.SensorRepository;
 import com.miola.mcr.Entities.Sensor;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -25,12 +27,12 @@ public class DBEnergyService {
     private final SensorService sensorService;
     private ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode jsonNode;
-    private final double costForKwH = 1.17;
-    private static double consumptionToday;
+    public static final double costForKwH = 1.17;
+    public static double consumptionToday;
     public static double consumptionCostYesterday;
     private Map<String, Double> consumptionDevices = new HashMap<>();
-    private static Map<Long, Double> consumptionSensors = new LinkedHashMap<>();
-    private static List<Map.Entry<String, Double> > deviceConsumptionList = new ArrayList<>();
+    public static Map<Long, Double> consumptionSensors = new LinkedHashMap<>();
+    public static List<Map.Entry<String, Double> > deviceConsumptionList = new ArrayList<>();
 
 
     @Autowired
@@ -40,7 +42,7 @@ public class DBEnergyService {
 
         // TODO handle exceptions
         getCostYesterday();
-
+        sortDevicesByConsumption();
     }
 
 
@@ -54,7 +56,6 @@ public class DBEnergyService {
         consumptionToday = consumptionToday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
 
         updateSensorDate(jsonNode);
-        sortDevicesByConsumption();
 
         System.out.println(consumptionSensors);
         System.out.println(consumptionDevices);

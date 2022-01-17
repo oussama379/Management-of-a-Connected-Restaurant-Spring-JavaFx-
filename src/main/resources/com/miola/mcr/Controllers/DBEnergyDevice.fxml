@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXLabel?>
+<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBEnergyDevice">
+   <children>
+      <MFXLabel fx:id="lblDeviceName" labelStyle="STYLE1" layoutX="25.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="200.0" text="Device 1">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </MFXLabel>
+      <MFXLabel fx:id="lblKwh" layoutX="14.0" layoutY="14.0" text="1.7 KWh" />
+      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="75.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../img/smart-plug.png" />
+         </image>
+      </ImageView>
+      <MFXToggleButton fx:id="tbPower" layoutX="144.0" layoutY="4.0" onAction="#changePower" text="OFF" />
+   </children>
+</AnchorPane>
