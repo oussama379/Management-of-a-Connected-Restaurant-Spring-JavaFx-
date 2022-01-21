@@ -144,6 +144,7 @@ public class DBEnergy implements Initializable {
 
         List<Pane> devices = new ArrayList<>();
         for (Map.Entry<String, Double> e: DBEnergyService.deviceConsumptionList) {
+            System.out.println(e);
             devices.add(fxWeaver.loadView(DBEnergyDevice.class));
             fxWeaver.getBean(DBEnergyDevice.class).fillData(e.getKey(), Math.round(e.getValue())+"KWh", deviceService.getDeviceByName(e.getKey()).getPower());
         }

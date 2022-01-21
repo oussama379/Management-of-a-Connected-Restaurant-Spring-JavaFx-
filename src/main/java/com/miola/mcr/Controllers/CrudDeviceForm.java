@@ -55,8 +55,11 @@ public class CrudDeviceForm implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbDeviceType.getItems().addAll("Air Conditioner", "Air Quality", "Energy Monitor");
+        cbDeviceType.getItems().addAll(/*"Air Conditioner", "Air Quality", */
+                "Energy Monitor");
         // Set Validation
+        cbDeviceType.setPromptText("Energy Monitor");
+        cbDeviceType.setSelectedValue("Energy Monitor");
         this.setFieldsValidators();
     }
 

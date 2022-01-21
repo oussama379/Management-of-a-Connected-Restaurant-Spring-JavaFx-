@@ -4,6 +4,7 @@ package com.miola.mcr;
 
 import com.miola.mcr.Controllers.Login;
 import com.miola.mcr.Controllers.MainScene;
+import com.miola.mcr.Controllers.Orders;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -29,7 +30,7 @@ public class JavaFxApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(MainScene.class);
+        Parent root = fxWeaver.loadView(Orders.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         //stage.setOnHidden(e -> Platform.exit());

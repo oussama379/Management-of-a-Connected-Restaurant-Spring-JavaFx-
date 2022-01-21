@@ -57,7 +57,7 @@ public abstract class Crud {
     public void add(Stage formWindow) {
         /* show form */
         formWindow.close();
-        formWindow.setTitle("Add new Zone");
+        formWindow.setTitle("Add new Menu Item");
         formWindow.showAndWait(); // blocks execution until the stage is closed
     }
 
@@ -107,6 +107,11 @@ public abstract class Crud {
                 Alerte alerteToBeEdit = (Alerte) tableView.getSelectionModel().getSelectedItems().get(0);
                 fxWeaver.getBean(CrudAlerteForm.class).fillData(alerteToBeEdit.getType(), alerteToBeEdit.getId(), alerteToBeEdit.getSeverity(),
                         String.valueOf(alerteToBeEdit.getValue()), alerteToBeEdit.getOperator(), alerteToBeEdit.getCategoryName());
+
+            }else if (crudClass.equals(CrudMenuItem.class)){
+                MenuItem menuItemToBeEdit = (MenuItem) tableView.getSelectionModel().getSelectedItems().get(0);
+                fxWeaver.getBean(CrudMenuItemForm.class).fillData(menuItemToBeEdit.getId(), menuItemToBeEdit.getTitle(),
+                        menuItemToBeEdit.getPrice(), menuItemToBeEdit.getDescription());
             }
 
             /* show form */

@@ -19,11 +19,11 @@ public class AirConditioner extends Device {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
-    private Double temperature;
+   /* private Double temperature;*/
 
     public AirConditioner(Long id, String name, DevicePower power, Collection<Sensor> sensors, Double temperature) {
         super(id, name, power, sensors);
-        this.temperature = temperature;
+       /* this.temperature = temperature;*/
     }
 
 
@@ -31,7 +31,7 @@ public class AirConditioner extends Device {
 
     }
 
-    public Double getTemperature() {
+/*    public Double getTemperature() {
         return temperature;
     }
 
@@ -44,5 +44,5 @@ public class AirConditioner extends Device {
         return "AirConditioner{" +
                 "temperature=" + temperature +
                 '}';
-    }
+    }*/
 }

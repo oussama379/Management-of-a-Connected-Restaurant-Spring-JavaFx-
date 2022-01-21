@@ -17,19 +17,17 @@ public class EnergyMonitor extends Device {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
-    private Boolean state;
+   /* private Boolean state;*/
 
 
     public EnergyMonitor(Long id, String name, DevicePower power, Collection<Sensor> sensors, Boolean state) {
         super(id, name, power, sensors);
-        this.state = state;
+      /*  this.state = state;*/
     }
 
-    public EnergyMonitor() {
+    public EnergyMonitor() {}
 
-    }
-
-    public Boolean getState() {
+/*    public Boolean getState() {
         return state;
     }
 
@@ -42,5 +40,5 @@ public class EnergyMonitor extends Device {
         return  "EnergyMonitor{" +
                 "state=" + state +
                 '}';
-    }
+    }*/
 }

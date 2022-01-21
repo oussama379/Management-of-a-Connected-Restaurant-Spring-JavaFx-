@@ -3,6 +3,7 @@ package com.miola.mcr.Entities;
 import io.github.palexdev.materialfx.filter.IFilterable;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="Users")
@@ -18,6 +19,9 @@ public class User implements IFilterable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+
+    @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
+    private Set<Order> orders;
 
     public User(Long id, String name, String username, String password, Role role) {
         this.id = id;

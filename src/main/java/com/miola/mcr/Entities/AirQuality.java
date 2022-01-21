@@ -18,20 +18,20 @@ public class AirQuality extends Device {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
-    private String type;
-    private Boolean alarm;
+/*    private String type;
+    private Boolean alarm;*/
 
     public AirQuality(Long id, String name, DevicePower power, Collection<Sensor> sensors, Boolean state, String type, Boolean alarm) {
         super(id, name, power, sensors);
-        this.type = type;
-        this.alarm = alarm;
+      /*  this.type = type;
+        this.alarm = alarm;*/
     }
 
 
     public AirQuality() {
 
     }
-
+/*
     public String getType() {
         return type;
     }
@@ -46,13 +46,13 @@ public class AirQuality extends Device {
 
     public void setAlarm(Boolean alarm) {
         this.alarm = alarm;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public String toString() {
         return "AirQuality{" +
                 "type='" + type + '\'' +
                 ", alarm=" + alarm +
                 '}';
-    }
+    }*/
 }

@@ -22,11 +22,19 @@ public class DiningTable {
     @OneToMany(mappedBy="diningTable", fetch = FetchType.EAGER)
     private Set<Sensor> sensors;
 
+    @OneToMany(mappedBy="diningTable", fetch = FetchType.EAGER)
+    private Set<Order> orders;
+
     public DiningTable(Long id, int number, String state, Set<Sensor> sensors) {
         this.id = id;
         this.number = number;
         this.state = state;
         this.sensors = sensors;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
     }
 
     public DiningTable() {

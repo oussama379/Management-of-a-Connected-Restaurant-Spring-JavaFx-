@@ -30,6 +30,7 @@
                   <MFXButton fx:id="btPermissionsCrud" onAction="#loadScene" prefHeight="57.0" prefWidth="200.0" text="Permissions CRUD" />
                   <MFXButton fx:id="btAlertesCrud" onAction="#loadScene" prefHeight="44.0" prefWidth="200.0" text="Alertes CRUD" />
                   <MFXButton fx:id="btDevicesCrud" onAction="#loadScene" prefHeight="58.0" prefWidth="200.0" text="Devices CRUD" />
+                  <MFXButton fx:id="btMenuItemCrud" onAction="#loadScene" prefHeight="25.0" prefWidth="201.0" text="MenuItems CRUD" />
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" />
                   <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Customers Dashboard">
                      <font>

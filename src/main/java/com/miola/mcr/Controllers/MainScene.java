@@ -54,6 +54,10 @@ public class MainScene implements Initializable {
     @FXML
     private MFXButton btDevicesCrud;
 
+
+    @FXML
+    private MFXButton btMenuItemCrud;
+
     @FXML
     private MFXButton btEnergyDB;
 
@@ -83,6 +87,8 @@ public class MainScene implements Initializable {
         mapButtonClass.put(btPermissionsCrud, CrudPermission.class);
         mapButtonClass.put(btAlertesCrud, CrudAlerte.class);
         mapButtonClass.put(btDevicesCrud, CrudDevice.class);
+        mapButtonClass.put(btMenuItemCrud, CrudMenuItem.class);
+
         /* DashBoards */
         mapButtonClass.put(btEnergyDB, DBEnergy.class);
 

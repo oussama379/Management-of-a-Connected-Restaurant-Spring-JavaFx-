@@ -1,6 +1,7 @@
 package com.miola.mcr;
 
 import com.miola.mcr.Dao.*;
+import com.miola.mcr.Dao.Order_MenuItemRepository;
 import com.miola.mcr.Services.*;
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,17 @@ public class McrApplication implements CommandLineRunner {
     private final SensorRepository sensorRepository;
     private final DBEnergyService dbEnergyService;
     private final DiningTableRepository diningTableRepository;
-
+    private final AlertesService alertesService;
+    private final Order_MenuItemRepository order_menuItemRepository;
+    private final OrderRepository orderRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final OrderService orderService;
     @Autowired
-    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService, RoleRepository roleRepository, ZoneRepository zoneRepository, DeviceService deviceService, EnergyMonitorRepository energyMonitorRepository, DeviceRepository deviceRepository, SensorRepository sensorRepository, DBEnergyService dbEnergyService, DiningTableRepository diningTableRepository) {
+    public McrApplication(UserService userService, ZoneService zoneService, RoleService roleService,
+                          RoleRepository roleRepository, ZoneRepository zoneRepository, DeviceService deviceService,
+                          EnergyMonitorRepository energyMonitorRepository, DeviceRepository deviceRepository,
+                          SensorRepository sensorRepository, DBEnergyService dbEnergyService,
+                          DiningTableRepository diningTableRepository, AlertesService alertesService, Order_MenuItemRepository order_menuItemRepository, OrderRepository orderRepository, MenuItemRepository menuItemRepository, OrderService orderService) {
         this.userService = userService;
         this.zoneService = zoneService;
         this.roleService = roleService;
@@ -36,6 +45,11 @@ public class McrApplication implements CommandLineRunner {
         this.sensorRepository = sensorRepository;
         this.dbEnergyService = dbEnergyService;
         this.diningTableRepository = diningTableRepository;
+        this.alertesService = alertesService;
+        this.order_menuItemRepository = order_menuItemRepository;
+        this.orderRepository = orderRepository;
+        this.menuItemRepository = menuItemRepository;
+        this.orderService = orderService;
     }
 
     public static void main(String[] args) {
@@ -49,6 +63,22 @@ public class McrApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+/*        Set<Alerte> L = alertesService.TestAlerts(sensorRepository.findById(1L).orElse(null), 1);
+        for(Alerte a : L)
+            System.out.println(a.toString());
+        System.out.println("==================");
+        Set<Alerte> L1 = alertesService.TestAlerts(sensorRepository.findById(1L).orElse(null), 150);
+        for(Alerte a : L1)
+            System.out.println(a.toString());
+        System.out.println("==================");
+        Set<Alerte> L2 = alertesService.TestAlerts(sensorRepository.findById(2L).orElse(null), 150);
+        for(Alerte a : L2)
+            System.out.println(a.toString());
+        System.out.println("==================");
+        Set<Alerte> L3 = alertesService.TestAlerts(sensorRepository.findById(2L).orElse(null), 9);
+        for(Alerte a : L3)
+            System.out.println(a.toString());
+        System.out.println("==================");*/
    /*     User u2 = new User(2L,"oussamaX","oussama","1234");
         userService.editUser(u2);*/
 //        User u = new User("ilyas","ilyas3","1234");
@@ -134,25 +164,26 @@ public class McrApplication implements CommandLineRunner {
         diningTableRepository.UpdateTableState(1L, "Empty");
         System.out.println(diningTableRepository.findById(1L).toString());*/
 
+        /*Order_MenuItem i =  order_menuItemRepository.findByOrderAndMenuItem(orderRepository.findById(1L).orElse(null),
+                menuItemRepository.findById(3L).orElse(null));
+
+        if(i != null)
+            System.out.println(i);
+        else
+            System.out.println("i.toString()");*/
+
+       /* MenuItem M1 = menuItemRepository.findById(1L).orElse(null);
+        MenuItem M2 = menuItemRepository.findById(2L).orElse(null);
+        Order O = orderRepository.findById(1L).orElse(null);
+        ArrayList<MenuItem> M = new ArrayList<>();
+        M.add(M1);
+        M.add(M1);
+        M.add(M2);
+        System.out.println(M);
+        orderService.saveOrderItems(O,M);*/
+
+
     }
-
-   /* @Bean
-    @ServiceActivator(inputChannel = "mqttInputChannel")
-    public MessageHandler handler() {
-        return new MessageHandler() {
-
-            @Override
-            public void handleMessage(Message<?> message) throws MessagingException {
-                String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
-                if(topic.equals("myTopic2")) {
-                    System.out.println("This is the topic2");
-                }
-                System.out.println(message.getPayload());
-
-            }
-
-        };
-    }*/
 
 
 
