@@ -1,6 +1,8 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.Dao.UserRepository;
+import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -24,6 +26,7 @@ public class Login {
 
     private final ConfigurableApplicationContext applicationContext;
     private final UserService userService;
+    private final UserRepository userRepository;
     @FXML
     private Button btnFB;
 
@@ -45,17 +48,23 @@ public class Login {
     @FXML
     private TextField txtUsername;
 
+    public static Long idCurrentUser;
+    public static Role roleCurrentUser;
+
 
 
     @Autowired
-    public Login(ConfigurableApplicationContext applicationContext, UserService userService) {
+    public Login(ConfigurableApplicationContext applicationContext, UserService userService, UserRepository userRepository) {
         this.applicationContext = applicationContext;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @FXML
     void handleButtonAction(MouseEvent event) {
         if(userService.authenticate(getUsername(), getPassword()) != null){
+            idCurrentUser = userRepository.findByUsername(getUsername()).getId();
+            roleCurrentUser = userRepository.findByUsername(getUsername()).getRole();
             lblErrors.setText("Login Succefull.");
             FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
             Pane root = fxWeaver.loadView(MainScene.class);

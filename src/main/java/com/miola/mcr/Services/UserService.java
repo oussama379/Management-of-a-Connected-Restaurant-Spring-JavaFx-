@@ -17,6 +17,7 @@ public interface UserService {
     User getUser ();
     List<User> getAllUsers();
     String encryptionMd5(String passwordToHash);
+   List<String> getAllUsersNames();
 
 
 

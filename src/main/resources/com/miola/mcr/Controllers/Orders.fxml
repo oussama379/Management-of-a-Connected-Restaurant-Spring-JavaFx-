@@ -45,16 +45,17 @@
                         <JFXTreeTableView fx:id="tbMenuItems" layoutY="-3.0" prefHeight="286.0" prefWidth="422.0" stylesheets="@../../../../static/TreeTableViewLook.css" />
                      </children>
                   </Pane>
-                  <Pane layoutX="461.0" layoutY="317.0" prefHeight="330.0" prefWidth="503.0">
+                  <Pane layoutX="461.0" layoutY="317.0" prefHeight="330.0" prefWidth="503.0" AnchorPane.topAnchor="317.0">
                      <children>
                         <MFXComboBox fx:id="cbMenuItems" layoutX="23.0" layoutY="21.0" prefHeight="27.0" prefWidth="209.0" />
                         <MFXButton fx:id="btRemoveSelectedItem" layoutX="269.0" layoutY="24.0" onAction="#RemoveItem" prefHeight="25.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Remove Selected Item" />
                         <MFXButton fx:id="btAddItem" layoutX="23.0" layoutY="84.0" onAction="#AddItem" prefHeight="25.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Add Item" />
                         <JFXTextArea fx:id="taSpecialRequest" focusColor="#405aa8" layoutX="23.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" style="-fx-background-color: E0E0E0;" text="Special Requests........" />
                         <JFXTextArea fx:id="taComments" layoutX="265.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" style="-fx-background-color: E0E0E0;" text="Comments......" />
-                        <MFXButton fx:id="btSubmitOrder" layoutX="151.0" layoutY="285.0" onAction="#AddOrder" prefHeight="33.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Submit Order" />
+                        <MFXButton fx:id="btSubmitOrder" layoutX="266.0" layoutY="283.0" onAction="#AddOrder" prefHeight="33.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Submit Order" />
                         <MFXLabel layoutX="269.0" layoutY="83.0" text="Total Price : " />
                         <MFXLabel fx:id="labelPrice" layoutX="375.0" layoutY="83.0" />
+                        <MFXButton fx:id="btCancelEdit" layoutX="24.0" layoutY="283.0" onAction="#CancelEdit" prefHeight="33.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Cancel" />
                      </children>
                   </Pane>
                </children></AnchorPane>
@@ -78,12 +79,21 @@
                      <children>
                         <JFXButton fx:id="btDeleteOrder" onAction="#DeleteOrder" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: E0E0E0;" text="Delete Order" />
                         <JFXButton fx:id="btEditOrder" onAction="#EditOrder" prefHeight="25.0" prefWidth="210.0" style="-fx-background-color: E0E0E0;" text="Edit Order" GridPane.columnIndex="1" />
-                        <JFXButton prefHeight="25.0" prefWidth="209.0" style="-fx-background-color: E0E0E0;" text="Export Order" GridPane.columnIndex="2" />
                      </children>
                   </GridPane>
                   <MFXTableView fx:id="tableView" layoutX="14.0" layoutY="125.0" prefHeight="131.0" prefWidth="702.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="75.0" />
                </children></AnchorPane>
       </content>
     </Tab>
+      <Tab text="Staff Activity">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <MFXComboBox fx:id="cbStaff" layoutX="477.0" layoutY="27.0" prefHeight="27.0" prefWidth="195.0" />
+                  <MFXTableView fx:id="tbStaffActivity" layoutX="39.0" layoutY="586.0" prefHeight="55.0" prefWidth="907.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="75.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
   </tabs>
 </TabPane>

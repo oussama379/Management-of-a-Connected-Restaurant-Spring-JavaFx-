@@ -6,28 +6,25 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.miola.mcr.Dao.Order_MenuItemRepository;
+import com.miola.mcr.Dao.UserRepository;
 import com.miola.mcr.Entities.*;
 import com.miola.mcr.Services.DiningTableService;
 import com.miola.mcr.Services.MenuItemService;
 import com.miola.mcr.Services.OrderService;
+import com.miola.mcr.Services.UserService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringExpression;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,7 @@ import java.util.*;
 public class Orders implements Initializable {
 
     @FXML private MFXComboBox<String> cbMenuItems;
+    @FXML private MFXComboBox<String> cbStaff;
     @FXML private MFXButton btRemoveSelectedItem;
     @FXML private MFXButton btAddItem;
     @FXML private MFXLabel labelPrice;
@@ -48,28 +46,37 @@ public class Orders implements Initializable {
     @FXML private JFXTextArea taSpecialRequest;
     @FXML private JFXTextArea taComments;
     @FXML private MFXButton btSubmitOrder;
+    @FXML private MFXButton btCancelEdit;
     @FXML private JFXTreeTableView<MenuItem> tbMenuItems;
     @FXML private JFXTreeTableView<Order>  tbOrders;
     private final MenuItemService menuItemService;
     private final OrderService orderService;
     private final DiningTableService diningTableService;
+    private final UserService userService;
     private final Order_MenuItemRepository order_menuItemRepository;
+    private final UserRepository userRepository;
     private ObservableList<MenuItem> menuItems;
     private TreeItem<MenuItem> rootMenuItems ;
     private ObservableList<Order> orders;
     @FXML
     private MFXTableView<Order> tableView;
     @FXML
+    private MFXTableView<String> tbStaffActivity;
+    @FXML
     private MFXComboBox<String> cbOrderMenuItems ;
     private final FxWeaver fxWeaver;
     private Stage stage;
+    private boolean isEdit;
+    private Long idOrderEdit;
 
     @Autowired
-    public Orders(MenuItemService menuItemService, OrderService orderService, DiningTableService diningTableService, Order_MenuItemRepository order_menuItemRepository, FxWeaver fxWeaver) {
+    public Orders(MenuItemService menuItemService, OrderService orderService, DiningTableService diningTableService, UserService userService, Order_MenuItemRepository order_menuItemRepository, UserRepository userRepository, FxWeaver fxWeaver) {
         this.menuItemService = menuItemService;
         this.orderService = orderService;
         this.diningTableService = diningTableService;
+        this.userService = userService;
         this.order_menuItemRepository = order_menuItemRepository;
+        this.userRepository = userRepository;
         this.fxWeaver = fxWeaver;
     }
 
@@ -80,6 +87,38 @@ public class Orders implements Initializable {
         formWindow.setScene(new Scene(fxWeaver.loadView(Orders.class)));*/
 
         cbMenuItems.getItems().addAll(menuItemService.getAllMenuItemsNames());
+        cbStaff.setPromptText("Select an Item");
+        cbStaff.getItems().addAll(userService.getAllUsersNames());
+        cbStaff.setPromptText("Select a member of staff");
+
+
+        MFXTableColumn<String> activitiesColumn = new MFXTableColumn<>("Activities");
+        activitiesColumn.setPrefWidth(1000);
+        activitiesColumn.setRowCellFunction(string -> new MFXTableRowCell(string.toString()));
+        tbStaffActivity.getTableColumns().addAll(activitiesColumn);
+
+
+        cbStaff.selectedValueProperty().addListener(new ChangeListener<String>() {
+            @Override public void changed(ObservableValue ov, String oldname, String newName) {
+                ArrayList<String> activities = new ArrayList<>();
+                User user = userRepository.findByUsername(newName);
+                System.out.println(user);
+                for(Order order : user.getOrders()){
+                    for(Order_MenuItem order_menuItem : order.getOrder_menuItem()){
+                        activities.add(user.getUsername() + ", added x"+order_menuItem.getQuantity()+" "
+                                +order_menuItem.getMenuItem().getTitle()+" to table "+order.getDiningTableName()+" at : "+
+                                order.getDate_time());
+                    }
+                }
+                System.out.println(activities);
+                ObservableList<String> activitiess = FXCollections.observableArrayList(activities);
+                tbStaffActivity.setItems(activitiess);
+
+            }
+        });
+
+
+
         labelPrice.setText("00.00");
 
         JFXTreeTableColumn<MenuItem, String> titletColumn = new JFXTreeTableColumn<>("Item");
@@ -115,20 +154,35 @@ public class Orders implements Initializable {
     @FXML
     public void AddOrder(ActionEvent event) {
         Order order = new Order();
+        if(isEdit) {
+            order.setId(idOrderEdit);
+            isEdit = false;
+            idOrderEdit = null;
+        }
         ArrayList<MenuItem> menuItemSet = new ArrayList<>();
         menuItems.forEach(menuItem -> {menuItemSet.add(menuItem);});
-        System.out.println(menuItemSet);
+        //System.out.println(menuItemSet);
         order.setTotalPrice(Double.parseDouble(getTfPrice()));
         order.setComment(getTaComments());
         order.setSpecial_request(getTaSpecialRequest());
         order.setDate_time(String.valueOf(new Date()));
+        order.setUser(userRepository.findById(Login.idCurrentUser).orElse(null));
         // TODO ILYAS : PASSE SELECTED TABLE
         order.setDiningTable(diningTableService.getDiningTableByNumber(1));
         orderService.saveOrderItems(order, menuItemSet);
+
         menuItems.clear();
+        rootMenuItems = new RecursiveTreeItem<>(menuItems, RecursiveTreeObject::getChildren);
+        tbMenuItems.setRoot(rootMenuItems);
+
         orders = FXCollections.observableArrayList(orderService.getAllOrders());
         tableView.setItems(orders);
 
+
+        taComments.clear();
+        taSpecialRequest.clear();
+        labelPrice.setText("");
+        cbStaff.setPromptText("Select an Item");
     }
 
     @FXML
@@ -143,18 +197,20 @@ public class Orders implements Initializable {
     }
     @FXML
     public void RemoveItem(ActionEvent event) {
-        // TODO Fix Price
-        if(tbMenuItems.getSelectionModel().selectedItemProperty().get() != null) {
-            MenuItem M = tbMenuItems.getSelectionModel().selectedItemProperty().get().getValue();
+        System.out.println(menuItems);
+        if(!menuItems.isEmpty() || tbMenuItems.getSelectionModel().getSelectedItem() != null) {
+            MenuItem M = tbMenuItems.getSelectionModel().getSelectedItems().get(0).getValue();
             menuItems.remove(M);
-            if (menuItems.isEmpty())
-                labelPrice.setText("00.00");
-            double i = 0;
-            menuItems.forEach(menuItem -> {
-                labelPrice.setText(String.valueOf(i + menuItem.getPrice()));
-                System.out.println(menuItem);
-            });
+
+            rootMenuItems = new RecursiveTreeItem<>(menuItems, RecursiveTreeObject::getChildren);
+            tbMenuItems.setRoot(rootMenuItems);
+                double i = 0;
+                for(MenuItem menuItem : menuItems)
+                    i = i + menuItem.getPrice();
+            labelPrice.setText(String.valueOf(i));
         }
+        if (menuItems.isEmpty())
+            labelPrice.setText("");
     }
 
     @FXML
@@ -174,7 +230,7 @@ public class Orders implements Initializable {
         List<?> selectedItems = tableView.getSelectionModel().getSelectedItems();
         if (!selectedItems.isEmpty()) {
             Order orderToBeEdit = tableView.getSelectionModel().getSelectedItems().get(0);
-            tfPrice.setText(String.valueOf(orderToBeEdit.getTotalPrice()));
+            labelPrice.setText(String.valueOf(orderToBeEdit.getTotalPrice()));
             taSpecialRequest.setText(orderToBeEdit.getSpecial_request());
             taComments.setText(orderToBeEdit.getComment());
 
@@ -183,17 +239,24 @@ public class Orders implements Initializable {
                     menuItems.add(order_menuItem.getMenuItem());
                 }
             }
-
+            System.out.println(menuItems);
+            idOrderEdit = orderToBeEdit.getId();
+            isEdit = true;
         }
-          /*  fxWeaver.getBean(OrdersEditForm.class).fillData(orderToBeEdit.getId(), orderToBeEdit.getDiningTableName(), orderToBeEdit.getDate_time()
-                , orderToBeEdit.getTotalPrice(), orderToBeEdit.getSpecial_request(), orderToBeEdit.getComment(), cbOrderMenuItems);*/
+    }
 
+    @FXML
+    public void CancelEdit(ActionEvent event) {
+        menuItems.clear();
+        rootMenuItems = new RecursiveTreeItem<>(menuItems, RecursiveTreeObject::getChildren);
+        tbMenuItems.setRoot(rootMenuItems);
 
+        taComments.clear();
+        taSpecialRequest.clear();
+        labelPrice.setText("");
 
-        /*formWindow.close();
-        formWindow.setTitle("Edit Order");
-        formWindow.showAndWait(); // blocks execution until the stage is closed*/
-
+        isEdit = false;
+        cbStaff.setPromptText("Select an Item");
     }
 
     public String getCbMenuItems() {
@@ -244,8 +307,6 @@ public class Orders implements Initializable {
             return cell;
         });
 
-
-
         /* fill table */
         tableView.setItems(orders);
         tableView.getTableColumns().addAll(tableColumn);
@@ -256,5 +317,7 @@ public class Orders implements Initializable {
         tableView.getTableColumns().addAll(menuItemsColumn);
 
     }
+
+
 
 }

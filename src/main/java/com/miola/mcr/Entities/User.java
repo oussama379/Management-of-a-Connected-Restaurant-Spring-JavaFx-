@@ -84,6 +84,14 @@ public class User implements IFilterable {
         this.role = role;
     }
 
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public String toFilterString() {
         return getId() + " " + this.getName() + " " + getUsername() + " " + getPassword();

@@ -2,12 +2,14 @@ package com.miola.mcr.Services;
 
 
 import com.miola.mcr.Dao.UserRepository;
+import com.miola.mcr.Entities.MenuItem;
 import com.miola.mcr.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -143,6 +145,15 @@ public class UserServiceImp implements UserService{
             e.printStackTrace();
         }
         return generatedPassword;
+    }
+
+    @Override
+    public List<String> getAllUsersNames() {
+        List<String> usersNames = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            usersNames.add(user.getUsername());
+        }
+        return usersNames;
     }
 
 }

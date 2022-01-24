@@ -67,17 +67,28 @@ public class OrderServiceImp implements OrderService{
     @Override
     public boolean saveOrderItems(Order order, ArrayList<MenuItem> menuItems) {
         this.saveOrder(order);
-        for (MenuItem menuItem : menuItems){
-            if(order_menuItemRepository.findByOrderAndMenuItem(order, menuItem) == null) {
+        //System.out.println(menuItems);
+        if(menuItems.isEmpty() | !order_menuItemRepository.findByOrder(order).isEmpty()) {
+            //For orders with no items, and only special requests
+            order_menuItemRepository.deleteByOrder(order);
+        }
+        for (MenuItem menuItem : menuItems) {
+            /*if (order_menuItemRepository.findByOrderAndMenuItem(order, menuItem) != null) {
+                order_menuItemRepository.deleteByOrder(order);
+            }*/
+            if (order_menuItemRepository.findByOrderAndMenuItem(order, menuItem) == null) {
+                //System.out.println("No "+menuItem+"In Order"+order);
                 Order_MenuItem order_menuItem = new Order_MenuItem();
                 order_menuItem.setOrder(order);
                 order_menuItem.setMenuItem(menuItem);
                 int i = Collections.frequency(menuItems, menuItem);
-                System.out.println(i);
+                //System.out.println(i);
                 order_menuItem.setQuantity((long) i);
                 order_menuItemRepository.save(order_menuItem);
             }
         }
+
+
         return true;
     }
 
