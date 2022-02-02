@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.miola.mcr.Controllers.DBEnergy;
+import com.miola.mcr.Controllers.MainScene;
+import com.miola.mcr.Controllers.NotificationsLauncher;
 import com.miola.mcr.Dao.SensorRepository;
+import com.miola.mcr.Entities.Alerte;
 import com.miola.mcr.Entities.Sensor;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -23,6 +24,7 @@ public class DBEnergyService {
 
     // static variable to hold the message, and be used in all the functions in this service
     //{"date":"2022-01-08 12:16:20","energyConsumption":6.735382944183295,"idSensor":3}
+    private final AlertesService alertesService;
     private final SensorRepository sensorRepository;
     private final SensorService sensorService;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -36,9 +38,10 @@ public class DBEnergyService {
 
 
     @Autowired
-    public DBEnergyService(SensorRepository sensorRepository, SensorService sensorService) throws ParseException, JsonProcessingException {
+    public DBEnergyService(MainScene mainScene, SensorRepository sensorRepository, SensorService sensorService, AlertesService alertesService) throws ParseException, JsonProcessingException {
         this.sensorRepository = sensorRepository;
         this.sensorService = sensorService;
+        this.alertesService = alertesService;
 
         // TODO handle exceptions
         getCostYesterday();
@@ -56,6 +59,12 @@ public class DBEnergyService {
         consumptionToday = consumptionToday + Double.parseDouble(String.valueOf(jsonNode.get("energyConsumption")));
 
         updateSensorDate(jsonNode);
+        Sensor s = sensorService.getSensorById(jsonNode.get("idSensor").asLong()).get();
+        Set<Alerte> triggeredAlertes = alertesService.TestAlerts(s, jsonNode.get("energyConsumption").asDouble(), NotificationsLauncher.AlertType.Energy);
+
+        for (Alerte a: triggeredAlertes) {
+            new NotificationsLauncher(NotificationsLauncher.AlertType.valueOf(a.getType()), NotificationsLauncher.Severity.valueOf(a.getSeverity()), s.getName(), a.getOperator(), a.getValue()).showTopRight();
+        }
 
         System.out.println(consumptionSensors);
         System.out.println(consumptionDevices);

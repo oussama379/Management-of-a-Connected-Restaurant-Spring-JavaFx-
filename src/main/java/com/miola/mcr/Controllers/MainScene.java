@@ -1,14 +1,16 @@
 package com.miola.mcr.Controllers;
 
 
-import com.miola.mcr.JavaFxApplication;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXNotification;
+import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
+import io.github.palexdev.materialfx.notifications.NotificationPos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.scene.layout.Region;
+import javafx.util.Duration;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component
 @FxmlView
@@ -61,6 +60,9 @@ public class MainScene implements Initializable {
     @FXML
     private MFXButton btEnergyDB;
 
+    @FXML
+    private MFXButton btnAirDB;
+
     private Map<MFXButton, Class> mapButtonClass=new HashMap<>();
     @FXML
     private MFXButton btSignOut;
@@ -91,6 +93,7 @@ public class MainScene implements Initializable {
 
         /* DashBoards */
         mapButtonClass.put(btEnergyDB, DBEnergy.class);
+        mapButtonClass.put(btnAirDB, DBAir.class);
 
     }
 

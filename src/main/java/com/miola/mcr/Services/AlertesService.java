@@ -1,5 +1,6 @@
 package com.miola.mcr.Services;
 
+import com.miola.mcr.Controllers.NotificationsLauncher;
 import com.miola.mcr.Entities.Alerte;
 import com.miola.mcr.Entities.Category;
 import com.miola.mcr.Entities.Sensor;
@@ -14,17 +15,19 @@ import java.util.*;
 @Component
 public class AlertesService {
 
-    public Set<Alerte> TestAlerts(Sensor S, double payloadValue){
+    public Set<Alerte> TestAlerts(Sensor S, double payloadValue, NotificationsLauncher.AlertType type){
         Set<Alerte> triggeredAlertes = new HashSet<>();
         Category sensorCategory = S.getCategory();
         Set<Alerte> CategoryAlertes = sensorCategory.getAlerts();
 
         for (Alerte alerte : CategoryAlertes){
-            if(alerte.getFromTime().equals("00:00:00") || alerte.getToTime().equals("00:00:00")) {
-                if(checkValue(payloadValue,alerte) != null) triggeredAlertes.add(checkValue(payloadValue,alerte));
-            }else{
-                if(checkTime(alerte.getFromTime(),alerte.getToTime()))
+            if (NotificationsLauncher.AlertType.valueOf(alerte.getType()).equals(type)){
+                if(alerte.getFromTime().equals("00:00:00") || alerte.getToTime().equals("00:00:00")) {
                     if(checkValue(payloadValue,alerte) != null) triggeredAlertes.add(checkValue(payloadValue,alerte));
+                }else{
+                    if(checkTime(alerte.getFromTime(),alerte.getToTime()))
+                        if(checkValue(payloadValue,alerte) != null) triggeredAlertes.add(checkValue(payloadValue,alerte));
+                }
             }
         }
         return triggeredAlertes;

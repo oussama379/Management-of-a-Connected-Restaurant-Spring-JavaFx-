@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class JavaFxApplication extends Application {
 
     private ConfigurableApplicationContext applicationContext;
+    public static Stage stage;
 
     @Override
     public void init() {
@@ -30,10 +31,11 @@ public class JavaFxApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(Orders.class);
+        Parent root = fxWeaver.loadView(MainScene.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         //stage.setOnHidden(e -> Platform.exit());
+        JavaFxApplication.stage = stage;
         stage.show();
     }
 
