@@ -22,11 +22,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,12 +62,21 @@ public class Orders implements Initializable {
     private ObservableList<MenuItem> menuItems;
     private TreeItem<MenuItem> rootMenuItems ;
     private ObservableList<Order> orders;
-    @FXML
-    private MFXTableView<Order> tableView;
-    @FXML
-    private MFXTableView<String> tbStaffActivity;
-    @FXML
-    private MFXComboBox<String> cbOrderMenuItems ;
+    @FXML private MFXTableView<Order> tableView;
+    @FXML private MFXTableView<String> tbStaffActivity;
+    @FXML private MFXComboBox<String> cbOrderMenuItems ;
+
+    // Dinning Area
+    @FXML private FlowPane paneTables;
+    @FXML private MFXScrollPane scrollPaneTables;
+    @FXML private AnchorPane orderPane;
+    private static final Map<Long, MFXButton> sensors = new HashMap<>();
+    private static final Map<MFXButton, String> tables = new HashMap<>();
+    private static final Map<MFXButton, Integer> tablesNumbers = new HashMap<>();
+    private static final Map<Long, Boolean> sensorsLastValue = new HashMap<>();
+    private static final Map<String, String> colors = new HashMap<>();
+    private int selectedTable;
+
     private final FxWeaver fxWeaver;
     private Stage stage;
     private boolean isEdit;
@@ -83,6 +96,31 @@ public class Orders implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Fill colors
+        colors.put("empty", "-fx-background-color: Lavender; -fx-font-size: 20");
+        colors.put("taken", "-fx-background-color: LightSalmon; -fx-font-size: 20");
+        colors.put("served", "-fx-background-color: LightGreen; -fx-font-size: 20");
+        colors.put("dirty", "-fx-background-color: Sienna; -fx-font-size: 20");
+
+        // Fill tables
+        for (DiningTable dt : diningTableService.getAllDiningTables()) {
+            MFXButton b = new MFXButton("Table "+dt.getNumber(),200,100);
+            FontIcon f = new FontIcon("fas-th-large");
+            f.setIconSize(30);
+            b.setGraphic(f);
+            b.setContentDisplay(ContentDisplay.TOP);
+            b.setStyle(colors.get("empty"));
+            b.setOnAction(this::nextStateWaiter);
+            tables.put(b, "empty");
+            tablesNumbers.put(b, dt.getNumber());
+            // Fill sensors
+            for (Sensor s: dt.getSensors()) {
+                sensors.put(s.getId(), b);
+                sensorsLastValue.put(s.getId(), false);
+            }
+        }
+        paneTables.getChildren().addAll(tables.keySet());
+
         /*formWindow = new Stage();
         formWindow.setScene(new Scene(fxWeaver.loadView(Orders.class)));*/
 
@@ -156,8 +194,14 @@ public class Orders implements Initializable {
         Order order = new Order();
         if(isEdit) {
             order.setId(idOrderEdit);
+            order.setDiningTable(orderService.getOrderById(idOrderEdit).getDiningTable());
             isEdit = false;
             idOrderEdit = null;
+        }else {
+            order.setDiningTable(diningTableService.getDiningTableByNumber(selectedTable));
+            MFXButton table = getKey(tablesNumbers, selectedTable);
+            table.setStyle(colors.get("served"));
+            tables.put(table, "served");
         }
         ArrayList<MenuItem> menuItemSet = new ArrayList<>();
         menuItems.forEach(menuItem -> {menuItemSet.add(menuItem);});
@@ -167,8 +211,7 @@ public class Orders implements Initializable {
         order.setSpecial_request(getTaSpecialRequest());
         order.setDate_time(String.valueOf(new Date()));
         order.setUser(userRepository.findById(Login.idCurrentUser).orElse(null));
-        // TODO ILYAS : PASSE SELECTED TABLE
-        order.setDiningTable(diningTableService.getDiningTableByNumber(1));
+
         orderService.saveOrderItems(order, menuItemSet);
 
         menuItems.clear();
@@ -183,6 +226,8 @@ public class Orders implements Initializable {
         taSpecialRequest.clear();
         labelPrice.setText("");
         cbStaff.setPromptText("Select an Item");
+
+        orderPane.setVisible(false);
     }
 
     @FXML
@@ -243,6 +288,7 @@ public class Orders implements Initializable {
             idOrderEdit = orderToBeEdit.getId();
             isEdit = true;
         }
+        orderPane.setVisible(true);
     }
 
     @FXML
@@ -257,6 +303,8 @@ public class Orders implements Initializable {
 
         isEdit = false;
         cbStaff.setPromptText("Select an Item");
+
+        orderPane.setVisible(false);
     }
 
     public String getCbMenuItems() {
@@ -318,6 +366,58 @@ public class Orders implements Initializable {
 
     }
 
+    /*
+     * Waiter function
+     * */
+    public void nextStateWaiter(ActionEvent actionEvent){
+        MFXButton table = ((MFXButton)actionEvent.getSource());
+        if (tables.get(table).equals("taken")){
+//            table.setStyle(colors.get("served"));
+//            tables.put(table, "served");
+            orderPane.setVisible(true);
+            selectedTable = tablesNumbers.get(table);
+        }
+        if (tables.get(table).equals("dirty")){
+            table.setStyle(colors.get("empty"));
+            tables.put(table, "empty");
+        }
+    }
 
+    /*
+     * Payload function
+     * */
+    public static void nextStatePayload(long id, boolean forced){
+        MFXButton table = sensors.get(id);
+        List<Map.Entry<Long, MFXButton>> sensorsOfTable = sensors.entrySet().stream().filter(longMFXButtonEntry -> longMFXButtonEntry.getValue() == table).toList();
+        sensorsLastValue.put(id, forced);
+        if (tables.get(table).equals("empty") && forced){
+            table.setStyle(colors.get("taken"));
+            tables.put(table, "taken");
+        }
+        boolean allSensorsAreFalse = true ;
+        // To make sure all sensors has forced = false
+        for (Map.Entry<Long, Boolean> s: sensorsLastValue.entrySet()) {
+            if (sensorsOfTable.contains(Map.entry(s.getKey(), table))){
+                if (s.getValue()) allSensorsAreFalse = false;
+            }
+        }
+        if (tables.get(table).equals("served") && allSensorsAreFalse){
+            table.setStyle(colors.get("dirty"));
+            tables.put(table, "dirty");
+        }
+        if (tables.get(table).equals("taken") && allSensorsAreFalse){
+            table.setStyle(colors.get("empty"));
+            tables.put(table, "empty");
+        }
+    }
+
+    public <K, V> K getKey(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
 }

@@ -48,7 +48,7 @@ public class Login {
     @FXML
     private TextField txtUsername;
 
-    public static Long idCurrentUser;
+    public static Long idCurrentUser = 1L; // Admin
     public static Role roleCurrentUser;
 
 

@@ -25,52 +25,27 @@ import java.util.*;
 public class MainScene implements Initializable {
 
     private final ConfigurableApplicationContext applicationContext;
+    private final Map<MFXButton, Class> mapButtonClass=new HashMap<>();
 
-    @FXML
-    private MFXButton btUsersCrud;
+    @FXML private MFXButton btUsersCrud;
+    @FXML private MFXButton btZonesCrud;
+    @FXML private MFXButton btSensorsCrud;
+    @FXML private MFXButton btDinningTablesCrud;
+    @FXML private MFXButton btCategoriesCrud;
+    @FXML private MFXButton btRolesCrud;
+    @FXML private MFXButton btAlertesCrud;
+    @FXML private MFXButton btPermissionsCrud;
+    @FXML private MFXButton btDevicesCrud;
+    @FXML private MFXButton btMenuItemCrud;
 
-    @FXML
-    private MFXButton btZonesCrud;
+    @FXML private MFXButton btEnergyDB;
+    @FXML private MFXButton btnAirDB;
 
-    @FXML
-    private MFXButton btSensorsCrud;
+    @FXML private MFXButton btnCustomerArea;
+    @FXML private MFXButton btSignOut;
 
-    @FXML
-    private MFXButton btDinningTablesCrud;
+    @FXML private BorderPane rootPane;
 
-    @FXML
-    private MFXButton btCategoriesCrud;
-
-    @FXML
-    private MFXButton btRolesCrud;
-
-    @FXML
-    private MFXButton btAlertesCrud;
-
-    @FXML
-    private MFXButton btPermissionsCrud;
-
-    @FXML
-    private MFXButton btDevicesCrud;
-
-
-    @FXML
-    private MFXButton btMenuItemCrud;
-
-    @FXML
-    private MFXButton btEnergyDB;
-
-    @FXML
-    private MFXButton btnAirDB;
-
-    private Map<MFXButton, Class> mapButtonClass=new HashMap<>();
-    @FXML
-    private MFXButton btSignOut;
-
-
-
-    @FXML
-    private BorderPane rootPane;
 
     @Autowired
     public MainScene(ConfigurableApplicationContext applicationContext) {
@@ -94,6 +69,8 @@ public class MainScene implements Initializable {
         /* DashBoards */
         mapButtonClass.put(btEnergyDB, DBEnergy.class);
         mapButtonClass.put(btnAirDB, DBAir.class);
+
+        mapButtonClass.put(btnCustomerArea, Orders.class);
 
     }
 

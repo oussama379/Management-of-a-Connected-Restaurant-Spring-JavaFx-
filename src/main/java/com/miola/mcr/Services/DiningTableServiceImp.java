@@ -27,7 +27,6 @@ public class DiningTableServiceImp implements DiningTableService{
     @Override
     public List<String> getAllTablesNumbers() {
         List<String> TablesNames = new ArrayList<>();
-        TablesNames.add("fake device");
         for (DiningTable diningTable : diningTableRepository.findAll()) {
             TablesNames.add(String.valueOf(diningTable.getNumber()));
         }

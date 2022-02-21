@@ -92,4 +92,9 @@ public class OrderServiceImp implements OrderService{
         return true;
     }
 
+    @Override
+    public Order getOrderById(long id) {
+        return orderRepository.findById(id);
+    }
+
 }

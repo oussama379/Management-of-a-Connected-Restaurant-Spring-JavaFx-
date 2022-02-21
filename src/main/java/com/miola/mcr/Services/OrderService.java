@@ -14,4 +14,5 @@ public interface OrderService {
     boolean saveOrder (Order order);
     boolean editOrder(Order order);
     boolean saveOrderItems(Order order, ArrayList<MenuItem> menuItems);
+    Order getOrderById(long id);
 }

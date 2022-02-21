@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.miola.mcr.Controllers.Orders;
 import com.miola.mcr.Dao.SensorRepository;
 import com.miola.mcr.Entities.DiningTable;
 import com.miola.mcr.Entities.Sensor;
@@ -36,8 +37,10 @@ public class CustomerAreaService {
     public void handleHere2(@Payload Object payload) throws JsonProcessingException {
         System.out.println("payload 3 : "+payload);
 
-        //{"idSensor" : 2,"date": 01/15/22 15:13:52,"force":true}
+        //{"idSensor" : 2,"date": "2022-01-15 15:43:02","force":true}
+        // "{\"idSensor\" : 2,\"date\": \"2022-01-15 15:43:02\",\"force\":true}"
         jsonNode = objectMapper.readTree((String) payload);
+        Orders.nextStatePayload(jsonNode.get("idSensor").asLong(), jsonNode.get("force").asBoolean());
         //Sensor S = sensorService.getSensorById(Long.parseLong(jsonNode.get("idSensor").asText())).orElse(null);
 
         //String State = jsonNode.get("force").asText();
