@@ -42,6 +42,8 @@ public class MainScene implements Initializable {
     @FXML private MFXButton btnAirDB;
 
     @FXML private MFXButton btnCustomerArea;
+    @FXML private MFXButton btnStatistics;
+
     @FXML private MFXButton btSignOut;
 
     @FXML private BorderPane rootPane;
@@ -71,7 +73,7 @@ public class MainScene implements Initializable {
         mapButtonClass.put(btnAirDB, DBAir.class);
 
         mapButtonClass.put(btnCustomerArea, Orders.class);
-
+        mapButtonClass.put(btnStatistics, Statistics.class);
     }
 
     @FXML

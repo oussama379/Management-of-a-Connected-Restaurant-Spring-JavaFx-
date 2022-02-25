@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.Statistics">
+   <children>
+      <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="22.0" prefHeight="100.0" prefWidth="252.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+      <HBox fx:id="hbox2" alignment="CENTER" layoutX="14.0" layoutY="208.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+      <HBox fx:id="hbox3" alignment="CENTER" layoutX="33.0" layoutY="440.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+   </children>
+</AnchorPane>
