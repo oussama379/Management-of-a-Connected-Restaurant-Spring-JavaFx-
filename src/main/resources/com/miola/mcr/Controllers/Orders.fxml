@@ -12,25 +12,70 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.Orders">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../../../../style/style-form.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.Orders">
    <children>
-      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <tabs>
             <Tab text="Dining Tables">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="627.0" prefWidth="1000.0">
                      <children>
-                        <MFXScrollPane fx:id="scrollPaneTables" fitToWidth="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                        <HBox alignment="CENTER" prefHeight="50.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 25px;" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0">
+                           <children>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
+                                 <children>
+                                    <Label text="EMPTY">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fill="LAVENDER" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
+                                 <children>
+                                    <Label text="TAKEN">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fill="LIGHTSALMON" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
+                                 <children>
+                                    <Label text="SERVED">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fill="LIGHTGREEN" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
+                                 <children>
+                                    <Label text="DIRTY">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Circle fill="SIENNA" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                        <MFXScrollPane fx:id="scrollPaneTables" fitToWidth="true" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                            <content>
                               <FlowPane fx:id="paneTables" hgap="15.0" prefWidth="200.0" vgap="5.0">
                                  <padding>
@@ -47,23 +92,9 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="1013.0">
                      <children>
-                        <GridPane layoutX="42.0" layoutY="14.0" prefHeight="119.0" prefWidth="895.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <JFXButton fx:id="btDeleteOrder" onAction="#DeleteOrder" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: E0E0E0;" text="Delete Order" />
-                              <JFXButton fx:id="btEditOrder" onAction="#EditOrder" prefHeight="25.0" prefWidth="210.0" style="-fx-background-color: E0E0E0;" text="Edit Order" GridPane.columnIndex="1" />
-                           </children>
-                        </GridPane>
-                        <MFXTableView fx:id="tableView" layoutX="14.0" layoutY="125.0" prefHeight="131.0" prefWidth="702.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="75.0" />
+                        <JFXButton fx:id="btDeleteOrder" onAction="#DeleteOrder" prefHeight="40.0" prefWidth="200.0" text="Delete Order" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+                        <JFXButton fx:id="btEditOrder" onAction="#EditOrder" prefHeight="40.0" prefWidth="200.0" text="Edit Order" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="20.0" />
+                        <MFXTableView fx:id="tableView" layoutX="14.0" layoutY="125.0" prefHeight="131.0" prefWidth="702.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -72,15 +103,19 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <MFXComboBox fx:id="cbStaff" layoutX="477.0" layoutY="27.0" prefHeight="27.0" prefWidth="195.0" />
-                        <MFXTableView fx:id="tbStaffActivity" layoutX="39.0" layoutY="586.0" prefHeight="55.0" prefWidth="907.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="75.0" />
+                        <MFXTableView fx:id="tbStaffActivity" layoutX="39.0" layoutY="586.0" prefHeight="55.0" prefWidth="907.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <MFXComboBox fx:id="cbStaff" comboStyle="STYLE2" prefHeight="27.0" prefWidth="195.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
                </content>
             </Tab>
          </tabs>
       </TabPane>
-      <AnchorPane fx:id="orderPane" layoutX="25.0" layoutY="150.0" prefHeight="350.0" prefWidth="950.0" style="-fx-background-color: gray;" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
+      <AnchorPane fx:id="orderPane" layoutX="25.0" layoutY="150.0" prefHeight="350.0" prefWidth="950.0" styleClass="order" visible="false" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="150.0">
          <children>
             <Pane fx:id="tablePane" layoutX="14.0" layoutY="33.0" prefHeight="283.0" prefWidth="420.0" AnchorPane.leftAnchor="10.0">
                <children>
@@ -89,65 +124,21 @@
             </Pane>
             <Pane layoutX="446.0" layoutY="14.0" prefHeight="330.0" prefWidth="503.0" AnchorPane.rightAnchor="10.0">
                <children>
-                  <MFXComboBox fx:id="cbMenuItems" layoutX="23.0" layoutY="21.0" prefHeight="27.0" prefWidth="209.0" />
-                  <MFXButton fx:id="btRemoveSelectedItem" layoutX="269.0" layoutY="24.0" onAction="#RemoveItem" prefHeight="25.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Remove Selected Item" />
-                  <MFXButton fx:id="btAddItem" layoutX="23.0" layoutY="84.0" onAction="#AddItem" prefHeight="25.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Add Item" />
-                  <JFXTextArea fx:id="taSpecialRequest" focusColor="#405aa8" layoutX="23.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" style="-fx-background-color: E0E0E0;" text="Special Requests........" />
-                  <JFXTextArea fx:id="taComments" layoutX="265.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" style="-fx-background-color: E0E0E0;" text="Comments......" />
-                  <MFXButton fx:id="btSubmitOrder" layoutX="266.0" layoutY="283.0" onAction="#AddOrder" prefHeight="33.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Submit Order" />
-                  <MFXLabel layoutX="269.0" layoutY="83.0" text="Total Price : " />
-                  <MFXLabel fx:id="labelPrice" layoutX="375.0" layoutY="83.0" />
-                  <MFXButton fx:id="btCancelEdit" layoutX="24.0" layoutY="283.0" onAction="#CancelEdit" prefHeight="33.0" prefWidth="211.0" style="-fx-background-color: E0E0E0;" text="Cancel" />
+                  <MFXComboBox fx:id="cbMenuItems" comboStyle="STYLE2" layoutX="23.0" layoutY="21.0" prefHeight="27.0" prefWidth="209.0" />
+                  <MFXButton fx:id="btRemoveSelectedItem" layoutX="269.0" layoutY="24.0" onAction="#RemoveItem" prefHeight="25.0" prefWidth="211.0" text="Remove Selected Item" />
+                  <MFXButton fx:id="btAddItem" layoutX="23.0" layoutY="84.0" onAction="#AddItem" prefHeight="25.0" prefWidth="211.0" text="Add Item" />
+                  <JFXTextArea fx:id="taSpecialRequest" focusColor="#405aa8" layoutX="23.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" text="Special Requests........" />
+                  <JFXTextArea fx:id="taComments" layoutX="265.0" layoutY="149.0" prefHeight="118.0" prefWidth="213.0" text="Comments......" />
+                  <MFXLabel labelStyle="STYLE2" layoutX="269.0" layoutY="83.0" text="Total Price : " />
+                  <MFXButton fx:id="btSubmitOrder" layoutX="266.0" layoutY="283.0" onAction="#AddOrder" prefHeight="33.0" prefWidth="211.0" text="Submit Order" />
+                  <MFXLabel fx:id="labelPrice" labelStyle="STYLE2" layoutX="375.0" layoutY="83.0" />
+                  <MFXButton fx:id="btCancelEdit" layoutX="24.0" layoutY="283.0" onAction="#CancelEdit" prefHeight="33.0" prefWidth="211.0" text="Cancel" />
                </children>
             </Pane>
          </children>
+         <effect>
+            <DropShadow radius="17.25" width="50.0" />
+         </effect>
       </AnchorPane>
-      <HBox alignment="CENTER" layoutX="300.0" layoutY="650.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 25px;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="20.0">
-         <children>
-            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
-               <children>
-                  <Label text="EMPTY">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-                  <Circle fill="LAVENDER" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
-               <children>
-                  <Label text="TAKEN">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-                  <Circle fill="LIGHTSALMON" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
-               <children>
-                  <Label text="SERVED">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-                  <Circle fill="LIGHTGREEN" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="5.0">
-               <children>
-                  <Label text="DIRTY">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-                  <Circle fill="SIENNA" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-      </HBox>
    </children>
 </AnchorPane>

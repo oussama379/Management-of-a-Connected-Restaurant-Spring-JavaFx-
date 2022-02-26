@@ -7,25 +7,35 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.Statistics">
    <children>
-      <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="71.0" prefHeight="100.0" prefWidth="252.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0" />
-      <HBox fx:id="hbox2" alignment="CENTER" layoutX="14.0" layoutY="208.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="210.0" />
-      <HBox fx:id="hbox3" alignment="CENTER" layoutX="33.0" layoutY="440.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="430.0" />
+      <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="160.0" prefHeight="50.0" prefWidth="960.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0" />
+      <HBox fx:id="hbox2" alignment="CENTER" layoutX="14.0" layoutY="170.0" prefHeight="250.0" prefWidth="960.0" spacing="20.0" styleClass="hbox-border" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0" />
+      <HBox fx:id="hbox3" alignment="CENTER" layoutX="33.0" layoutY="440.0" prefHeight="250.0" prefWidth="200.0" spacing="20.0" styleClass="hbox-border" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="420.0" />
       <HBox alignment="CENTER" layoutX="20.0" layoutY="14.0" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="2.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <MFXLabel animateLines="false" labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Today Orders">
+                        <MFXLabel animateLines="false" labelStyle="STYLE1" prefHeight="50.0" prefWidth="150.0" text="Today Orders">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                        <MFXLabel fx:id="lblTodayOrders" animateLines="false" labelStyle="STYLE1" prefHeight="50.0" prefWidth="80.0" text="0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </MFXLabel>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="2.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <MFXLabel animateLines="false" labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Today Profit">
+                        <MFXLabel animateLines="false" labelStyle="STYLE1" prefHeight="50.0" prefWidth="150.0" text="Today Profit">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                        <MFXLabel fx:id="lblTodayProfit" animateLines="false" labelStyle="STYLE1" prefHeight="50.0" prefWidth="80.0" text="0 DH">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -36,18 +46,28 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="2.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <MFXLabel labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Month Orders">
+                        <MFXLabel labelStyle="STYLE1" prefHeight="50.0" prefWidth="150.0" text="Month Orders">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                        <MFXLabel fx:id="lblMonthOrders" labelStyle="STYLE1" prefHeight="50.0" prefWidth="80.0" text="0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </MFXLabel>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="2.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <MFXLabel labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Month Proft">
+                        <MFXLabel labelStyle="STYLE1" prefHeight="50.0" prefWidth="150.0" text="Month Profit">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                        <MFXLabel fx:id="lblMonthProfit" labelStyle="STYLE1" prefHeight="50.0" prefWidth="80.0" text="0 DH">
                            <font>
                               <Font size="18.0" />
                            </font>

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBEnergyDevice">
+<AnchorPane fx:id="rootPane" prefHeight="250.0" prefWidth="250.0" styleClass="SM-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBEnergyDevice">
    <children>
       <MFXLabel fx:id="lblDeviceName" labelStyle="STYLE1" layoutX="25.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="200.0" text="Device 1">
          <font>

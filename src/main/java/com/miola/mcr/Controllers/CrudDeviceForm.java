@@ -1,15 +1,14 @@
 package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Entities.*;
+import com.miola.mcr.Services.CategoryService;
 import com.miola.mcr.Services.DeviceService;
-import com.miola.mcr.Services.RoleService;
-import com.miola.mcr.Services.UserService;
+import com.miola.mcr.Services.SensorService;
+import com.miola.mcr.Services.ZoneService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.BindingUtils;
-import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +28,9 @@ public class CrudDeviceForm implements Initializable {
 
     private final FxWeaver fxWeaver;
     private final DeviceService deviceService;
+    private final SensorService sensorService;
+    private final CategoryService categoryService;
+    private final ZoneService zoneService;
 
     @FXML
     private MFXButton btnCancel;
@@ -41,16 +43,22 @@ public class CrudDeviceForm implements Initializable {
 
     @FXML
     private MFXTextField tfName;
+    @FXML
+    private MFXComboBox<String> cbZone;
 
 
     private Boolean isAnEdit = false ; // to know difference in save function
+    private Sensor sensorOfDevice ;
 
     private Long idDevice;
 
     @Autowired
-    public CrudDeviceForm(FxWeaver fxWeaver, DeviceService deviceService) {
+    public CrudDeviceForm(FxWeaver fxWeaver, DeviceService deviceService, SensorService sensorService, CategoryService categoryService, ZoneService zoneService) {
         this.fxWeaver = fxWeaver;
         this.deviceService = deviceService;
+        this.sensorService = sensorService;
+        this.categoryService = categoryService;
+        this.zoneService = zoneService;
     }
 
     @Override
@@ -60,6 +68,8 @@ public class CrudDeviceForm implements Initializable {
         // Set Validation
         cbDeviceType.setPromptText("Energy Monitor");
         cbDeviceType.setSelectedValue("Energy Monitor");
+        cbZone.getItems().addAll(zoneService.getAllZonesNames());
+        cbZone.setPromptText("See Zones");
         this.setFieldsValidators();
     }
 
@@ -70,17 +80,23 @@ public class CrudDeviceForm implements Initializable {
 
     @FXML
     void save(ActionEvent event) {
-        boolean fieldsValidation = tfName.isValid() && cbDeviceType.isValid();
+        boolean fieldsValidation = tfName.isValid();
         if (fieldsValidation){
             Device deviceToEditOrSave = null;
             if(getDeviceType().equals("Air Conditioner")) deviceToEditOrSave = new AirConditioner();
             if(getDeviceType().equals("Air Quality"))  deviceToEditOrSave = new AirQuality();
             if(getDeviceType().equals("Energy Monitor")) deviceToEditOrSave = new EnergyMonitor();
             deviceToEditOrSave.setName(getName());
+            deviceToEditOrSave.setPower(DevicePower.OFF);
 
             if (isAnEdit){
                 deviceToEditOrSave.setId(this.idDevice);
                 if (deviceService.editDevice(deviceToEditOrSave)){
+                    // Update Sensor with Device
+                    sensorOfDevice.setName(getName());
+                    sensorOfDevice.setZone(zoneService.getZoneByName(getZone()));
+                    sensorService.saveSensor(sensorOfDevice);
+
                     fxWeaver.getBean(CrudDevice.class).showAlter(1);
                     this.closeWindow();
                 }else{
@@ -89,6 +105,14 @@ public class CrudDeviceForm implements Initializable {
             }else{
                 System.out.println(deviceToEditOrSave);
                 if (deviceService.saveDevice(deviceToEditOrSave)){
+                    // Save Sensor with Device
+                    Sensor s = new Sensor();
+                    s.setName(getName()); s.setTopic("EnergyDB");
+                    s.setCategory(categoryService.getCategoryByName("Energy"));
+                    s.setZone(zoneService.getZoneByName(getZone()));
+                    s.setDevice(deviceService.getDeviceByName(getName()));
+                    sensorService.saveSensor(s);
+
                     fxWeaver.getBean(CrudDevice.class).showAlter(1);
                     this.closeWindow();
                 }else{
@@ -110,6 +134,8 @@ public class CrudDeviceForm implements Initializable {
         if(deviceType.equals("EnergyMonitor")) {cbDeviceType.getSelectionModel().selectItem("Energy Monitor"); }
         cbDeviceType.setDisable(true);
         isAnEdit = true;
+        sensorOfDevice = List.copyOf(deviceService.getAllDevices().stream().filter(device -> device.getId() == this.idDevice).toList().get(0).getSensors()).get(0);
+        cbZone.getSelectionModel().selectItem(sensorOfDevice.getZoneName());
     }
 
     public void closeWindow(){
@@ -133,6 +159,13 @@ this.isAnEdit = false;
                 BindingUtils.toProperty(cbDeviceType.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
                 "A value must be selected"
         );
+
+        // Zone ComboBox : Required
+        cbZone.setValidated(true);
+        cbZone.getValidator().add(
+                BindingUtils.toProperty(cbZone.getSelectionModel().selectedIndexProperty().isNotEqualTo(-1)),
+                "A value must be selected"
+        );
     }
 
     public void clearFields(){
@@ -146,6 +179,9 @@ this.isAnEdit = false;
     }
     public String getDeviceType() {
         return cbDeviceType.getSelectedValue();
+    }
+    public String getZone() {
+        return cbZone.getSelectedValue();
     }
 
 }

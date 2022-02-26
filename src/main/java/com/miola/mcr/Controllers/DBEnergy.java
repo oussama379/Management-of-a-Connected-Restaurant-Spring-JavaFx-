@@ -56,6 +56,8 @@ public class DBEnergy implements Initializable {
     private BarChartItem    barChartItem3;
     private BarChartItem    barChartItem4;
 
+    private static XYChart.Series<String, Number> series1;
+
     @Autowired
     public DBEnergy(FxWeaver fxWeaver, DeviceService deviceService) {
         this.fxWeaver = fxWeaver;
@@ -78,7 +80,7 @@ public class DBEnergy implements Initializable {
                 .build();
 
         // AreaChart Data
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
+        series1 = new XYChart.Series();
         series1.getData().add(new XYChart.Data(String.valueOf(hourIndex-1)+"H", 0));
         areaChartTile = TileBuilder.create()
                 .skinType(SkinType.SMOOTHED_CHART)
@@ -133,8 +135,11 @@ public class DBEnergy implements Initializable {
                 if (now > lastTimerCall + 1.2e+10) {
                     highLowTile.setValue(DBEnergyService.consumptionCostYesterday);
                     highLowTile.setValue(DBEnergyService.consumptionToday * DBEnergyService.costForKwH);
+
                     series1.getData().add(new XYChart.Data(hourIndex+"H", DBEnergyService.consumptionToday));
                     hourIndex++;
+                    if (series1.getData().size() > 24) series1.getData().remove(0);
+                    if (hourIndex > 23) hourIndex = 0;
 
                     lastTimerCall = now;
                 }
@@ -147,6 +152,8 @@ public class DBEnergy implements Initializable {
             fxWeaver.getBean(DBEnergyDevice.class).fillData(e.getKey(), Math.round(e.getValue())+"KWh", deviceService.getDeviceByName(e.getKey()).getPower());
         }
 
+        highLowTile.getStyleClass().add("hbox-border");
+        barChartTile.getStyleClass().add("hbox-border");
         hbox1.getChildren().addAll(highLowTile, barChartTile);
         hbox2.getChildren().add(areaChartTile);
         hboxDevices.getChildren().addAll(devices);

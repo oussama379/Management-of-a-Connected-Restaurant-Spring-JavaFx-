@@ -45,6 +45,10 @@ public abstract class Crud {
         formWindow.setResizable(false); // prevents resize and removes minimize and maximize buttons
         formWindow.initStyle(StageStyle.UNDECORATED);
 //        formWindow.setScene(scene);
+        formWindow.getScene().getStylesheets().add(getClass().getResource("/style/style-form.css").toExternalForm());
+        formWindow.getScene().getRoot().getStyleClass().add("form");
+        formWindow.sizeToScene();
+        formWindow.centerOnScreen();
         formWindow.setOnCloseRequest(ev -> {
             updateTable();
         });

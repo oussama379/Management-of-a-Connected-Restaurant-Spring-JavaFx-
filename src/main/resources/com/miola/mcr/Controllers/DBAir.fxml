@@ -11,8 +11,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBAir">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../../../../style/style-scrollPane.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBAir">
    <children>
       <GridPane fx:id="gpTiles" alignment="CENTER" hgap="10.0" layoutX="20.0" layoutY="125.0" prefHeight="250.0" prefWidth="660.0" vgap="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="320.0" AnchorPane.topAnchor="125.0">
         <columnConstraints>
@@ -23,7 +24,7 @@
           <RowConstraints maxHeight="290.6000122070312" minHeight="10.0" prefHeight="283.4000244140625" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <MFXScrollPane fx:id="paneZones" hbarPolicy="NEVER" layoutX="900.0" layoutY="14.0" prefHeight="666.0" prefWidth="305.0" styleClass="bc-darkblue" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MFXScrollPane fx:id="paneZones" hbarPolicy="NEVER" layoutX="900.0" layoutY="14.0" prefHeight="666.0" prefWidth="305.0" styleClass="imz-scroll-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <effect>
             <DropShadow>
                <color>
@@ -44,9 +45,12 @@
       </MFXScrollPane>
       <HBox alignment="CENTER" prefHeight="86.0" prefWidth="700.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0">
          <children>
-            <MFXLabel fx:id="lblTitle" labelStyle="STYLE1" prefHeight="50.0" prefWidth="250.0" />
+            <MFXLabel fx:id="lblTitle" labelStyle="STYLE1" prefHeight="50.0" prefWidth="250.0" text=" ">
+               <font>
+                  <Font size="24.0" />
+               </font></MFXLabel>
          </children>
       </HBox>
-      <HBox fx:id="hbox1" layoutX="20.0" layoutY="350.0" prefHeight="270.0" prefWidth="660.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="320.0" />
+      <HBox fx:id="hbox1" layoutX="20.0" layoutY="350.0" prefHeight="270.0" prefWidth="660.0" styleClass="hbox-border" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="320.0" AnchorPane.topAnchor="400.0" />
    </children>
 </AnchorPane>

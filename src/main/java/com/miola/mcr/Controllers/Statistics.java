@@ -5,6 +5,7 @@ import com.miola.mcr.Services.DBEnergyService;
 import com.miola.mcr.Services.OrderService;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
+import io.github.palexdev.materialfx.controls.MFXLabel;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,6 +38,11 @@ public class Statistics implements Initializable {
     @FXML private HBox hbox2;
     @FXML private HBox hbox3;
 
+    @FXML private MFXLabel lblTodayOrders;
+    @FXML private MFXLabel lblTodayProfit;
+    @FXML private MFXLabel lblMonthOrders;
+    @FXML private MFXLabel lblMonthProfit;
+
     private static final Random RND = new Random();
     private AnimationTimer timer;
     private long           lastTimerCall;
@@ -50,6 +56,8 @@ public class Statistics implements Initializable {
 
     private Tile lineChartTileMonth;
     private Tile lineChartTileYear;
+    private static XYChart.Series<String, Number> seriesDaysOfMonth;
+    private static XYChart.Series<String, Number> seriesMonthsOfYear;
 
     private int todayCount;
     private double todayProfit;
@@ -75,26 +83,31 @@ public class Statistics implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        lblTodayOrders.setText(String.valueOf(todayCount));
+        lblTodayProfit.setText(String.valueOf(todayProfit));
+        lblMonthOrders.setText(String.valueOf(monthCount));
+        lblMonthProfit.setText(String.valueOf(monthProfit));
+
 //        textToday = TileBuilder.create()
 //                .skinType(Tile.SkinType.TEXT)
 //                .prefSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
 //                .description("TODAY")
 //                .descriptionAlignment(Pos.CENTER)
 //                .build();
-        numberTileTodayOrders = TileBuilder.create()
-                .skinType(Tile.SkinType.NUMBER)
-                .prefSize(200, Double.POSITIVE_INFINITY)
-                .title("Today Orders")
-                .value(todayCount)
-                .unit("order")
-                .build();
-        numberTileTodayProfit = TileBuilder.create()
-                .skinType(Tile.SkinType.NUMBER)
-                .prefSize(200, Double.POSITIVE_INFINITY)
-                .title("Today Profit")
-                .value(todayProfit)
-                .unit("DH")
-                .build();
+//        numberTileTodayOrders = TileBuilder.create()
+//                .skinType(Tile.SkinType.NUMBER)
+//                .prefSize(200, Double.POSITIVE_INFINITY)
+//                .title("Today Orders")
+//                .value(todayCount)
+//                .unit("order")
+//                .build();
+//        numberTileTodayProfit = TileBuilder.create()
+//                .skinType(Tile.SkinType.NUMBER)
+//                .prefSize(200, Double.POSITIVE_INFINITY)
+//                .title("Today Profit")
+//                .value(todayProfit)
+//                .unit("DH")
+//                .build();
 
 //        textMonth = TileBuilder.create()
 //                .skinType(Tile.SkinType.TEXT)
@@ -102,46 +115,45 @@ public class Statistics implements Initializable {
 //                .description("THIS MONTH")
 //                .descriptionAlignment(Pos.CENTER)
 //                .build();
-        numberTileMonthOrders = TileBuilder.create()
-                .skinType(Tile.SkinType.NUMBER)
-                .prefSize(200, Double.POSITIVE_INFINITY)
-                .title("This Month Orders")
-                .value(monthCount)
-                .unit("order")
-                .build();
-        numberTileMonthProfit = TileBuilder.create()
-                .skinType(Tile.SkinType.NUMBER)
-                .prefSize(200, Double.POSITIVE_INFINITY)
-                .title("This Month Profit")
-                .value(monthProfit)
-                .unit("DH")
-                .build();
+//        numberTileMonthOrders = TileBuilder.create()
+//                .skinType(Tile.SkinType.NUMBER)
+//                .prefSize(200, Double.POSITIVE_INFINITY)
+//                .title("This Month Orders")
+//                .value(monthCount)
+//                .unit("order")
+//                .build();
+//        numberTileMonthProfit = TileBuilder.create()
+//                .skinType(Tile.SkinType.NUMBER)
+//                .prefSize(200, Double.POSITIVE_INFINITY)
+//                .title("This Month Profit")
+//                .value(monthProfit)
+//                .unit("DH")
+//                .build();
 
         // LineChart Month Data
-        XYChart.Series<String, Number> seriesDaysOfMonth = new XYChart.Series();
-        seriesDaysOfMonth.setName("Inside");
-        for (int i = 1; i < LocalDate.now().getDayOfMonth()+1; i++) {
+        seriesDaysOfMonth = new XYChart.Series();
+        for (int i = 1; i < 31; i++) {
             seriesDaysOfMonth.getData().add(new XYChart.Data(String.valueOf(i), daysOfMonthOrdersList.get(i).size()));
         }
         lineChartTileMonth = TileBuilder.create()
                 .skinType(Tile.SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
-                .title("SmoothedChart Tile")
+                .title("Orders - Days of this month")
                 .animated(true)
                 .smoothing(false).dataPointsVisible(true)
                 .series(seriesDaysOfMonth)
                 .build();
 
         // LineChart Year Data
-        XYChart.Series<String, Number> seriesMonthsOfYear = new XYChart.Series();
+        seriesMonthsOfYear = new XYChart.Series();
         seriesDaysOfMonth.setName("Inside");
-        for (int i = 0; i < LocalDate.now().getMonthValue(); i++) {
+        for (int i = 0; i < 12; i++) {
             seriesMonthsOfYear.getData().add(new XYChart.Data(String.valueOf(i+1), monthOfYearOrdersList.get(i).size()));
         }
         lineChartTileYear = TileBuilder.create()
                 .skinType(Tile.SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
-                .title("SmoothedChart Tile")
+                .title("Orders - Months of this year")
                 .animated(true)
                 .smoothing(false)
                 .series(seriesMonthsOfYear)
@@ -156,10 +168,14 @@ public class Statistics implements Initializable {
             public void handle(long now) {
                 if (now > lastTimerCall + 1.2e+10) {
                     refresh();
-                    numberTileTodayOrders.setValue(todayCount);
-                    numberTileTodayProfit.setValue(todayProfit);
-                    numberTileMonthOrders.setValue(monthCount);
-                    numberTileMonthProfit.setValue(monthProfit);
+//                    numberTileTodayOrders.setValue(todayCount);
+//                    numberTileTodayProfit.setValue(todayProfit);
+//                    numberTileMonthOrders.setValue(monthCount);
+//                    numberTileMonthProfit.setValue(monthProfit);
+                    lblTodayOrders.setText(String.valueOf(todayCount));
+                    lblTodayProfit.setText(String.valueOf(todayProfit));
+                    lblMonthOrders.setText(String.valueOf(monthCount));
+                    lblMonthProfit.setText(String.valueOf(monthProfit));
 
                     seriesDaysOfMonth.getData().get(LocalDate.now().getDayOfMonth()-1).setYValue(daysOfMonthOrdersList.get(LocalDate.now().getDayOfMonth()).size());
                     seriesMonthsOfYear.getData().get(LocalDate.now().getMonthValue()-1).setYValue(monthOfYearOrdersList.get(LocalDate.now().getMonthValue()-1).size());
@@ -171,12 +187,12 @@ public class Statistics implements Initializable {
 
 
 
-        Separator separator = new Separator(Orientation.VERTICAL); separator.prefWidth(50);
-        hbox1.getChildren().addAll(numberTileTodayOrders, numberTileTodayProfit, separator ,numberTileMonthOrders, numberTileMonthProfit);
-        hbox1.setHgrow(numberTileTodayOrders, Priority.ALWAYS);
-        hbox1.setHgrow(numberTileTodayProfit, Priority.ALWAYS);
-        hbox1.setHgrow(numberTileMonthOrders, Priority.ALWAYS);
-        hbox1.setHgrow(numberTileMonthProfit, Priority.ALWAYS);
+//        Separator separator = new Separator(Orientation.VERTICAL); separator.prefWidth(50);
+//        hbox1.getChildren().addAll(numberTileTodayOrders, numberTileTodayProfit, separator ,numberTileMonthOrders, numberTileMonthProfit);
+//        hbox1.setHgrow(numberTileTodayOrders, Priority.ALWAYS);
+//        hbox1.setHgrow(numberTileTodayProfit, Priority.ALWAYS);
+//        hbox1.setHgrow(numberTileMonthOrders, Priority.ALWAYS);
+//        hbox1.setHgrow(numberTileMonthProfit, Priority.ALWAYS);
 
         hbox2.getChildren().add(lineChartTileMonth);
         hbox2.setHgrow(lineChartTileMonth, Priority.ALWAYS);

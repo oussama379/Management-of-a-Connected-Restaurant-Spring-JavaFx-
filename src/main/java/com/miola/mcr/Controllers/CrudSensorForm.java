@@ -74,7 +74,7 @@ public class CrudSensorForm implements Initializable {
         cbDTable.getItems().addAll(diningTableService.getAllTablesNumbers());
         cbZone.getItems().addAll(zoneService.getAllZonesNames());
         cbDevice.setPromptText("See Devices");
-        cbCategory.setPromptText("See Categories");
+        cbCategory.setPromptText("See Types");
         cbDTable.setPromptText("See Dinning Tables");
         cbZone.setPromptText("See Zones");
         // Set Validation
@@ -88,16 +88,18 @@ public class CrudSensorForm implements Initializable {
 
     @FXML
     void save(ActionEvent event) {
-        Sensor sensorToEditOrAdd = new Sensor();
-        sensorToEditOrAdd.setName(getName());
-        sensorToEditOrAdd.setTopic(getTopic());
-        if(getCategory() != null) sensorToEditOrAdd.setCategory(categoryService.getCategoryByName(getCategory()));
-        if(getTable() != null) sensorToEditOrAdd.setDiningTable(diningTableService.getDiningTableByNumber(Integer.parseInt(getTable())));
-        if(getDevice() != null) sensorToEditOrAdd.setDevice(deviceService.getDeviceByName(getDevice()));
-        if(getZone() != null) sensorToEditOrAdd.setZone(zoneService.getZoneByName(getZone()));
-
-        boolean fieldsValidation = tfName.isValid() && tfTopic.isValid() && cbCategory.isValid() && cbZone.isValid();
+        boolean fieldsValidation = tfName.isValid() && cbCategory.isValid() && cbZone.isValid();
         if (fieldsValidation){
+            Sensor sensorToEditOrAdd = new Sensor();
+            sensorToEditOrAdd.setName(getName());
+            if (getCategory().equals("Force")) sensorToEditOrAdd.setTopic("DbCustomer");
+            if (getCategory().equals("Temperature") || getCategory().equals("Air")) sensorToEditOrAdd.setTopic("DbAir");
+            if (getCategory().equals("Energy")) sensorToEditOrAdd.setTopic("EnergyDB");
+            if(getCategory() != null) sensorToEditOrAdd.setCategory(categoryService.getCategoryByName(getCategory()));
+            if(getTable() != null) sensorToEditOrAdd.setDiningTable(diningTableService.getDiningTableByNumber(Integer.parseInt(getTable())));
+            if(getDevice() != null) sensorToEditOrAdd.setDevice(deviceService.getDeviceByName(getDevice()));
+            if(getZone() != null) sensorToEditOrAdd.setZone(zoneService.getZoneByName(getZone()));
+
             if (isAnEdit){
                 sensorToEditOrAdd.setId(this.idSensor);
                 if (sensorService.editSensor(sensorToEditOrAdd)){
@@ -151,11 +153,11 @@ this.isAnEdit = false;
         );
 
         // Topic TextField : Required
-        tfTopic.setValidated(true);
-        tfTopic.getValidator().add(
-                BindingUtils.toProperty(tfTopic.textProperty().isNotEmpty()),
-                "Required"
-        );
+//        tfTopic.setValidated(true);
+//        tfTopic.getValidator().add(
+//                BindingUtils.toProperty(tfTopic.textProperty().isNotEmpty()),
+//                "Required"
+//        );
 
         // Role ComboBox : Required
         cbCategory.setValidated(true);

@@ -17,6 +17,7 @@
 .bc-darkblue-alt{
     /*-fx-background-color: #9DD6CE;*/
     -fx-background-color: #16273B;
+    /*-fx-background-color: #85c1e9;*/
 }
 .bc-skyblue{
     -fx-background-color: #297FB8;
@@ -64,11 +65,12 @@
     -fx-text-fill: white;
 }
 
-#paneZones .viewport {
-    -fx-background-color: transparent;
-}
-#paneZones *{
-    -fx-background-color: transparent;
+.mfx-scroll-pane {
+    -mfx-track-color: rgb(230, 230, 230);
+    -mfx-thumb-color: rgb(137, 137, 137);
+    -mfx-thumb-hover-color: rgb(89, 88, 91);
+
+    -fx-background-color: #0A0C23;
 }
 
 .zone-pane{
@@ -77,4 +79,22 @@
 }
 .zone-pane:hover{
     -fx-background-color: LightGray !important;
+}
+
+.SM-pane{
+    -fx-background-color : Lavender !important;
+    -fx-background-radius: 20 20 20 20;
+}
+.SM-pane:hover{
+    -fx-background-color: LightGray !important;
+}
+
+MFXLabel {
+    -fx-text-fill: white;
+}
+
+.hbox-border{
+    -fx-border-width: 5;
+    -fx-border-color: white;
+    -fx-border-radius: 10;
 }

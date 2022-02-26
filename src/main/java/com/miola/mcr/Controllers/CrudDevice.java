@@ -21,10 +21,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
@@ -94,18 +96,20 @@ public class CrudDevice extends Crud implements Initializable {
         //MFXTableColumn<AirQuality> typeColumn = new MFXTableColumn<>("Alarme Type", Comparator.comparing(AirQuality::getType));
         //MFXTableColumn<EnergyMonitor stateColumn = new MFXTableColumn<>("State", Comparator.comparing(EnergyMonitor::getState));
         MFXTableColumn<Device> sensorsColumn = new MFXTableColumn<>("Sensors");
+        MFXTableColumn<Device> zoneColumn = new MFXTableColumn<>("Zone", Comparator.comparing(Device::getZone));
 
 
         /* link columns with proprieties */
 
         idColumn.setRowCellFunction(device -> new MFXTableRowCell(String.valueOf(device.getId())));
         nameColumn.setRowCellFunction(device -> new MFXTableRowCell(device.getName()));
-        //powerColumn.setRowCellFunction(device -> new MFXTableRowCell(String.valueOf(device.getPower())));
+//        powerColumn.setRowCellFunction(device -> new MFXTableRowCell(String.valueOf(device.getPower())));
         typeDeviceColumn.setRowCellFunction(device -> new MFXTableRowCell(device.getClass().getSimpleName()));
         //tempColumn.setRowCellFunction(airConditioner -> new MFXTableRowCell(String.valueOf(airConditioner.getTemperature())));
         //alarmeColumn.setRowCellFunction(airQuality -> new MFXTableRowCell(String.valueOf(airQuality.getAlarm())));
         //typeColumn.setRowCellFunction(airQuality -> new MFXTableRowCell(airQuality.getType()));
         //stateColumn.setRowCellFunction(energyMonitor -> new MFXTableRowCell(String.valueOf(energyMonitor.getState())));
+        zoneColumn.setRowCellFunction(device -> new MFXTableRowCell(String.valueOf(device.getZone())));
 
         sensorsColumn.setRowCellFunction(device -> {
             MFXTableRowCell cell = new MFXTableRowCell("");
@@ -115,13 +119,23 @@ public class CrudDevice extends Crud implements Initializable {
             cell.setLeadingGraphic(cbSensor);
             return cell;
         });
+        powerColumn.setRowCellFunction(device -> {
+            MFXTableRowCell cell = new MFXTableRowCell("");
+            MFXButton b = new MFXButton("    ");
+            b.setStyle( (device.getPower().equals(DevicePower.OFF)) ? "-fx-background-color: RED;" : "-fx-background-color: GREEN;");
+            b.setDisable(true);
+//            b.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            cell.setLeadingGraphic(b);
+            return cell;
+        });
         /* fill table */
         tableView.setItems((ObservableList<Device>) devices);
         tableView.getTableColumns().addAll(idColumn);
-        tableView.getTableColumns().addAll(typeDeviceColumn);
+//        tableView.getTableColumns().addAll(typeDeviceColumn);
         tableView.getTableColumns().addAll(nameColumn);
-        //tableView.getTableColumns().addAll(powerColumn);
-        tableView.getTableColumns().addAll(sensorsColumn);
+//        tableView.getTableColumns().addAll(sensorsColumn);
+        tableView.getTableColumns().addAll(zoneColumn);
+        tableView.getTableColumns().addAll(powerColumn);
 
     }
 

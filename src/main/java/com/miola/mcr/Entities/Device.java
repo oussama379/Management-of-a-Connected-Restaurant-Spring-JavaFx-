@@ -69,6 +69,10 @@ public class Device {
         this.sensors = sensors;
     }
 
+    public String getZone(){
+        return sensors.stream().toList().get(0).getZoneName();
+    }
+
     @Override
     public String toString() {
         return "Device{" +

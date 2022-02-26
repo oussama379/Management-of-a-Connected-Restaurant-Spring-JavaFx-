@@ -1,0 +1,28 @@
+.form{
+    -fx-background-color:  #d6eaf8;
+    -fx-border-color: #0A0C23;
+    -fx-border-width: 5;
+}
+#btnSave{
+    -fx-background-color: LightGreen;
+}
+#btnCancel{
+    -fx-background-color: LightCoral;
+}
+
+.order{
+    -fx-background-color:  #297FB8;
+    -fx-border-color: #0A0C23;
+    -fx-border-width: 5;
+}
+MFXButton {
+    -fx-background-color:  #d6eaf8;
+}
+JFXTextArea {
+    -fx-background-color:  white;
+}
+
+#btEditOrder, #btDeleteOrder{
+    -fx-background-color: #297FB8;
+    -fx-text-fill: white;
+}

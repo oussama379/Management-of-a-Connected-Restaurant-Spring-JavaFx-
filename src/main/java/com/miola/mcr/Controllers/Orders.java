@@ -76,6 +76,7 @@ public class Orders implements Initializable {
     private static final Map<MFXButton, Integer> tablesNumbers = new HashMap<>();
     private static final Map<Long, Boolean> sensorsLastValue = new HashMap<>();
     private static final Map<String, String> colors = new HashMap<>();
+    private static boolean emptyMaps = true;
     private int selectedTable;
 
     private final FxWeaver fxWeaver;
@@ -97,27 +98,30 @@ public class Orders implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Fill colors
-        colors.put("empty", "-fx-background-color: Lavender; -fx-font-size: 20");
-        colors.put("taken", "-fx-background-color: LightSalmon; -fx-font-size: 20");
-        colors.put("served", "-fx-background-color: LightGreen; -fx-font-size: 20");
-        colors.put("dirty", "-fx-background-color: Sienna; -fx-font-size: 20");
+        if (emptyMaps){
+            emptyMaps = false;
+            // Fill colors
+            colors.put("empty", "-fx-background-color: Lavender; -fx-font-size: 20");
+            colors.put("taken", "-fx-background-color: LightSalmon; -fx-font-size: 20");
+            colors.put("served", "-fx-background-color: LightGreen; -fx-font-size: 20");
+            colors.put("dirty", "-fx-background-color: Sienna; -fx-font-size: 20");
 
-        // Fill tables
-        for (DiningTable dt : diningTableService.getAllDiningTables()) {
-            MFXButton b = new MFXButton("Table "+dt.getNumber(),200,100);
-            FontIcon f = new FontIcon("fas-th-large");
-            f.setIconSize(30);
-            b.setGraphic(f);
-            b.setContentDisplay(ContentDisplay.TOP);
-            b.setStyle(colors.get("empty"));
-            b.setOnAction(this::nextStateWaiter);
-            tables.put(b, "empty");
-            tablesNumbers.put(b, dt.getNumber());
-            // Fill sensors
-            for (Sensor s: dt.getSensors()) {
-                sensors.put(s.getId(), b);
-                sensorsLastValue.put(s.getId(), false);
+            // Fill tables
+            for (DiningTable dt : diningTableService.getAllDiningTables()) {
+                MFXButton b = new MFXButton("Table "+dt.getNumber(),200,100);
+                FontIcon f = new FontIcon("fas-th-large");
+                f.setIconSize(30);
+                b.setGraphic(f);
+                b.setContentDisplay(ContentDisplay.TOP);
+                b.setStyle(colors.get("empty"));
+                b.setOnAction(this::nextStateWaiter);
+                tables.put(b, "empty");
+                tablesNumbers.put(b, dt.getNumber());
+                // Fill sensors
+                for (Sensor s: dt.getSensors()) {
+                    sensors.put(s.getId(), b);
+                    sensorsLastValue.put(s.getId(), false);
+                }
             }
         }
         paneTables.getChildren().addAll(tables.keySet());

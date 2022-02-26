@@ -1,6 +1,7 @@
 package com.miola.mcr.Controllers;
 
 
+import com.miola.mcr.JavaFxApplication;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXNotification;
 import io.github.palexdev.materialfx.controls.SimpleMFXNotificationPane;
@@ -9,9 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -33,10 +37,10 @@ public class MainScene implements Initializable {
     @FXML private MFXButton btZonesCrud;
     @FXML private MFXButton btSensorsCrud;
     @FXML private MFXButton btDinningTablesCrud;
-    @FXML private MFXButton btCategoriesCrud;
-    @FXML private MFXButton btRolesCrud;
+//    @FXML private MFXButton btCategoriesCrud;
+//    @FXML private MFXButton btRolesCrud;
     @FXML private MFXButton btAlertesCrud;
-    @FXML private MFXButton btPermissionsCrud;
+//    @FXML private MFXButton btPermissionsCrud;
     @FXML private MFXButton btDevicesCrud;
     @FXML private MFXButton btMenuItemCrud;
 
@@ -63,14 +67,27 @@ public class MainScene implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /* Rearrange */
+        btUsersCrud.managedProperty().bind(btUsersCrud.visibleProperty());
+        btZonesCrud.managedProperty().bind(btZonesCrud.visibleProperty());
+        btSensorsCrud.managedProperty().bind(btSensorsCrud.visibleProperty());
+        btDinningTablesCrud.managedProperty().bind(btDinningTablesCrud.visibleProperty());
+        btAlertesCrud.managedProperty().bind(btAlertesCrud.visibleProperty());
+        btDevicesCrud.managedProperty().bind(btDevicesCrud.visibleProperty());
+        btMenuItemCrud.managedProperty().bind(btMenuItemCrud.visibleProperty());
+        btEnergyDB.managedProperty().bind(btEnergyDB.visibleProperty());
+        btnAirDB.managedProperty().bind(btnAirDB.visibleProperty());
+        btHome.managedProperty().bind(btHome.visibleProperty());
+        btManagement.managedProperty().bind(btManagement.visibleProperty());
+        btnCustomerArea.managedProperty().bind(btnCustomerArea.visibleProperty());
+        btnStatistics.managedProperty().bind(btnStatistics.visibleProperty());
+        btSignOut.managedProperty().bind(btSignOut.visibleProperty());
+
         /* CRUDs */
         mapButtonClass.put(btUsersCrud, CrudUser.class);
         mapButtonClass.put(btZonesCrud, CrudZone.class);
         mapButtonClass.put(btSensorsCrud, CrudSensor.class);
         mapButtonClass.put(btDinningTablesCrud, CrudDinningTable.class);
-        mapButtonClass.put(btCategoriesCrud, CrudCategory.class);
-        mapButtonClass.put(btRolesCrud, CrudRole.class);
-        mapButtonClass.put(btPermissionsCrud, CrudPermission.class);
         mapButtonClass.put(btAlertesCrud, CrudAlerte.class);
         mapButtonClass.put(btDevicesCrud, CrudDevice.class);
         mapButtonClass.put(btMenuItemCrud, CrudMenuItem.class);
@@ -78,13 +95,37 @@ public class MainScene implements Initializable {
         /* DashBoards */
         mapButtonClass.put(btEnergyDB, DBEnergy.class);
         mapButtonClass.put(btnAirDB, DBAir.class);
-
         mapButtonClass.put(btnCustomerArea, Orders.class);
         mapButtonClass.put(btnStatistics, Statistics.class);
 
+        /* Selected */
         btHome.getStyleClass().remove("menu-button");
         btHome.getStyleClass().add("menu-button-selected");
         selected = btHome;
+
+        /* Restriction */
+            // Technician | id = 2
+        if(Login.roleCurrentUser.getId() == 2){
+            for (Map.Entry<MFXButton, Class> e: mapButtonClass.entrySet()) {
+                e.getKey().setVisible(false);
+            }
+            btHome.setVisible(true);
+            btManagement.setVisible(true);
+            btDevicesCrud.setVisible(true);
+            btSensorsCrud.setVisible(true);
+            btZonesCrud.setVisible(true);
+        }
+            // Waiter | id = 3
+        if(Login.roleCurrentUser.getId() == 3){
+            for (Map.Entry<MFXButton, Class> e: mapButtonClass.entrySet()) {
+                e.getKey().setVisible(false);
+            }
+            btManagement.setVisible(false);
+            btHome.setVisible(true);
+            btnCustomerArea.setVisible(true);
+            btEnergyDB.setVisible(true);
+            btnAirDB.setVisible(true);
+        }
     }
 
     @FXML
@@ -114,6 +155,18 @@ public class MainScene implements Initializable {
     @FXML
     void showCruds(ActionEvent event){
         vbCruds.setVisible(!vbCruds.isVisible());
+    }
+
+    @FXML
+    void signOut(ActionEvent event) {
+            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+            Pane root = fxWeaver.loadView(Login.class);
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setMaximized(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
     }
 
 }

@@ -50,7 +50,7 @@ public class DBAir implements Initializable {
     private static final Random RND = new Random();
 
     private long           lastTimerCall;
-    private AnimationTimer timer;
+    private static AnimationTimer timer;
     private static int hourIndex = Integer.parseInt(DateTimeFormatter.ofPattern("HH").format(LocalDateTime.now()));
 
     private Tile areaChartTileTemp;
@@ -64,6 +64,8 @@ public class DBAir implements Initializable {
     private ChartData       smoothChartData3;
     private ChartData       smoothChartData4;
 
+    private static XYChart.Series<String, Number> series1;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         selectedZone = lblTitle.textProperty();
@@ -72,13 +74,14 @@ public class DBAir implements Initializable {
         /*
         * Tiles
         * */
-        XYChart.Series<String, Number> series1 = new XYChart.Series();
+        series1 = new XYChart.Series();
+        series1.getData().add(new XYChart.Data(hourIndex - 1 +"H", 0));
         areaChartTileTemp = TileBuilder.create()
                 .skinType(Tile.SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
                 .title("Temperature")
                 .chartType(Tile.ChartType.AREA)
-//                .animated(true)
+                .animated(true)
                 .smoothing(true)
                 .tooltipTimeout(1000)
                 .tilesFxSeries(new TilesFXSeries<>(series1,
@@ -93,7 +96,7 @@ public class DBAir implements Initializable {
                 .minValue(400)
                 .maxValue(2500)
                 .startFromZero(false)
-                .threshold(500)
+                .threshold(1000)
                 .thresholdVisible(false)
                 .title("CO2 Level")
                 .unit("PPM")
@@ -116,10 +119,10 @@ public class DBAir implements Initializable {
                 .minValue(400)
                 .maxValue(2500)
                 .startFromZero(false)
-                .threshold(500)
+                .threshold(700)
                 .thresholdVisible(false)
                 .title("VOC Level")
-                .unit("PPM")
+                .unit("PPO")
                 .gradientStops(new Stop(0, Bright.BLUE),
                         new Stop(0.1, Bright.BLUE_GREEN),
                         new Stop(0.2, Bright.GREEN),
@@ -174,12 +177,10 @@ public class DBAir implements Initializable {
             public void handle(long now) {
                 if (now > lastTimerCall + 3_500_000_000L) {
                     if (DBAirService.ZoneData_Temp_Humi.size() > 0) {
-                        if (series1.getData().size() > 5) {
-                            series1.getData().remove(0);
-                        }
                         series1.getData().add(new XYChart.Data(hourIndex + "H", Double.parseDouble(DBAirService.ZoneData_Temp_Humi.get(selectedZone.get()).get(0))));
                         hourIndex++;
-                        if(hourIndex > 23) hourIndex = 0;
+                        if (series1.getData().size() > 5) series1.getData().remove(0);
+                        if (hourIndex > 23) hourIndex = 0;
 
                         barGaugeTileCO2.setValue(Double.parseDouble(DBAirService.ZoneData_co2_voc.get(selectedZone.get()).get(0)));
                         barGaugeTileVOC.setValue(Double.parseDouble(DBAirService.ZoneData_co2_voc.get(selectedZone.get()).get(1)));
@@ -203,6 +204,8 @@ public class DBAir implements Initializable {
             }
         };
 
+        barGaugeTileCO2.getStyleClass().add("hbox-border");
+        barGaugeTileVOC.getStyleClass().add("hbox-border");
         gpTiles.add(barGaugeTileCO2, 0, 0);
         gpTiles.add(barGaugeTileVOC, 1, 0);
 //        gpTiles.add(smoothAreaChartTileCO2, 0, 1);

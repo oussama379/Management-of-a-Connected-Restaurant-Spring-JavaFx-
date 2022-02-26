@@ -3,6 +3,7 @@ package com.miola.mcr.Controllers;
 import com.miola.mcr.Entities.Alerte;
 import com.miola.mcr.Entities.User;
 import com.miola.mcr.Entities.Zone;
+import com.miola.mcr.JavaFxApplication;
 import com.miola.mcr.Services.AlerteService;
 import com.miola.mcr.Services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -67,6 +68,7 @@ public class CrudAlerte extends Crud implements Initializable {
         dialog = MFXDialogFactory.buildDialog(DialogType.INFO, "MFXDialog - Generic Dialog", null);
 
         super.initialize(formWindow, dialog);
+
     }
 
     public void populateTable() {

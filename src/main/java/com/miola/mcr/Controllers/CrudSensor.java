@@ -3,6 +3,7 @@ package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Entities.Role;
 import com.miola.mcr.Entities.Sensor;
+import com.miola.mcr.JavaFxApplication;
 import com.miola.mcr.Services.SensorService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableView;
@@ -81,7 +82,7 @@ public class CrudSensor extends Crud implements Initializable {
         MFXTableColumn<Sensor> idColumn = new MFXTableColumn<Sensor>("Id", Comparator.comparing(Sensor::getId));
         MFXTableColumn<Sensor> nameColumn = new MFXTableColumn<Sensor>("Name", Comparator.comparing(Sensor::getName));
         MFXTableColumn<Sensor> topicColumn = new MFXTableColumn<Sensor>("Topic", Comparator.comparing(Sensor::getTopic));
-        MFXTableColumn<Sensor> categoryColumn = new MFXTableColumn<Sensor>("Category", Comparator.comparing(Sensor::getCategoryName));
+        MFXTableColumn<Sensor> categoryColumn = new MFXTableColumn<Sensor>("Type", Comparator.comparing(Sensor::getCategoryName));
         MFXTableColumn<Sensor> deviceColumn = new MFXTableColumn<Sensor>("Device", Comparator.comparing(Sensor::getDeviceName));
         MFXTableColumn<Sensor> dinningTableColumn = new MFXTableColumn<Sensor>("Dinning Table", Comparator.comparing(Sensor::getDiningTableName));
         MFXTableColumn<Sensor> zoneColumn = new MFXTableColumn<Sensor>("Zone", Comparator.comparing(Sensor::getZoneName));
@@ -102,9 +103,9 @@ public class CrudSensor extends Crud implements Initializable {
         tableView.setItems(sensors);
         tableView.getTableColumns().addAll(idColumn);
         tableView.getTableColumns().addAll(nameColumn);
-        tableView.getTableColumns().addAll(topicColumn);
+//        tableView.getTableColumns().addAll(topicColumn);
         tableView.getTableColumns().addAll(categoryColumn);
-        tableView.getTableColumns().addAll(deviceColumn);
+//        tableView.getTableColumns().addAll(deviceColumn);
         tableView.getTableColumns().addAll(dinningTableColumn);
         tableView.getTableColumns().addAll(zoneColumn);
 
