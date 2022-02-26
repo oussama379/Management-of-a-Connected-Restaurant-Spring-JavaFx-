@@ -18,7 +18,7 @@ import java.util.*;
 
 @Component
 public class DBAirService {
-    // {\"date\":\"2022-01-14 09:20:33\",\"humidity\":60.155631968437994,\"idSensor\"4,\"temperature\":33.466944974342724, \"typeAir\":\"AirCondionner\"}
+    // {\"date\":\"2022-01-14 09:20:33\",\"humidity\":60.155631968437994,\"idSensor\":4,\"temperature\":33.466944974342724, \"typeAir\":\"AirCondionner\"}
     private final AlertesService alertesService;
     private final ZoneService zoneService;
     private final SensorRepository sensorRepository;
@@ -42,27 +42,20 @@ public class DBAirService {
     @ServiceActivator(inputChannel="mqttInputChannel2")
     public void handleHere2(@Payload Object payload) throws JsonProcessingException {
         System.out.println("payload 2 : "+payload);
-        System.out.println("=================================================================================");
         jsonNode = objectMapper.readTree((String) payload);
         //updateSensorDate(jsonNode);
-        System.out.println("=================================================================================");
         Sensor S = sensorService.getSensorById(Long.parseLong(jsonNode.get("idSensor").asText())).orElse(null);
-        System.out.println("=================================================================================");
         Set<Alerte> triggeredAlertes = new HashSet<>();
-        System.out.println("=================================================================================");
-        if(jsonNode.get("typeAir").asText().equals("AirQuality"))
-            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("temperature").asDouble(), NotificationsLauncher.AlertType.Temperature));
+        if(jsonNode.get("typeAir").asText().equals("AirQuality")) {
+            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("co2").asDouble(), NotificationsLauncher.AlertType.CO2));
+            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("voc").asDouble(), NotificationsLauncher.AlertType.VOC));
             ZoneData_co2_voc.put(S.getZone().getTitle(),
                     new ArrayList<>(Arrays.asList(jsonNode.get("co2").asText(), jsonNode.get("voc").asText())));
+        }
         if(jsonNode.get("typeAir").asText().equals("AirCondionner")){
-            System.out.println("=================================================================================");
-            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("co2").asDouble(), NotificationsLauncher.AlertType.CO2));
-            System.out.println("=================================================================================");
-            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("voc").asDouble(), NotificationsLauncher.AlertType.VOC));
-            System.out.println("=================================================================================");
+            triggeredAlertes.addAll(alertesService.TestAlerts(S, jsonNode.get("temperature").asDouble(), NotificationsLauncher.AlertType.Temperature));
             ZoneData_Temp_Humi.put(S.getZone().getTitle(),
                     new ArrayList<>(Arrays.asList(jsonNode.get("temperature").asText(), jsonNode.get("humidity").asText())));
-            System.out.println("=================================================================================");
         }
         for (Alerte a: triggeredAlertes) {
             new NotificationsLauncher(NotificationsLauncher.AlertType.valueOf(a.getType()), NotificationsLauncher.Severity.valueOf(a.getSeverity()), S.getName(), a.getOperator(), a.getValue()).showTopRight();

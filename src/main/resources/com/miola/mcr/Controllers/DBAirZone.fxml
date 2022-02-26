@@ -2,29 +2,35 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXLabel?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="-Infinity" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: lightgray; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBAirZone">
+<AnchorPane minHeight="-Infinity" prefHeight="200.0" prefWidth="280.0" styleClass="zone-pane" stylesheets="@../../../../style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBAirZone">
    <children>
       <MFXLabel fx:id="lblZone" labelStyle="STYLE1" layoutX="33.0" layoutY="14.0" onMouseClicked="#selectThisZone" prefHeight="42.0" prefWidth="214.0" text="Zone 1">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></MFXLabel>
-      <Label layoutX="33.0" layoutY="75.0" text="Temperature" />
+      <MFXLabel animateLines="false" layoutX="18.0" layoutY="70.0" lineStrokeWidth="0.0" text="Temperature" />
+      <MFXLabel fx:id="lblTemp" animateLines="false" layoutX="-3.0" layoutY="101.0" lineStrokeWidth="0.0" prefHeight="55.0" prefWidth="85.0" text="25.0 °C">
+         <font>
+            <Font size="36.0" />
+         </font>
+         <textFill>
+            <Color red="0.1473684161901474" green="0.1473684161901474" blue="0.1473684161901474" />
+         </textFill>
+      </MFXLabel>
       <Line endX="100.0" layoutX="86.0" layoutY="129.0" rotate="90.0" startX="10.0" />
-      <Label layoutX="187.0" layoutY="75.0" text="Humidity" />
-      <Label fx:id="lblTemp" alignment="CENTER" layoutX="25.0" layoutY="102.0" prefWidth="85.0" text="25 °C">
+      <MFXLabel animateLines="false" layoutX="161.0" layoutY="70.0" lineStrokeWidth="0.0" text="Humidity" />
+      <MFXLabel fx:id="lblHum" animateLines="false" layoutX="143.0" layoutY="101.0" lineStrokeWidth="0.0" prefHeight="55.0" prefWidth="85.0" text="88.8 %">
          <font>
             <Font size="36.0" />
          </font>
-      </Label>
-      <Label fx:id="lblHum" alignment="CENTER" layoutX="169.0" layoutY="102.0" prefHeight="54.0" prefWidth="85.0" text="8 %" textAlignment="CENTER">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
+         <textFill>
+            <Color red="0.1473684161901474" green="0.1473684161901474" blue="0.1473684161901474" />
+         </textFill>
+      </MFXLabel>
    </children>
 </AnchorPane>

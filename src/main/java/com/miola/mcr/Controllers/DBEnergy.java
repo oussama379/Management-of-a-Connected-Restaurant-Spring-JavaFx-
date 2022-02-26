@@ -79,14 +79,13 @@ public class DBEnergy implements Initializable {
 
         // AreaChart Data
         XYChart.Series<String, Number> series1 = new XYChart.Series();
-        series1.setName("Whatever");
         series1.getData().add(new XYChart.Data(String.valueOf(hourIndex-1)+"H", 0));
         areaChartTile = TileBuilder.create()
                 .skinType(SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
                 .title("USAGE TILL NOW")
                 .chartType(Tile.ChartType.AREA)
-                //.animated(true)
+                .animated(true)
                 .smoothing(true)
                 .tooltipTimeout(1000)
                 .tilesFxSeries(new TilesFXSeries<>(series1,
@@ -144,7 +143,6 @@ public class DBEnergy implements Initializable {
 
         List<Pane> devices = new ArrayList<>();
         for (Map.Entry<String, Double> e: DBEnergyService.deviceConsumptionList) {
-            System.out.println(e);
             devices.add(fxWeaver.loadView(DBEnergyDevice.class));
             fxWeaver.getBean(DBEnergyDevice.class).fillData(e.getKey(), Math.round(e.getValue())+"KWh", deviceService.getDeviceByName(e.getKey()).getPower());
         }

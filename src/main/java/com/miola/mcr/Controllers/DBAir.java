@@ -51,7 +51,7 @@ public class DBAir implements Initializable {
 
     private long           lastTimerCall;
     private AnimationTimer timer;
-    private static int hourIndex = Integer.valueOf(DateTimeFormatter.ofPattern("HH").format(LocalDateTime.now()));
+    private static int hourIndex = Integer.parseInt(DateTimeFormatter.ofPattern("HH").format(LocalDateTime.now()));
 
     private Tile areaChartTileTemp;
     private Tile barGaugeTileCO2;
@@ -73,11 +73,10 @@ public class DBAir implements Initializable {
         * Tiles
         * */
         XYChart.Series<String, Number> series1 = new XYChart.Series();
-        series1.setName("Whatever");
         areaChartTileTemp = TileBuilder.create()
                 .skinType(Tile.SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
-                .title("SmoothedChart Tile")
+                .title("Temperature")
                 .chartType(Tile.ChartType.AREA)
 //                .animated(true)
                 .smoothing(true)
@@ -96,9 +95,8 @@ public class DBAir implements Initializable {
                 .startFromZero(false)
                 .threshold(500)
                 .thresholdVisible(false)
-                .title("BarGauge Tile")
-                .unit("F")
-                .text("Whatever text")
+                .title("CO2 Level")
+                .unit("PPM")
                 .gradientStops(new Stop(0, Bright.BLUE),
                         new Stop(0.1, Bright.BLUE_GREEN),
                         new Stop(0.2, Bright.GREEN),
@@ -120,9 +118,8 @@ public class DBAir implements Initializable {
                 .startFromZero(false)
                 .threshold(500)
                 .thresholdVisible(false)
-                .title("BarGauge Tile")
-                .unit("F")
-                .text("Whatever text")
+                .title("VOC Level")
+                .unit("PPM")
                 .gradientStops(new Stop(0, Bright.BLUE),
                         new Stop(0.1, Bright.BLUE_GREEN),
                         new Stop(0.2, Bright.GREEN),
@@ -182,6 +179,7 @@ public class DBAir implements Initializable {
                         }
                         series1.getData().add(new XYChart.Data(hourIndex + "H", Double.parseDouble(DBAirService.ZoneData_Temp_Humi.get(selectedZone.get()).get(0))));
                         hourIndex++;
+                        if(hourIndex > 23) hourIndex = 0;
 
                         barGaugeTileCO2.setValue(Double.parseDouble(DBAirService.ZoneData_co2_voc.get(selectedZone.get()).get(0)));
                         barGaugeTileVOC.setValue(Double.parseDouble(DBAirService.ZoneData_co2_voc.get(selectedZone.get()).get(1)));

@@ -1,76 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="rootPane" minHeight="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../../../../style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.MainScene">
+<BorderPane fx:id="rootPane" minHeight="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="root" stylesheets="@../../../../style/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.MainScene">
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="bc-darkblue" BorderPane.alignment="CENTER">
          <top>
-            <VBox prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+            <VBox prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <MFXButton depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Home">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btUsersCrud" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Users CRUD">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btZonesCrud" onAction="#loadScene" prefHeight="57.0" prefWidth="198.0" text="Zones CRUD" />
-                  <MFXButton fx:id="btSensorsCrud" onAction="#loadScene" prefHeight="59.0" prefWidth="200.0" text="Sensors CRUD" />
-                  <MFXButton fx:id="btDinningTablesCrud" onAction="#loadScene" prefHeight="64.0" prefWidth="200.0" text="Dinning Tables CRUD" />
-                  <MFXButton fx:id="btCategoriesCrud" onAction="#loadScene" prefHeight="60.0" prefWidth="200.0" text="Categories CRUD" />
-                  <MFXButton fx:id="btRolesCrud" onAction="#loadScene" prefHeight="55.0" prefWidth="200.0" text="Roles CRUD" />
-                  <MFXButton fx:id="btPermissionsCrud" onAction="#loadScene" prefHeight="57.0" prefWidth="200.0" text="Permissions CRUD" />
-                  <MFXButton fx:id="btAlertesCrud" onAction="#loadScene" prefHeight="44.0" prefWidth="200.0" text="Alertes CRUD" />
-                  <MFXButton fx:id="btDevicesCrud" onAction="#loadScene" prefHeight="58.0" prefWidth="200.0" text="Devices CRUD" />
-                  <MFXButton fx:id="btMenuItemCrud" onAction="#loadScene" prefHeight="25.0" prefWidth="201.0" text="MenuItems CRUD" />
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0" />
-                  <MFXButton fx:id="btEnergyDB" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Energy Dashboard">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btnAirDB" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Air Dashboard">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btnCustomerArea" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Customer Area">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btnStatistics" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Statistics">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
+                  <MFXButton fx:id="btHome" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Home" />
+                  <MFXButton fx:id="btnCustomerArea" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Customer Area" />
+                  <MFXButton fx:id="btnAirDB" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Air Dashboard" />
+                  <MFXButton fx:id="btEnergyDB" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Energy Dashboard" />
+                  <MFXButton fx:id="btnStatistics" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Statistics" />
+                  <MFXButton fx:id="btManagement" depthLevel="LEVEL0" onAction="#showCruds" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Management" />
+                  <VBox fx:id="vbCruds" prefHeight="200.0" prefWidth="173.0" styleClass="bc-dropdown" visible="false">
+                     <children>
+                        <MFXButton fx:id="btUsersCrud" depthLevel="LEVEL5" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="Users">
+                           <font>
+                              <Font name="Open Sans SemiBold" size="12.0" />
+                           </font>
+                        </MFXButton>
+                        <MFXButton fx:id="btZonesCrud" depthLevel="LEVEL5" onAction="#loadScene" prefHeight="57.0" prefWidth="198.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="Zones" />
+                        <MFXButton fx:id="btDinningTablesCrud" onAction="#loadScene" prefHeight="64.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="Dinning Tables" />
+                        <MFXButton fx:id="btSensorsCrud" onAction="#loadScene" prefHeight="59.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="Sensors" />
+                        <MFXButton fx:id="btAlertesCrud" onAction="#loadScene" prefHeight="44.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="Alertes" />
+                        <MFXButton fx:id="btDevicesCrud" onAction="#loadScene" prefHeight="58.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="SmartPlug" />
+                        <MFXButton fx:id="btMenuItemCrud" onAction="#loadScene" prefHeight="25.0" prefWidth="201.0" rippleAnimateShadow="true" styleClass="menu-button-dropdown" text="MenuItems" />
+                     </children>
+                  </VBox>
                </children>
             </VBox>
          </top>
          <bottom>
-            <VBox alignment="BOTTOM_LEFT" minHeight="150.0" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <VBox alignment="BOTTOM_LEFT" minHeight="61.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <MFXButton depthLevel="LEVEL0" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Profil">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
-                  <MFXButton fx:id="btSignOut" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Sign Out">
-                     <font>
-                        <Font name="Open Sans SemiBold" size="16.0" />
-                     </font>
-                  </MFXButton>
+                  <MFXButton fx:id="btSignOut" depthLevel="LEVEL0" onAction="#loadScene" prefHeight="50.0" prefWidth="200.0" rippleAnimateShadow="true" styleClass="menu-button" text="Sign Out" />
                </children>
             </VBox>
          </bottom>
+         <effect>
+            <DropShadow />
+         </effect>
       </BorderPane>
    </left>
+   <top>
+      <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="bc-darkblue" BorderPane.alignment="CENTER">
+         <effect>
+            <DropShadow />
+         </effect>
+      </AnchorPane>
+   </top>
 </BorderPane>

@@ -8,8 +8,10 @@ import io.github.palexdev.materialfx.notifications.NotificationPos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -41,12 +43,17 @@ public class MainScene implements Initializable {
     @FXML private MFXButton btEnergyDB;
     @FXML private MFXButton btnAirDB;
 
+    @FXML private MFXButton btHome;
+    @FXML private MFXButton btManagement;
     @FXML private MFXButton btnCustomerArea;
     @FXML private MFXButton btnStatistics;
 
     @FXML private MFXButton btSignOut;
 
     @FXML private BorderPane rootPane;
+    @FXML private VBox vbCruds;
+
+    private MFXButton selected;
 
 
     @Autowired
@@ -74,52 +81,39 @@ public class MainScene implements Initializable {
 
         mapButtonClass.put(btnCustomerArea, Orders.class);
         mapButtonClass.put(btnStatistics, Statistics.class);
+
+        btHome.getStyleClass().remove("menu-button");
+        btHome.getStyleClass().add("menu-button-selected");
+        selected = btHome;
     }
 
     @FXML
     void loadScene(ActionEvent event) {
-
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         rootPane.setCenter(fxWeaver.loadView(mapButtonClass.get(event.getSource())));
+        rootPane.getCenter().getStyleClass().add("bc-darkblue-alt");
 
-//        if (event.getSource().equals(btUsersCrud)) {
-//            Pane newLoadedPane = fxWeaver.loadView(CrudUser.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btZonesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudZone.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btSensorsCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudSensor.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btDinningTablesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudDinningTable.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btCategoriesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudCategory.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btRolesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudRole.class);
-//            rootPane.setCenter(newLoadedPane);
-//        } else if (event.getSource().equals(btPermissionsCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudPermission.class);
-//            rootPane.setCenter(newLoadedPane);
-//        }else if (event.getSource().equals(btAlertesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudAlerte.class);
-//            rootPane.setCenter(newLoadedPane);
-//        }else if (event.getSource().equals(btDevicesCrud)) {
-//            Pane newLoadedPane;
-//            newLoadedPane = fxWeaver.loadView(CrudDevice.class);
-//            rootPane.setCenter(newLoadedPane);
-//        }else {
-//            rootPane.setCenter(null);
-//        }
+        MFXButton b = (MFXButton)event.getSource();
+
+        selected.getStyleClass().remove("menu-button-selected");
+        selected.getStyleClass().add("menu-button");
+
+        if (b.toString().contains("Crud")) {
+            vbCruds.setVisible(!vbCruds.isVisible());
+            btManagement.getStyleClass().remove("menu-button");
+            btManagement.getStyleClass().add("menu-button-selected");
+            selected = btManagement;
+        }else {
+            b.getStyleClass().remove("menu-button");
+            b.getStyleClass().add("menu-button-selected");
+            selected = b;
+        }
+
+    }
+
+    @FXML
+    void showCruds(ActionEvent event){
+        vbCruds.setVisible(!vbCruds.isVisible());
     }
 
 }

@@ -26,6 +26,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;

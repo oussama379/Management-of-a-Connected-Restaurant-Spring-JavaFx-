@@ -1,12 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXLabel?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.Statistics">
    <children>
-      <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="22.0" prefHeight="100.0" prefWidth="252.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-      <HBox fx:id="hbox2" alignment="CENTER" layoutX="14.0" layoutY="208.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-      <HBox fx:id="hbox3" alignment="CENTER" layoutX="33.0" layoutY="440.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+      <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="71.0" prefHeight="100.0" prefWidth="252.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0" />
+      <HBox fx:id="hbox2" alignment="CENTER" layoutX="14.0" layoutY="208.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="210.0" />
+      <HBox fx:id="hbox3" alignment="CENTER" layoutX="33.0" layoutY="440.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="430.0" />
+      <HBox alignment="CENTER" layoutX="20.0" layoutY="14.0" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <MFXLabel animateLines="false" labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Today Orders">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <MFXLabel animateLines="false" labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Today Profit">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <MFXLabel labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Month Orders">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <MFXLabel labelStyle="STYLE2" prefHeight="50.0" prefWidth="150.0" text="Month Proft">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXLabel>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

@@ -34,6 +34,8 @@ public class JavaFxApplication extends Application {
         Parent root = fxWeaver.loadView(MainScene.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setMaximized(true);
         //stage.setOnHidden(e -> Platform.exit());
         JavaFxApplication.stage = stage;
         stage.show();

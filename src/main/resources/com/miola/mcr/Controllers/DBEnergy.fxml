@@ -8,8 +8,8 @@
 <AnchorPane fx:id="rootPane" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.miola.mcr.Controllers.DBEnergy">
     <children>
         <HBox fx:id="hbox1" alignment="CENTER" layoutX="20.0" layoutY="14.0" prefHeight="150.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
-        <HBox fx:id="hbox2" alignment="CENTER" layoutX="20.0" layoutY="241.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="190.0" />
-        <MFXScrollPane fitToWidth="true" hbarPolicy="ALWAYS" layoutX="20.0" layoutY="410.0" prefHeight="270.0" prefWidth="466.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="410.0">
+        <HBox fx:id="hbox2" alignment="CENTER" layoutX="20.0" layoutY="241.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="310.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="190.0" />
+        <MFXScrollPane fitToWidth="true" hbarPolicy="ALWAYS" layoutX="20.0" layoutY="410.0" prefHeight="270.0" prefWidth="466.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <content>
                 <HBox fx:id="hboxDevices" prefHeight="250.0" prefWidth="200.0" spacing="5.0" />
             </content>

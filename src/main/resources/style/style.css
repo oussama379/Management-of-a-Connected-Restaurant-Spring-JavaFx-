@@ -1,4 +1,80 @@
+/*
+    DarkBlue     : #0A0C23
+    DarkBlue Alt : #16273B
+    SkyBlue      : #297FB8
+    Orange       : #FFAB0B
+
+    Font :
+*/
+/***************************************************/
+@font-face {
+    font-family: 'Quicksand';
+    src: url('fonts/Quicksand-Bold.ttf');
+}
+.bc-darkblue{
+    -fx-background-color: #0A0C23;
+}
+.bc-darkblue-alt{
+    /*-fx-background-color: #9DD6CE;*/
+    -fx-background-color: #16273B;
+}
+.bc-skyblue{
+    -fx-background-color: #297FB8;
+}
+.bc-dropdown{
+    -fx-background-color: #0a0c32;
+}
+/***************************************************/
+.root *{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Quicksand";
+}
 .menu-button{
+    -fx-padding: 0 0 0 15px;
     -fx-background-color: transparent;
     -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+.menu-button:hover{
+    -fx-background-color: rgba(190, 190, 190, 0.3);
+}
+.menu-button-selected{
+    -fx-padding: 0 0 0 15px;
+    -fx-background-color: #297FB8;
+    -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+.menu-button-dropdown{
+    -fx-padding: 3px 0 3px 30px;
+    -fx-background-color: transparent;
+    -fx-alignment: center-left;
+    -fx-text-fill: white;
+}
+
+#btnNew{
+    -fx-background-color: #297FB8;
+    -fx-text-fill: white;
+}
+#btnEdit{
+    -fx-background-color: #297FB8;
+    -fx-text-fill: white;
+}
+#btnDelete{
+    -fx-background-color: #297FB8;
+    -fx-text-fill: white;
+}
+
+#paneZones .viewport {
+    -fx-background-color: transparent;
+}
+#paneZones *{
+    -fx-background-color: transparent;
+}
+
+.zone-pane{
+    -fx-background-color : Lavender !important;
+    -fx-background-radius: 20 0 0 20;
+}
+.zone-pane:hover{
+    -fx-background-color: LightGray !important;
 }

@@ -15,17 +15,12 @@ import java.util.Map;
 @FxmlView
 public class DBAirZone {
 
-    @FXML
-    private Label lblHum;
-
-    @FXML
-    private MFXLabel lblZone;
-
-    @FXML
-    private Label lblTemp;
+    @FXML private MFXLabel lblZone;
+    @FXML private MFXLabel lblHum;
+    @FXML private MFXLabel lblTemp;
 
 //    private static List<MFXLabel> views = new ArrayList<>();
-    public static Map<String, Pair<Label, Label>> views = new HashMap<>();
+    public static Map<String, Pair<MFXLabel, MFXLabel>> views = new HashMap<>();
 
     public void fillData(String lblZone, double lblTemp, double lblHum){
         this.lblZone.setText(lblZone);
@@ -35,7 +30,7 @@ public class DBAirZone {
     }
 
     public void updateData(String zoneName,double lblTemp, double lblHum){
-        Pair<Label, Label> data = views.get(zoneName);
+        Pair<MFXLabel, MFXLabel> data = views.get(zoneName);
         data.getKey().setText(lblTemp+" °C");
         data.getValue().setText(lblHum+" %");
     }
