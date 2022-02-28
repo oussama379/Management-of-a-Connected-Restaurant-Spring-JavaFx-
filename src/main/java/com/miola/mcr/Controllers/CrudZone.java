@@ -101,7 +101,7 @@ public class CrudZone extends Crud implements Initializable {
         /* create columns */
         MFXTableColumn<Zone> idColumn = new MFXTableColumn<Zone>("Id", Comparator.comparing(Zone::getId));
         MFXTableColumn<Zone> titleColumn = new MFXTableColumn<Zone>("Title", Comparator.comparing(Zone::getTitle));
-        MFXTableColumn<Zone> devicesColumn = new MFXTableColumn<Zone>("Devices");
+        MFXTableColumn<Zone> devicesColumn = new MFXTableColumn<Zone>("SmartPlugs");
         MFXTableColumn<Zone> sensorsColumn = new MFXTableColumn<Zone>("Sensors");
         MFXTableColumn<Zone> rolesColumn = new MFXTableColumn<Zone>("Roles");
 
@@ -114,7 +114,7 @@ public class CrudZone extends Crud implements Initializable {
             MFXTableRowCell cell = new MFXTableRowCell("");
             cbDevice = new MFXComboBox<>();
             cbDevice.getItems().addAll(zoneService.getZoneDevicesNames(zone));
-            cbDevice.setPromptText("See Devices");
+            cbDevice.setPromptText("See SmartPlugs");
             cell.setLeadingGraphic(cbDevice);
             return cell;
         });
@@ -126,14 +126,14 @@ public class CrudZone extends Crud implements Initializable {
             cell.setLeadingGraphic(cbSensor);
             return cell;
         });
-        rolesColumn.setRowCellFunction(zone -> {
-            MFXTableRowCell cell = new MFXTableRowCell("");
-            cbRole = new MFXComboBox<>();
-            cbRole.getItems().addAll(zoneService.getZoneRolesNames(zone));
-            cbRole.setPromptText("See Roles");
-            cell.setLeadingGraphic(cbRole);
-            return cell;
-        });
+//        rolesColumn.setRowCellFunction(zone -> {
+//            MFXTableRowCell cell = new MFXTableRowCell("");
+//            cbRole = new MFXComboBox<>();
+//            cbRole.getItems().addAll(zoneService.getZoneRolesNames(zone));
+//            cbRole.setPromptText("See Roles");
+//            cell.setLeadingGraphic(cbRole);
+//            return cell;
+//        });
 
 
         /* fill table */
@@ -142,7 +142,7 @@ public class CrudZone extends Crud implements Initializable {
         tableView.getTableColumns().addAll(titleColumn);
         tableView.getTableColumns().addAll(devicesColumn);
         tableView.getTableColumns().addAll(sensorsColumn);
-        tableView.getTableColumns().addAll(rolesColumn);
+//        tableView.getTableColumns().addAll(rolesColumn);
     }
 
     @FXML

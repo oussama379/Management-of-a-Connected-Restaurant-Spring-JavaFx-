@@ -26,7 +26,7 @@ public class DeviceServiceImp implements DeviceService{
     @Override
     public List<String> getAllDevicesNames() {
         List<String> devicesNames = new ArrayList<>();
-        devicesNames.add("fake device");
+//        devicesNames.add("fake device");
         for (Device device : deviceRepository.findAll()) {
             devicesNames.add(device.getName());
         }

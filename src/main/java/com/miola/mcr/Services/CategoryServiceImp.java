@@ -23,7 +23,7 @@ public class CategoryServiceImp implements CategoryService{
     @Override
     public List<String> getAllCategoriesNames() {
         List<String> CategoriesNames = new ArrayList<>();
-        CategoriesNames.add("fake device");
+//        CategoriesNames.add("fake device");
         for (Category category : categorieRepository.findAll()) {
             CategoriesNames.add(category.getTitle());
         }

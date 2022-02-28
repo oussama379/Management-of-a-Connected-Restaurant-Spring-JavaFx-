@@ -109,7 +109,7 @@ public class ZoneServiceImp implements ZoneService{
     @Override
     public List<String> getAllZonesNames() {
             List<String> zonesNames = new ArrayList<>();
-            zonesNames.add("fake device");
+//            zonesNames.add("fake device");
             for (Zone zone : zoneRepository.findAll()) {
                 zonesNames.add(zone.getTitle());
             }

@@ -9,7 +9,7 @@
 /***************************************************/
 @font-face {
     font-family: 'Quicksand';
-    src: url('fonts/Quicksand-Bold.ttf');
+    /*src: url('/fonts/Quicksand-Medium.ttf');*/
 }
 .bc-darkblue{
     -fx-background-color: #0A0C23;

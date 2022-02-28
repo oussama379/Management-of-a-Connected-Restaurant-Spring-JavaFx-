@@ -83,7 +83,7 @@ public class CrudAlerte extends Crud implements Initializable {
         MFXTableColumn<Alerte> operatorColumn = new MFXTableColumn<>("Operator", Comparator.comparing(Alerte::getOperator));
         MFXTableColumn<Alerte> fromTimeColumn = new MFXTableColumn<>("From Time", Comparator.comparing(Alerte::getFromTime));
         MFXTableColumn<Alerte> toTimeColumn = new MFXTableColumn<>("To Time", Comparator.comparing(Alerte::getToTime));
-        MFXTableColumn<Alerte> categoryColumn = new MFXTableColumn<>("Category", Comparator.comparing(Alerte::getCategoryName));
+        MFXTableColumn<Alerte> categoryColumn = new MFXTableColumn<>("Sensor", Comparator.comparing(Alerte::getCategoryName));
 
         /* link columns with proprieties */
         idColumn.setRowCellFunction(alerte -> new MFXTableRowCell(String.valueOf(alerte.getId())));

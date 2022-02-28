@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.*;
 
 @Component
@@ -75,7 +76,7 @@ public class DBAir implements Initializable {
         * Tiles
         * */
         series1 = new XYChart.Series();
-        series1.getData().add(new XYChart.Data(hourIndex - 1 +"H", 0));
+        series1.getData().add(new XYChart.Data(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), 0));
         areaChartTileTemp = TileBuilder.create()
                 .skinType(Tile.SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
@@ -177,9 +178,9 @@ public class DBAir implements Initializable {
             public void handle(long now) {
                 if (now > lastTimerCall + 3_500_000_000L) {
                     if (DBAirService.ZoneData_Temp_Humi.size() > 0) {
-                        series1.getData().add(new XYChart.Data(hourIndex + "H", Double.parseDouble(DBAirService.ZoneData_Temp_Humi.get(selectedZone.get()).get(0))));
-                        hourIndex++;
-                        if (series1.getData().size() > 5) series1.getData().remove(0);
+                        series1.getData().add(new XYChart.Data(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), Double.parseDouble(DBAirService.ZoneData_Temp_Humi.get(selectedZone.get()).get(0))));
+//                        hourIndex++;
+                        if (series1.getData().size() > 10) series1.getData().remove(0);
                         if (hourIndex > 23) hourIndex = 0;
 
                         barGaugeTileCO2.setValue(Double.parseDouble(DBAirService.ZoneData_co2_voc.get(selectedZone.get()).get(0)));

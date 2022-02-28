@@ -23,7 +23,7 @@ public class SensorServiceImp implements SensorService{
     @Override
     public List<String> getAllSensorsNames() {
             List<String> sensorsNames = new ArrayList<>();
-            sensorsNames.add("fake sensor");
+//            sensorsNames.add("fake sensor");
             for (Sensor sensor : sensorRepository.findAll()) {
                 sensorsNames.add(sensor.getName());
             }

@@ -3,11 +3,13 @@ package com.miola.mcr.Controllers;
 
 import com.miola.mcr.Dao.UserRepository;
 import com.miola.mcr.Entities.Role;
+import com.miola.mcr.JavaFxApplication;
 import com.miola.mcr.Services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -67,6 +69,7 @@ public class Login {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setMaximized(true);
+            stage.setResizable(true);
             stage.show();
         }else{
             lblErrors.setText("Login Failed.");

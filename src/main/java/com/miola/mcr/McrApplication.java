@@ -3,6 +3,7 @@ package com.miola.mcr;
 import com.miola.mcr.Dao.*;
 import com.miola.mcr.Dao.Order_MenuItemRepository;
 import com.miola.mcr.Services.*;
+import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -55,8 +56,8 @@ public class McrApplication implements CommandLineRunner {
     public static void main(String[] args) {
 
         //SpringApplication.run(McrApplication.class, args);
-        Application.launch(JavaFxApplication.class, args);
-
+//        Application.launch(JavaFxApplication.class, args);
+        LauncherImpl.launchApplication(JavaFxApplication.class, PreloaderApplication.class, args);
 
 
     }

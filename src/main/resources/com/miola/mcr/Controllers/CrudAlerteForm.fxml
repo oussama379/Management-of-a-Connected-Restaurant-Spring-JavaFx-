@@ -37,7 +37,7 @@
             <MFXTextField fx:id="tfType" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" />
             <MFXTextField fx:id="tfValue" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <MFXComboBox fx:id="cbOperator" prefHeight="27.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <MFXLabel text="Type" GridPane.rowIndex="7" />
+            <MFXLabel text="Sensor" GridPane.rowIndex="7" />
             <MFXComboBox fx:id="cbCategory" prefHeight="27.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <MFXLabel fx:id="fromTime" text="FromTime" GridPane.rowIndex="5" />
             <MFXLabel fx:id="toTime" text="ToTime" GridPane.rowIndex="6" />

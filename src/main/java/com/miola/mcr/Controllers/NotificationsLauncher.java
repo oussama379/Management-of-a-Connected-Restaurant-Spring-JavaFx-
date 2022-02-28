@@ -96,7 +96,7 @@ public class NotificationsLauncher {
         p.getTitleLabel().setWrapText(true);
         p.getChildren().removeAll(p.getContentScroll(), p.getButtonsBox());
         p.setPrefSize(450.0D, 70.0D);
-        p.getTitleLabel().setStyle("-fx-font-size: 18;");
+        p.getTitleLabel().setStyle("-fx-font-size: 14;");
 
         return p;
     }

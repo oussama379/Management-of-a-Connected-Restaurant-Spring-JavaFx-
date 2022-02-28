@@ -1,5 +1,6 @@
 package com.miola.mcr.Controllers;
 
+import com.miola.mcr.Entities.Category;
 import com.miola.mcr.Entities.Sensor;
 import com.miola.mcr.Services.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -70,7 +71,8 @@ public class CrudSensorForm implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cbDevice.getItems().addAll(deviceService.getAllDevicesNames());
-        cbCategory.getItems().addAll(categoryService.getAllCategoriesNames());
+//        cbCategory.getItems().addAll(categoryService.getAllCategoriesNames());
+        cbCategory.getItems().addAll("Force", "Temperature", "Air", "Energy");
         cbDTable.getItems().addAll(diningTableService.getAllTablesNumbers());
         cbZone.getItems().addAll(zoneService.getAllZonesNames());
         cbDevice.setPromptText("See Devices");
@@ -95,7 +97,12 @@ public class CrudSensorForm implements Initializable {
             if (getCategory().equals("Force")) sensorToEditOrAdd.setTopic("DbCustomer");
             if (getCategory().equals("Temperature") || getCategory().equals("Air")) sensorToEditOrAdd.setTopic("DbAir");
             if (getCategory().equals("Energy")) sensorToEditOrAdd.setTopic("EnergyDB");
-            if(getCategory() != null) sensorToEditOrAdd.setCategory(categoryService.getCategoryByName(getCategory()));
+//            if(getCategory() != null){
+//                Category c = new Category();
+//                c.setTitle(getName());
+//                categoryService.saveCategory(c);
+//                sensorToEditOrAdd.setCategory(categoryService.getCategoryByName(getName()));
+//            }
             if(getTable() != null) sensorToEditOrAdd.setDiningTable(diningTableService.getDiningTableByNumber(Integer.parseInt(getTable())));
             if(getDevice() != null) sensorToEditOrAdd.setDevice(deviceService.getDeviceByName(getDevice()));
             if(getZone() != null) sensorToEditOrAdd.setZone(zoneService.getZoneByName(getZone()));
@@ -103,12 +110,17 @@ public class CrudSensorForm implements Initializable {
             if (isAnEdit){
                 sensorToEditOrAdd.setId(this.idSensor);
                 if (sensorService.editSensor(sensorToEditOrAdd)){
+
                     fxWeaver.getBean(CrudSensor.class).showAlter(1);
                     this.closeWindow();
                 }else{
                     fxWeaver.getBean(CrudSensor.class).showAlter(0);
                 }
             }else{
+                Category c = new Category();
+                c.setTitle(getName());
+                categoryService.saveCategory(c);
+                sensorToEditOrAdd.setCategory(categoryService.getCategoryByName(getName()));
                 if (sensorService.saveSensor(sensorToEditOrAdd)){
                     fxWeaver.getBean(CrudSensor.class).showAlter(1);
                     this.closeWindow();

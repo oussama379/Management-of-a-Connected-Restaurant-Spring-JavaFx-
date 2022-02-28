@@ -2,18 +2,25 @@ package com.miola.mcr;
 
 
 
-import com.miola.mcr.Controllers.Login;
-import com.miola.mcr.Controllers.MainScene;
-import com.miola.mcr.Controllers.Orders;
+import com.miola.mcr.Controllers.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.application.Preloader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JavaFxApplication extends Application {
 

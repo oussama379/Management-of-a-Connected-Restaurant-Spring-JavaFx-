@@ -132,7 +132,7 @@ public class Statistics implements Initializable {
 
         // LineChart Month Data
         seriesDaysOfMonth = new XYChart.Series();
-        for (int i = 1; i < 31; i++) {
+        for (int i = 1; i < 32; i++) {
             seriesDaysOfMonth.getData().add(new XYChart.Data(String.valueOf(i), daysOfMonthOrdersList.get(i).size()));
         }
         lineChartTileMonth = TileBuilder.create()

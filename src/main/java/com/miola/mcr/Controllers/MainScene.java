@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -57,6 +58,8 @@ public class MainScene implements Initializable {
     @FXML private BorderPane rootPane;
     @FXML private VBox vbCruds;
 
+    @FXML private Label lblHeader;
+
     private MFXButton selected;
 
 
@@ -99,9 +102,10 @@ public class MainScene implements Initializable {
         mapButtonClass.put(btnStatistics, Statistics.class);
 
         /* Selected */
-        btHome.getStyleClass().remove("menu-button");
-        btHome.getStyleClass().add("menu-button-selected");
-        selected = btHome;
+        btHome.setVisible(false);
+        btnCustomerArea.getStyleClass().remove("menu-button");
+        btnCustomerArea.getStyleClass().add("menu-button-selected");
+        selected = btnCustomerArea;
 
         /* Restriction */
             // Technician | id = 2
@@ -109,11 +113,14 @@ public class MainScene implements Initializable {
             for (Map.Entry<MFXButton, Class> e: mapButtonClass.entrySet()) {
                 e.getKey().setVisible(false);
             }
-            btHome.setVisible(true);
             btManagement.setVisible(true);
             btDevicesCrud.setVisible(true);
             btSensorsCrud.setVisible(true);
             btZonesCrud.setVisible(true);
+            btManagement.getStyleClass().remove("menu-button");
+            btManagement.getStyleClass().add("menu-button-selected");
+            selected = btManagement;
+
         }
             // Waiter | id = 3
         if(Login.roleCurrentUser.getId() == 3){
@@ -121,11 +128,11 @@ public class MainScene implements Initializable {
                 e.getKey().setVisible(false);
             }
             btManagement.setVisible(false);
-            btHome.setVisible(true);
             btnCustomerArea.setVisible(true);
             btEnergyDB.setVisible(true);
             btnAirDB.setVisible(true);
         }
+        initScene();
     }
 
     @FXML
@@ -149,7 +156,7 @@ public class MainScene implements Initializable {
             b.getStyleClass().add("menu-button-selected");
             selected = b;
         }
-
+        lblHeader.setText(selected.getText());
     }
 
     @FXML
@@ -167,6 +174,16 @@ public class MainScene implements Initializable {
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
+    }
+
+    void initScene(){
+        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+        if(selected == btManagement)
+            rootPane.setCenter(fxWeaver.loadView(mapButtonClass.get(btSensorsCrud)));
+        else
+            rootPane.setCenter(fxWeaver.loadView(mapButtonClass.get(selected)));
+        rootPane.getCenter().getStyleClass().add("bc-darkblue-alt");
+        lblHeader.setText(selected.getText());
     }
 
 }

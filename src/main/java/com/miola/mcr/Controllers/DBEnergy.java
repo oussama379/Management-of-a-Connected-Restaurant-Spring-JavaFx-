@@ -78,10 +78,11 @@ public class DBEnergy implements Initializable {
                 .referenceValue(DBEnergyService.consumptionCostYesterday)
                 .value(0)
                 .build();
+        highLowTile.setValue(DBEnergyService.consumptionToday * DBEnergyService.costForKwH);
 
         // AreaChart Data
         series1 = new XYChart.Series();
-        series1.getData().add(new XYChart.Data(String.valueOf(hourIndex-1)+"H", 0));
+        series1.getData().add(new XYChart.Data(String.valueOf(hourIndex-1)+"H", DBEnergyService.consumptionToday));
         areaChartTile = TileBuilder.create()
                 .skinType(SkinType.SMOOTHED_CHART)
                 .maxSize(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)

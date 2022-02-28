@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -51,12 +52,14 @@
       </BorderPane>
    </left>
    <top>
-      <AnchorPane prefHeight="50.0" prefWidth="200.0" styleClass="bc-darkblue" BorderPane.alignment="CENTER">
+      <AnchorPane id="header" prefHeight="50.0" prefWidth="200.0" styleClass="bc-darkblue" BorderPane.alignment="CENTER">
          <effect>
             <DropShadow />
          </effect>
          <children>
-            <Label alignment="CENTER" layoutX="450.0" layoutY="12.0" prefHeight="26.0" prefWidth="300.0" style="-fx-text-fill: white;" text="Management Connected Restaurant" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="450.0" />
+            <Label alignment="CENTER" layoutX="14.0" layoutY="12.0" prefHeight="26.0" prefWidth="320.0" style="-fx-text-fill: white;" text="Management of Connected Restaurant" AnchorPane.leftAnchor="15.0" />
+            <Separator layoutX="14.0" layoutY="35.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Label fx:id="lblHeader" alignment="CENTER" layoutX="600.0" layoutY="12.0" prefHeight="26.0" prefWidth="320.0" style="-fx-text-fill: white;" text="Customer area" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="280.0" />
          </children>
       </AnchorPane>
    </top>
