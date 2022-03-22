@@ -30,10 +30,10 @@ o Capteurs de température/humidité qui publient leurs données sur le topic �
 o Capteurs de qualité de l'air qui publient leurs données sur le topic “DbAir”.
 o Capteurs d'énergie qui publient leurs données sur le topic “DbEnergy”.
 o Capteurs de résistance à la force qui publient leurs données sur le topic “DbCustomer” 
-(2) - Lorsque le broker reçoit les payloads publiées dans les différents topics de l'IOT-DATASIMULATOR, il envoie le payload de chaque topic aux classes de l’application qui sont 
-abonnées à ce topic.
-(3) - Ensuite, lorsque chaque classe reçoit les données, elle les interprète et les affiche sur 
-l'interface utilisateur sous une forme particulière (graphiques, tuiles, etc.…).
+
+(2) - Lorsque le broker reçoit les payloads publiées dans les différents topics de l'IOT-DATA-SIMULATOR, il envoie le payload de chaque topic aux classes de l’application qui sont abonnées à ce topic.
+
+(3) - Ensuite, lorsque chaque classe reçoit les données, elle les interprète et les affiche sur l'interface utilisateur sous une forme particulière (graphiques, tuiles, etc.…).
 
 Présentation des interfaces : 
 
