@@ -1,6 +1,6 @@
-# Management-of-a-Connected-Restaurant-Spring-JavaFx-
+# Desktop solution for managing a connected restaurant
 
-Présentation du projet : 
+## Présentation du projet : 
 
 - Ce projet vise à développer une plateforme/solution IoT pour la gestion d'un restaurant 
 équipé de dispositifs IoT, et permet plus particulièrement : 
@@ -17,10 +17,10 @@ d'énergie.
   
   5. Surveillance de la qualité de l'air.
 
-Les technologies utilisées : 
+## Les technologies utilisées : 
 Spring boot, JavaFx, Css,  MySql, Protocol MQTT, JSON,  [Simulateur de données IoT(IOT-DATA-SIMULATOR by IBA Group)](https://github.com/IBA-Group-IT/IoT-data-simulator).
 
-Architecture de l’application : 
+## Architecture de l’application : 
 
 ![Archit3](https://user-images.githubusercontent.com/70114659/159466462-9cd2e8e9-d3ab-4944-a54c-5ceb4b825bde.png)
 
@@ -35,7 +35,7 @@ o Capteurs de résistance à la force qui publient leurs données sur le topic �
 
 (3) - Ensuite, lorsque chaque classe reçoit les données, elle les interprète et les affiche sur l'interface utilisateur sous une forme particulière (graphiques, tuiles, etc.…).
 
-#### Présentation des interfaces
+## Présentation des interfaces
 
   1. IOT-DATA-SIMULATOR
 
